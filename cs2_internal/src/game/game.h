@@ -82,13 +82,15 @@ struct game_t
 
 	struct
 	{
-		get_weapon_data_t get_weapon_data;
-		sdl_set_relative_mouse_mode_t sdl_set_relative_mouse_mode;
-		sdl_set_window_grab_t sdl_set_window_grab;
-		set_channel_verbosity_t set_channel_verbosity;
-		register_logging_channel_t register_logging_channel;
-		log_direct_t log_direct;
-		find_channel_t find_channel;
+		// 必须显式置空：旧接线块被注释后这些成员从未赋值，
+		// 未初始化垃圾指针曾被当作函数调用导致崩溃
+		get_weapon_data_t get_weapon_data = nullptr;
+		sdl_set_relative_mouse_mode_t sdl_set_relative_mouse_mode = nullptr;
+		sdl_set_window_grab_t sdl_set_window_grab = nullptr;
+		set_channel_verbosity_t set_channel_verbosity = nullptr;
+		register_logging_channel_t register_logging_channel = nullptr;
+		log_direct_t log_direct = nullptr;
+		find_channel_t find_channel = nullptr;
 	} fn;
 
 	utils::library tier0, sdl3, gameoverlayrenderer64, client, engine2, inputsystem, localize, panorama, scenesystem;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="src">
@@ -431,6 +431,9 @@
     <ClInclude Include="src\sdk\panorama.h">
       <Filter>includes\sdk</Filter>
     </ClInclude>
+    <ClInclude Include="src\game\aimbot.h">
+      <Filter>includes\game</Filter>
+    </ClInclude>
     <ClInclude Include="src\game\movement.h">
       <Filter>includes\game</Filter>
     </ClInclude>
@@ -791,6 +794,9 @@
       <Filter>src\sdk</Filter>
     </ClCompile>
     <ClCompile Include="src\game\draw_manager.cpp">
+      <Filter>src\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\aimbot.cpp">
       <Filter>src\game</Filter>
     </ClCompile>
     <ClCompile Include="src\game\movement.cpp">

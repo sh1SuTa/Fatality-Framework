@@ -35,7 +35,7 @@ namespace utils
 			return *reinterpret_cast<uintptr_t *>(reinterpret_cast<uintptr_t>(handle) + off);
 		}
 
-		HANDLE handle;
+		HANDLE handle{};
 	};
 }
 

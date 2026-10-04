@@ -94,7 +94,8 @@ namespace math
 		sdk::vector temp;
 		const auto result = screen_transform(in, temp);
 		out.x = temp.x, out.y = temp.y;
-		out = out.round();
+		// 注意：这里返回的是 NDC [-1,1]，调用方需自行换算成屏幕像素；
+		// 原来的 out.round() 会把 NDC 量化成 0/±1，导致 ESP 全部坍缩到屏幕中心
 		return result;
 	}
 

@@ -45,10 +45,13 @@ context::context(float text_size)
 	GetSystemWindowsDirectoryA(win_dir_arr, 256);
 
 	std::string win_dir{win_dir_arr};
-	draw.fonts[GUI_HASH("gui_debug")] = std::make_shared<font>((win_dir + ("/fonts/seguisb.ttf")).c_str(), 18.f, font_flag_outline | font_flag_anti_alias, 0, 0x45F);
-	draw.fonts[GUI_HASH("gui_title")] = std::make_shared<font>((win_dir + ("/fonts/seguisb.ttf")).c_str(), 22.f);
-	draw.fonts[GUI_HASH("gui_main")] = std::make_shared<font>((win_dir + ("/fonts/seguisb.ttf")).c_str(), text_size + 4.f, font_flag_outline | font_flag_anti_alias, 0, 0x45F);
-	draw.fonts[GUI_HASH("gui_bold")] = std::make_shared<font>((win_dir + ("/fonts/seguisb.ttf")).c_str(), text_size + 4.f, font_flag_outline | font_flag_anti_alias, 0, 0x45F);
+	// font 类按值保存 const char* path 且 create() 延后调用，
+	// 路径字符串必须用静态生命周期，不能用临时 string 的 c_str()
+	static const std::string gui_font_path{win_dir + ("/fonts/seguisb.ttf")};
+	draw.fonts[GUI_HASH("gui_debug")] = std::make_shared<font>(gui_font_path.c_str(), 18.f, font_flag_outline | font_flag_anti_alias, 0, 0x45F);
+	draw.fonts[GUI_HASH("gui_title")] = std::make_shared<font>(gui_font_path.c_str(), 22.f);
+	draw.fonts[GUI_HASH("gui_main")] = std::make_shared<font>(gui_font_path.c_str(), text_size + 4.f, font_flag_outline | font_flag_anti_alias, 0, 0x45F);
+	draw.fonts[GUI_HASH("gui_bold")] = std::make_shared<font>(gui_font_path.c_str(), text_size + 4.f, font_flag_outline | font_flag_anti_alias, 0, 0x45F);
 
 	draw.shaders[GUI_HASH("blur_f")] = std::make_shared<shader>(
 		XOR(

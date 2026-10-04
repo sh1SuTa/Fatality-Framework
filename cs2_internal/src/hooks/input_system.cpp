@@ -8,6 +8,18 @@ namespace hooks::input_system
 {
 	LRESULT wnd_proc(HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	{
+		// END 键触发卸载：解除 hook、还原窗口过程后卸载模块，游戏继续运行
+		if (msg == WM_KEYDOWN && wparam == VK_END)
+		{
+			CreateThread(nullptr, 0,
+				[](LPVOID) -> DWORD
+				{
+					game->unload();
+					return 0;
+				}, nullptr, 0, nullptr);
+			return 0;
+		}
+
 		if (!evo::gui::ctx)
 			return ::CallWindowProcW(sdk::pOldWndProc, wnd, msg, wparam, lparam);
 

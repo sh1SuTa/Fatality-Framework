@@ -20,8 +20,11 @@ public:
 
 		if (const MH_STATUS status = MH_CreateHook(pBaseFn, pReplaceFn, &pOriginalFn); status != MH_OK)
 		{
-
-			CS_ASSERT(false);
+			// log instead of breaking: a failed hook must not kill the process in debug builds
+			char szBuffer[160];
+			wsprintfA(szBuffer, "Fatality: MH_CreateHook(%p) failed: %s\n", pBaseFn, MH_StatusToString(status));
+			OutputDebugStringA(szBuffer);
+			pBaseFn = nullptr;
 			return false;
 		}
 
@@ -45,8 +48,9 @@ public:
 
 		if (const MH_STATUS status = MH_EnableHook(pBaseFn); status != MH_OK)
 		{
-
-			CS_ASSERT(false);
+			char szBuffer[160];
+			wsprintfA(szBuffer, "Fatality: MH_EnableHook(%p) failed: %s\n", pBaseFn, MH_StatusToString(status));
+			OutputDebugStringA(szBuffer);
 			return false;
 		}
 

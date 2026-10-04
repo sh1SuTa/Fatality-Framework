@@ -25,7 +25,6 @@ BOOL APIENTRY DllMain(uintptr_t inst, uint32_t  dw_reason_for_call, uint32_t lp_
 	case DLL_PROCESS_ATTACH:
 	{
 		DisableThreadLibraryCalls((HMODULE)inst);
-
 		auto current_process = GetCurrentProcess();
 		auto priority_class = GetPriorityClass(current_process);
 

@@ -78,16 +78,25 @@ namespace sdk
 		PAD(0x40);
 		cutl_linked_list<convar *> cvars;
 
+		// @note: the CCvar layout above is a manual guess from an older build;
+		// a mismatch must not fault the game, hence the guards below
 		convar *find(uint32_t name)
 		{
-			for (int i = cvars.head(); i != cvars.invalid_index(); i = cvars.next(i))
+			__try
 			{
-				convar *cvar = cvars.element(i);
-				if (!cvar)
-					continue;
+				for (int i = cvars.head(); i != cvars.invalid_index(); i = cvars.next(i))
+				{
+					convar *cvar = cvars.element(i);
+					if (!cvar)
+						continue;
 
-				if (FNV1A_CMP_IM(cvar->name, name))
-					return cvar;
+					if (FNV1A_CMP_IM(cvar->name, name))
+						return cvar;
+				}
+			}
+			__except (EXCEPTION_EXECUTE_HANDLER)
+			{
+				return nullptr;
 			}
 
 			return nullptr;
@@ -95,18 +104,27 @@ namespace sdk
 
 		void unlock()
 		{
-			for (int i = cvars.head(); i != cvars.invalid_index(); i = cvars.next(i))
+			__try
 			{
-				convar *cvar = cvars.element(i);
-				if (!cvar)
-					continue;
+				for (int i = cvars.head(); i != cvars.invalid_index(); i = cvars.next(i))
+				{
+					convar *cvar = cvars.element(i);
+					if (!cvar)
+						continue;
 
-				cvar->flags &= ~FCVAR_HIDDEN;
-				cvar->flags &= ~FCVAR_DEVELOPMENTONLY;
+					cvar->flags &= ~FCVAR_HIDDEN;
+					cvar->flags &= ~FCVAR_DEVELOPMENTONLY;
+				}
+			}
+			__except (EXCEPTION_EXECUTE_HANDLER)
+			{
+				// list walk faulted: layout mismatch for this build, skipping
 			}
 		}
 	};
 
 } // namespace sdk
 
-#define var(name) static auto name = sdk::Cvar->find(FNV1A(#name))
+// no `static`: cached convar pointers dangle when CS2 rebuilds its cvar system
+// during early startup (lobby injection) — re-find every call; callers null-check
+#define var(name) auto name = sdk::Cvar->find(FNV1A(#name))

@@ -346,69 +346,34 @@ void* __cdecl operator new[](const std::size_t nSize)
 		// @todo: msvc poorly optimizes this, it looks even better w/o optimization at all
 		std::uint8_t* MEM::FindPatternEx(const std::uint8_t* pRegionStart, const std::size_t nRegionSize, const std::uint8_t* arrByteBuffer, const std::size_t nByteCount, const char* szByteMask)
 		{
-			std::uint8_t* pCurrentAddress = const_cast<std::uint8_t*>(pRegionStart);
-			const std::uint8_t* pRegionEnd = pRegionStart + nRegionSize - nByteCount;
-			const bool bIsMaskUsed = (szByteMask != nullptr);
-
-			while (pCurrentAddress < pRegionEnd)
+			if (!pRegionStart || !arrByteBuffer || nByteCount == 0 || nByteCount > nRegionSize)
+				return nullptr;
+			for (std::size_t offset = 0; offset <= nRegionSize - nByteCount; ++offset)
 			{
-				// check the first byte before entering the loop, otherwise if there two consecutive bytes of first byte in the buffer, we may skip both and fail the search
-				if ((bIsMaskUsed && *szByteMask == '?') || *pCurrentAddress == *arrByteBuffer)
-				{
-					if (nByteCount == 1)
-						return pCurrentAddress;
-
-					// compare the least byte sequence and continue on wildcard or skip forward on first mismatched byte
-					std::size_t nComparedBytes = 0U;
-					while ((bIsMaskUsed && szByteMask[nComparedBytes + 1U] == '?') || pCurrentAddress[nComparedBytes + 1U] == arrByteBuffer[nComparedBytes + 1U])
-					{
-						// check does byte sequence match
-						if (++nComparedBytes == nByteCount - 1U)
-							return pCurrentAddress;
-					}
-
-					// skip non suitable bytes
-					pCurrentAddress += nComparedBytes;
-				}
-
-				++pCurrentAddress;
+				std::size_t i = 0;
+				for (; i < nByteCount; ++i)
+					if ((!szByteMask || szByteMask[i] != '?') && pRegionStart[offset + i] != arrByteBuffer[i])
+						break;
+				if (i == nByteCount)
+					return const_cast<std::uint8_t*>(pRegionStart + offset);
 			}
-
 			return nullptr;
 		}
 
 		std::vector<std::uint8_t*> MEM::FindPatternAllOccurrencesEx(const std::uint8_t* pRegionStart, const std::size_t nRegionSize, const std::uint8_t* arrByteBuffer, const std::size_t nByteCount, const char* szByteMask)
 		{
-			const std::uint8_t* pRegionEnd = pRegionStart + nRegionSize - nByteCount;
-			const bool bIsMaskUsed = (szByteMask != nullptr);
-
-			// container for addresses of the all found occurrences
 			std::vector<std::uint8_t*> vecOccurrences = {};
-
-			for (std::uint8_t* pCurrentByte = const_cast<std::uint8_t*>(pRegionStart); pCurrentByte < pRegionEnd; ++pCurrentByte)
+			if (!pRegionStart || !arrByteBuffer || nByteCount == 0 || nByteCount > nRegionSize)
+				return vecOccurrences;
+			// Advance one byte: skipping a matched prefix can miss overlapping matches.
+			for (std::size_t offset = 0; offset <= nRegionSize - nByteCount; ++offset)
 			{
-				// do a first byte check before entering the loop, otherwise if there two consecutive bytes of first byte in the buffer, we may skip both and fail the search
-				if ((!bIsMaskUsed || *szByteMask != '?') && *pCurrentByte != *arrByteBuffer)
-					continue;
-
-				// check for bytes sequence match
-				bool bSequenceMatch = true;
-				for (std::size_t i = 1U; i < nByteCount; i++)
-				{
-					// compare sequence and continue on wildcard or skip forward on first mismatched byte
-					if ((!bIsMaskUsed || szByteMask[i] != '?') && pCurrentByte[i] != arrByteBuffer[i])
-					{
-						// skip non suitable bytes
-						pCurrentByte += i - 1U;
-
-						bSequenceMatch = false;
+				std::size_t i = 0;
+				for (; i < nByteCount; ++i)
+					if ((!szByteMask || szByteMask[i] != '?') && pRegionStart[offset + i] != arrByteBuffer[i])
 						break;
-					}
-				}
-
-				// check did we found address
-				if (bSequenceMatch)
-					vecOccurrences.push_back(pCurrentByte);
+				if (i == nByteCount)
+					vecOccurrences.push_back(const_cast<std::uint8_t*>(pRegionStart + offset));
 			}
 
 			return vecOccurrences;

@@ -36,6 +36,7 @@
     <ClInclude Include="src\memory\interfaceless.h" />
     <ClInclude Include="src\memory\keyvalue3.h" />
     <ClInclude Include="src\memory\memory.h" />
+    <ClInclude Include="src\game\aimbot.h" />
     <ClInclude Include="src\game\movement.h" />
     <ClInclude Include="src\game\visuals.h" />
     <ClInclude Include="src\gui\anim.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\game\hook_manager.cpp" />
     <ClCompile Include="src\memory\memory.cpp" />
+    <ClCompile Include="src\game\aimbot.cpp" />
     <ClCompile Include="src\game\movement.cpp" />
     <ClCompile Include="src\game\visuals.cpp" />
     <ClCompile Include="src\gui\anim.cpp" />
@@ -275,19 +277,19 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{3afea3a6-2325-4e24-b977-bc9e95875c0a}</ProjectGuid>
     <RootNamespace>cs2internal</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -352,7 +354,7 @@
       <PrecompiledHeaderOutputFile>$(IntDir)pch\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>C:\Users\ПК\Desktop\fatality.win cs2 framework\cs2_internal-master\contrib\minhook;C:\Users\ПК\Desktop\minhook-master\include;C:\Users\ПК\Desktop\fatality.win cs2 framework\cs2_internal-master\contrib\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\CODEDEMO\Fatality-Framework-review\cs2_internal\src\renderer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -360,8 +362,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalOptions>/MAP %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>libMinHook.x64.lib;d3d11.lib;d3dx11.lib;d3dcompiler.lib;minhook.lib;minhook_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\ПК\Desktop\fatality.win cs2 framework\cs2_internal-master\contrib\minhook;C:\Users\ПК\Desktop\minhook-master\build\VC17\lib\Release;C:\Users\ПК\Desktop\fatality.win cs2 framework\cs2_internal-master\contrib\luajit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\CODEDEMO\Fatality-Framework-review\contrib\minhook;C:\Users\ПК\Desktop\minhook-master\build\VC17\lib\Release;D:\CODEDEMO\Fatality-Framework-review\contrib\luajit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -370,7 +373,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>JM_XORSTR_DISABLE_AVX_INTRINSICS;NDEBUG;CS2INTERNAL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>JM_XORSTR_DISABLE_AVX_INTRINSICS;NDEBUG;CS2INTERNAL_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -391,11 +394,12 @@
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\xorstr;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\tinyformat;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\cs2_internal\src\renderer\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\CODEDEMO\Fatality-Framework-review\cs2_internal\src\renderer\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\xorstr;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\tinyformat;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\cs2_internal\src\renderer\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalOptions>/wd5999 /Zc:threadSafeInit- %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -408,7 +412,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalOptions>/MAP %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>libMinHook.x64.lib;d3d11.lib;d3dx11.lib;d3dcompiler.lib;minhook.lib;minhook_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\luajit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\CODEDEMO\Fatality-Framework-review\contrib\minhook;D:\CODEDEMO\Fatality-Framework-review\contrib\luajit;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\luajit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Prerelease|x64'">

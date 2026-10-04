@@ -1,4 +1,5 @@
 #include <ranges>
+#include <fstream>
 #include <game/draw_manager.h>
 #include <sdk/client.h>
 #include <sdk/panorama.h>
@@ -78,26 +79,57 @@ std::shared_ptr<texture> draw_manager_t::get_panorama_texture(const std::string 
 	auto ico = textures.find(hash);
 	if (ico == textures.end())
 	{
-		const auto svg = sdk::load_svg_compiled_file(tfm::format(XOR("panorama/images/%s.vsvg_c"), path).c_str());
-		if (svg.empty())
-			return nullptr;
+		// 资产为预光栅化的 RGBA 原始数据（tools/rasterize_icons.py 生成，格式：uint32 w + uint32 h + RGBA8）。
+		// 原实现走 image_data_t::load_svg → panorama::load_svg / utlbuffer::ctor 游戏函数，
+		// 偏移未核验（fail-fast 风险，曾致闪退），故解码整体移至构建期
+		const auto data = read_asset(path + ".raw");
+		if (data.size() > 8)
+		{
+			const auto w = *reinterpret_cast<const uint32_t *>(data.data());
+			const auto h = *reinterpret_cast<const uint32_t *>(data.data() + 4);
+			if (w && h && data.size() >= 8 + static_cast<size_t>(w) * h * 4)
+			{
+				// texture 的 rgba 构造不拷贝数据，只存指针 —— data(string) 在 create() 消费期间必须存活
+				const auto tex = std::make_shared<texture>(reinterpret_cast<void *>(const_cast<char *>(data.data()) + 8), w, h, w * 4);
+				tex->create();
+				ico = textures.insert_or_assign(hash, icon_info_t{invalid_name, path, target_height, tex}).first;
+			}
+			else
+				OutputDebugStringA(("Fatality: icon: bad data " + path + "\n").c_str());
+		}
+		else
+			OutputDebugStringA(("Fatality: icon: no file " + path + "\n").c_str());
 
-		std::vector<uint8_t> texture(0xFFFFFF);
-		sdk::image_data_t img(texture);
-		uint32_t w{}, h{};
-		if (!img.load_svg((uint8_t *)svg.data(), svg.size(), &w, &h))
-			return nullptr;
-
-		const auto width_to_height = static_cast<float>(w) / static_cast<float>(h);
-		const auto tex = load_svg_to_texture(
-			(uint8_t *)svg.data(), svg.size(), target_height ? static_cast<uint32_t>(width_to_height * target_height) : 0, target_height);
-		if (!tex)
-			return nullptr;
-
-		ico = textures.insert_or_assign(hash, icon_info_t{invalid_name, path, target_height, tex}).first;
+		// 加载失败也缓存 null 纹理，避免每帧文件 IO
+		if (ico == textures.end())
+			ico = textures.insert_or_assign(hash, icon_info_t{invalid_name, path, target_height, nullptr}).first;
 	}
 
 	return ico->second.tex;
+}
+
+std::string draw_manager_t::read_asset(const std::string &path)
+{
+	// 资产目录 = 本 DLL 所在目录 \assets\（static 只推导一次）
+	static const std::string root = []()
+	{
+		// 用本模块内的全局对象地址反查自身模块句柄
+		HMODULE self{};
+		GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+			reinterpret_cast<LPCSTR>(&draw_mgr), &self);
+		char buf[MAX_PATH]{};
+		GetModuleFileNameA(self, buf, MAX_PATH);
+		std::string dir{buf};
+		const auto r = dir.substr(0, dir.find_last_of('\\')) + "\\assets\\";
+		OutputDebugStringA(("Fatality: assets root=" + r + "\n").c_str());
+		return r;
+	}();
+
+	std::ifstream f(root + path, std::ios::binary);
+	if (!f)
+		return {};
+
+	return std::string{std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>()};
 }
 
 std::shared_ptr<texture> draw_manager_t::get_svg_texture(const uint32_t name, const uint32_t target_height)

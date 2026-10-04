@@ -69,6 +69,8 @@ struct visuals_t
 	static void draw_bar(
 		const evo::ren::vec2 &start_pos, int length, bool horizontal, const std::vector<evo::ren::color> &colors, float fraction,
 		std::optional<int> value = std::nullopt);
+	static void player_skeleton(sdk::cs2_player_pawn *pawn, player_data_t &player, const std::shared_ptr<evo::ren::layer> &layer);
+	static void player_out_of_fov(player_data_t &player);
 
 	player_data_t players[sdk::max_players];
 

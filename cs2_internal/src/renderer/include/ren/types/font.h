@@ -102,9 +102,9 @@ namespace evo::ren
 	class font : public font_base
 	{
 	public:
-		font(const char *path, float size, uint32_t fl = 0, uint32_t mi = 0, uint32_t ma = 255) : is_from_file(true), path(path)
+		font(const char *p, float size, uint32_t fl = 0, uint32_t mi = 0, uint32_t ma = 255) : is_from_file(true), path(p)
 		{
-			REN_DBG_FMT("font allocated (path %s, size %.0f, flags %d, min %d, max %d)", path, size, fl, mi, ma);
+			REN_DBG_FMT("font allocated (path %s, size %.0f, flags %d, min %d, max %d)", p, size, fl, mi, ma);
 			height = real_height = size;
 			flags = fl;
 			mins = mi;

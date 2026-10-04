@@ -270,9 +270,26 @@ namespace sdk
 
 		void* GetEntityByIndex(int nIndex)
 		{
-			using fnGetBaseEntity = void* (CS_THISCALL*)(void*, int);
-			static auto GetBaseEntity = reinterpret_cast<fnGetBaseEntity>(MEM::FindPattern(CLIENT_DLL, CS_XOR("81 FA ? ? ? ? 77 ? 8B C2 C1 F8 ? 83 F8 ? 77 ? 48 98 48 8B 4C C1 ? 48 85 C9 74 ? 8B C2 25 ? ? ? ? 48 6B C0 ? 48 03 C8 74 ? 8B 41 ? 25 ? ? ? ? 3B C2 75 ? 48 8B 01")));
-			return GetBaseEntity(this, nIndex);
+			if (nIndex <= 0)
+				return nullptr;
+
+			// CGameEntitySystem: +0x10 起是内联的分块指针数组，每块 512 个实体，
+			// 块内步长 0x70。布局来自对本 build 实测可用的外部实现；旧的 pattern
+			// 扫描函数调用未经验证，已移除。全部读取都有 SEH 兜底。
+			__try
+			{
+				const auto chunk = *reinterpret_cast<void* const*>(
+					reinterpret_cast<const uint8_t*>(this) + 0x10 + sizeof(void*) * (nIndex >> 9));
+				if (!chunk)
+					return nullptr;
+
+				return *reinterpret_cast<void* const*>(
+					static_cast<const uint8_t*>(chunk) + 0x70 * (nIndex & 0x1FF));
+			}
+			__except (EXCEPTION_EXECUTE_HANDLER)
+			{
+				return nullptr;
+			}
 		}
 
 		template <typename T = cs2_base_entity>

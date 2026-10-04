@@ -4,6 +4,7 @@
 #define SDK_PROTO_H
 
 #include <cstdint>
+#include <string>
 
 #include <sdk/macros.h>
 

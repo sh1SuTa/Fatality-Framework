@@ -24,6 +24,7 @@ struct draw_manager_t
 
 	static std::shared_ptr<evo::ren::texture> load_svg_to_texture(uint8_t *data, size_t sz, uint32_t w, uint32_t h);
 	std::shared_ptr<evo::ren::texture> get_panorama_texture(const std::string &path, uint32_t height);
+	std::string read_asset(const std::string &path);
 	std::shared_ptr<evo::ren::texture> get_svg_texture(uint32_t name, uint32_t target_height);
 
 	std::unordered_map<uint32_t, std::string> svg_icons = {

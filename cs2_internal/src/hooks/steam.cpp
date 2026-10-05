@@ -21,7 +21,6 @@ namespace hooks::steam
 
 	HRESULT present(IDXGISwapChain*chain, UINT sync, UINT flags)
 	{
-		// [present 一次性面包屑已静音] 首帧管线已稳定，崩溃定位可临时重加 log_once
 
 		const auto oPresent = hkPresent.GetOriginal();
 
@@ -218,4 +217,4 @@ namespace hooks::steam
 
 		return oPresent(chain, sync, flags);
 	}
-} // namespace hooks::steam
+} 

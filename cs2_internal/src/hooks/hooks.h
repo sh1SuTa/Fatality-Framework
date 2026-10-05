@@ -30,6 +30,14 @@ namespace hooks
 		// a0 = CCSGOInput*。返回 original 的 rax 原样透传。
 		void* create_move(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7);
 		inline CBaseHookObject<decltype(&create_move)> hkCreateMove = {};
+
+		// [silent aim] sub_CFA140（create_move 内部"填命令视角"，用户 IDA+FPU 断点+
+		// NOP 实验实锤：命令 viewangles 唯一写入点）。rcx=输入视角快照（+0x10 pitch/
+		// +0x14 yaw/+0x18 roll），rdx=命令上下文，[rdx+0x18]=CUserCmd（+0x10 dirty
+		// 位图、+0x18/+0x1C/+0x20=viewangles P/Y/R）。签名多参（IDA arg_0/8/10/20/28），
+		// 8 槽透传；original 填完后改写为 aimbot 目标角 → 服务端打头、本地视角不动。
+		void* fill_cmd_angles(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7);
+		inline CBaseHookObject<decltype(&fill_cmd_angles)> hkFillCmdAngles = {};
 		void frame_stage_notify(void *rcx, sdk::client_frame_stage stage);
 		void override_view(void *rcx, sdk::cview_setup *view_setup);
 		void on_render_start(sdk::cview_render *view_render);
@@ -55,9 +63,14 @@ namespace hooks
 		// 复刻 client 0x80CE65 现场配方，眼位→视线前方 256u 打一发并 dump 出参 surface
 		void aw_self_trace_test();
 
+		// [aimbot 可见性] 眼位→目标点同步 trace（自调用漏斗，p5=1）。
+		// 返回 fraction，出参 hit_ent = 命中实体指针（+0x08，miss 为 null）；故障返回 1/null。
+		float aw_trace_query(const float start[3], const float end[3], const void** hit_ent);
+
 		// [aimbot 可见性] 眼位→目标点同步 trace（自调用漏斗，p5=1）；
-		// 返回 false=被世界几何阻挡。trace 故障按可见处理（保守）。
-		bool aw_visible_check(const float start[3], const float end[3]);
+		// false=被阻挡（命中非目标实体）。trace 故障按可见处理（保守）。
+		// 命中目标 pawn 自身也算可见（骨骼点在 hitbox 内部，trace 停在目标表面）。
+		bool aw_visible_check(const float start[3], const float end[3], const void* target_pawn);
 
 		// [aw-verify] 11 个 trace filter 的 dtor 钩（vtable slot0）。栈上 filter 在
 		// trace 完成后析构 → 反查开火 trace 函数 + 同栈扫已完成 CGameTrace。

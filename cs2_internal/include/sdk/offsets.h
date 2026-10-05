@@ -279,6 +279,15 @@ namespace sdk
 				constexpr auto set_view_angles = 0x756060;
 				constexpr auto mouse_input_enabled = 0x878390;
 				constexpr auto csgoinput_create_move = 0xd01b20; // IDA 对照序言：mov rax,rsp / [rax+18],r8 / sub rsp,1D8（build 14188，0x740e50 系误配）
+				// [silent] 命令视角填充（2026-10-05 用户 IDA+FPU 断点+NOP 实验实锤）：
+				// sub_CFA140，create_move+5A4 与 sub_CDEC40+87 调用。rcx=视角快照
+				// (+0x10 pitch/+0x14 yaw/+0x18 roll)，rdx=上下文，[rdx+18h]=CUserCmd
+				// （+10h dirty 位图、+18h/1Ch/20h=viewangles）。NOP 两条 movss → 射向 0/0。
+				constexpr auto csgoinput_fill_cmd_angles = 0xcfa140;
+				// [btn2] create_move 反汇编实锤的全局单例（.data qword_24C4FA0，r15 宿主对象）：
+				// [gs+0xBD0]=0x60 步长输入样本表，gs 的 +0x50..0x5C/+0xBC0/+0xBC4 为状态字段，
+				// byte[gs+0x58] 在 D01F52/D02060 两处被当按钮态读 —— autofire 头号直写候选
+				constexpr auto csgoinput_ctx_global = 0x24c4fa0;
 			} // namespace input
 
 			namespace inputsystem

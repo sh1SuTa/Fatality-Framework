@@ -227,6 +227,30 @@ namespace
 	int aw_seen_n = 0;
 	int aw_dtor_logs = 0;
 
+	// [btn2] create_move 全参数扫描探针 —— a4 被证伪（常 null/模块字符串/堆但表为0），
+	// r15 宿主需从 a0-a7 实测定位。LMB 按下沿武装，held(n=4)/rel/idle 三态各一行：
+	// 对每个可读 arg 读 +0x58(byte) 与 +0xBD0(表指针)，翻转者=按钮态、tbl=ok 者=宿主。
+	int btn_win_n = -1;  // -1 = 未武装
+	bool btn_prev_lmb = false;
+	bool btn2_rel = false;
+	int btn2_rel_n = 0;
+	int btn2_refractory = 0;
+	const unsigned char* btn2_gs = nullptr;   // 全局单例 qword_24C4FA0 指向的对象
+
+	// SEH 扁平拷贝（命令对象可能悬垂，读崩就跳过）
+	__declspec(noinline) bool btn_seh_copy(const void* p, int bytes, unsigned char* out)
+	{
+		__try
+		{
+			std::memcpy(out, p, static_cast<size_t>(bytes));
+			return true;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			return false;
+		}
+	}
+
 	struct aw_stack_trace_cand { const unsigned char* p; float fraction; int hit; };
 
 	__declspec(noinline) void aw_filter_dtor_event(int id, const void* self, const void* retaddr)
@@ -258,10 +282,12 @@ namespace
 namespace hooks::client
 {
 	// [aimbot 可见性] 可复用同步 trace 段（配方同 aw_self_trace_test，p5=1 命中挡位）。
-	// 返回 fraction（1=全程无阻挡）；任何故障按 1 处理（trace 失败不废锁人）。
+	// 返回 fraction，出参 hit_ent = 命中实体指针（CGameTrace+0x08，miss 时为 null）；
+	// 任何故障按"无命中"处理（trace 失败不废锁人）。
 	// 纯 POD 局部，无 C++ 对象（C2712 约束）。
-	__declspec(noinline) float aw_trace_fraction(const float start[3], const float end[3])
+	__declspec(noinline) float aw_trace_query(const float start[3], const float end[3], const void** hit_ent)
 	{
+		*hit_ent = nullptr;
 		const auto base = reinterpret_cast<uintptr_t>(game->client.handle);
 		if (!base)
 			return 1.f;
@@ -294,7 +320,9 @@ namespace hooks::client
 			reinterpret_cast<funnel_fn>(base + sdk::offsets::functions::client::trace_funnel)(
 				phys, qdesc, s, e, nullptr, reinterpret_cast<void*>(static_cast<uintptr_t>(1)), out);
 
-			return *reinterpret_cast<const float*>(out + 0xAC);
+			const auto frac = *reinterpret_cast<const float*>(out + 0xAC);
+			*hit_ent = *reinterpret_cast<void* const*>(out + 0x08);
+			return frac;
 		}
 		__except (EXCEPTION_EXECUTE_HANDLER)
 		{
@@ -302,11 +330,21 @@ namespace hooks::client
 		}
 	}
 
-	// [aimbot 可见性] 眼位→目标点被世界几何阻挡判定：fraction≥0.99 视为可见
-	// （打到目标自身 hitbox 也落在 ≥0.99，不误拦）
-	bool aw_visible_check(const float start[3], const float end[3])
+	// [aimbot 可见性] 眼位→目标点视线判定。判定链：
+	// ① 无命中（fraction≥0.99 且无实体）→ 可见；
+	// ② 命中实体就是目标 pawn 自己 → 可见（骨骼点在头部 hitbox 内部，trace 停在目标表面）；
+	// ③ frac≤0.05 的命中 → 可见（起点内命中：眼位在本地碰撞盒内部，trace 出发即撞
+	//    自己——实测 frac=0.000~0.017、hit=世界对象、与朝向无关；真墙实测 frac≥0.38）；
+	// ④ 其余（命中远墙/别人）→ 不可见。
+	bool aw_visible_check(const float start[3], const float end[3], const void* target_pawn)
 	{
-		return aw_trace_fraction(start, end) >= 0.99f;
+		const void* hit = nullptr;
+		const auto frac = aw_trace_query(start, end, &hit);
+		if (!hit)
+			return frac >= 0.99f;
+		if (hit == target_pawn)
+			return true;
+		return frac <= 0.05f;
 	}
 
 	// [aw-verify] 自调用同步 trace（F5 触发）—— 配方复刻 client 0x80CE65 现场（build 14188）：
@@ -400,13 +438,121 @@ namespace hooks::client
 	void* create_move(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7)
 	{
 		// 8 槽透传（栈参数 5-8 由 MSVC 写进本函数的 outgoing area）。
-		// 先让原函数生成当前命令，再改写视角。
-		const auto oCreateMove = hkCreateMove.GetOriginal();
-		const auto ret = oCreateMove(a0, a1, a2, a3, a4, a5, a6, a7);
+		// 先跑 aimbot（silent 目标角/非 silent 视角写入都在 original 之前就绪），
+		// 再让原函数生成当前命令——original 内部会调 fill_cmd_angles（已钩），
+		// silent 目标角在本 tick 即被消费。
+
+		// [btn2] 相位检测（pre-original）+ 表 dump（post-original）。
+		// 上轮实测：a0 恒为 0x7FFC... 模块地址、+0xBD0 始终有表、cmd 递增 = 宿主 r15。
+		// 但 pre-original 读 pressed 全 -1（上帧重置后）—— 按钮态在 create_move 内部
+		// switch case 写入，必须 original 之后读。
+		const char* phase = nullptr;
+		const unsigned char* btn_host = static_cast<const unsigned char*>(a0);
+		{
+			const bool lmb = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+			if (btn2_refractory > 0)
+				--btn2_refractory;
+
+			if (lmb && !btn_prev_lmb && btn_win_n < 0 && btn2_refractory == 0)
+			{
+				btn_win_n = 0;
+				btn2_rel = false;
+			}
+			btn_prev_lmb = lmb;
+
+			if (btn_win_n >= 0)
+			{
+				if (!lmb && !btn2_rel)
+				{
+					btn2_rel = true;
+					btn2_rel_n = btn_win_n;
+					phase = "rel";
+				}
+				else if (lmb && btn_win_n == 4)
+				{
+					phase = "held";
+				}
+				else if (btn2_rel && btn_win_n - btn2_rel_n >= 128)
+				{
+					phase = "idle";
+					btn_win_n = -2;
+					btn2_rel = false;
+					btn2_refractory = 128;
+				}
+				++btn_win_n;
+			}
+		}
 
 		if (a0)
 		{
 			__try { aimbot_t::run(static_cast<sdk::ccsgo_input*>(a0)); }
+			__except (EXCEPTION_EXECUTE_HANDLER) { }
+		}
+
+		const auto oCreateMove = hkCreateMove.GetOriginal();
+		const auto ret = oCreateMove(a0, a1, a2, a3, a4, a5, a6, a7);
+
+		// [btn2] post-original：hex dump a0 表 entry 0 全 0x60 字节。
+		// e0-e3 pressed 恒 -1，说明 +0x58 不是按下态或表被重置。
+		// 逐字节 diff held vs idle，找真正翻转的偏移。
+		if (phase && btn_host)
+		{
+			unsigned long long tblv = 0;
+			if (btn_seh_copy(btn_host + 0xBD0, 8, reinterpret_cast<unsigned char*>(&tblv)) && tblv)
+			{
+				const unsigned char* tbl = reinterpret_cast<const unsigned char*>(tblv);
+				unsigned char buf[0x60];
+				if (btn_seh_copy(tbl, static_cast<int>(sizeof(buf)), buf))
+				{
+					char line[512];
+					for (int row = 0; row < 6; ++row)
+					{
+						int pos = snprintf(line, sizeof(line), "Fatality: [btn2] %s e0 %02x:", phase, row * 16);
+						for (int i = 0; i < 16 && pos > 0 && pos < static_cast<int>(sizeof(line)) - 4; ++i)
+							pos += snprintf(line + pos, sizeof(line) - static_cast<size_t>(pos),
+								" %02x", buf[row * 16 + i]);
+						if (pos > 0)
+						{
+							snprintf(line + pos, sizeof(line) - static_cast<size_t>(pos), "\n");
+							OutputDebugStringA(line);
+						}
+					}
+				}
+				else
+				{
+					OutputDebugStringA("Fatality: [btn2] e0 copy fail\n");
+				}
+			}
+			else
+			{
+				char line[64];
+				snprintf(line, sizeof(line), "Fatality: [btn2] %s a0tbl=null\n", phase);
+				OutputDebugStringA(line);
+			}
+		}
+
+		return ret;
+	}
+
+	void* fill_cmd_angles(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7)
+	{
+		const auto oFill = hkFillCmdAngles.GetOriginal();
+		const auto ret = oFill(a0, a1, a2, a3, a4, a5, a6, a7);
+
+		// [silent aim] a1 = 命令上下文 rdx：[+0x18]=CUserCmd，+0x18/+0x1C=viewangles P/Y。
+		// original 已填 live 视角并置 dirty 位（bit0/1/2），此处覆写为目标头角即可
+		// （用户 NOP 实验证明这是 viewangles 唯一写入点，之后无覆盖）。
+		if (a1 && aimbot_t::silent_valid)
+		{
+			__try
+			{
+				const auto cmd = *reinterpret_cast<unsigned char**>(static_cast<unsigned char*>(a1) + 0x18);
+				if (cmd)
+				{
+					*reinterpret_cast<float*>(cmd + 0x18) = aimbot_t::silent_pitch;
+					*reinterpret_cast<float*>(cmd + 0x1C) = aimbot_t::silent_yaw;
+				}
+			}
 			__except (EXCEPTION_EXECUTE_HANDLER) { }
 		}
 

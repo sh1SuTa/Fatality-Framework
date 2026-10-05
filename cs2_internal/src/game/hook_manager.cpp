@@ -62,7 +62,6 @@ void hook_manager_t::init()
 			OutputDebugStringA(szBuffer);
 		};
 
-	// attach the present hook last: it fires immediately on the render
 	// thread and must not interrupt the installation diagnostics below
 	{
 		char szBuffer[96];
@@ -91,7 +90,6 @@ void hook_manager_t::init()
 		const auto expander_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::client::trace_expander));
 		create_logged("trace_expander", expander_target && hooks::client::hkTraceExpander.Create(expander_target, reinterpret_cast<void*>(&hooks::client::trace_expander)), expander_target);
 	}
-	// [aw-verify] bullet_trace_helper（0x8C931B）与 11 个 filter dtor 钩已撤装：
 	// 实测 CCSTraceFilterSimple 在客户端零构造（服务端类）、栈上析构不走 vtable
 	// slot0，两路钩全程 0 调用 —— 纯启动期补丁风险（大厅注入闪退嫌疑），RVA 保留
 	// 在 offsets::filter_dtors / functions::client::bullet_trace_helper 备查。
@@ -120,6 +118,12 @@ void hook_manager_t::init()
 			OutputDebugStringA(szBytes);
 		}
 		create_logged("create_move", create_move_target && hooks::client::hkCreateMove.Create(create_move_target, reinterpret_cast<void*>(&hooks::client::create_move)), create_move_target);
+	}
+
+	{
+		
+		const auto fill_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::input::csgoinput_fill_cmd_angles));
+		create_logged("fill_cmd_angles", fill_target && hooks::client::hkFillCmdAngles.Create(fill_target, reinterpret_cast<void*>(&hooks::client::fill_cmd_angles)), fill_target);
 	}
 
 	///create_hook(create_move, game->client.at(sdk::offsets::functions::input::csgoinput_create_move), &hooks::client::create_move);

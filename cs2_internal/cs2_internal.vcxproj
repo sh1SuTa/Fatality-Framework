@@ -394,7 +394,7 @@
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>D:\CODEDEMO\Fatality-Framework-review\cs2_internal\src\renderer\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\xorstr;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\tinyformat;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\cs2_internal\src\renderer\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\xorstr;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\tinyformat;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\contrib\minhook\include;C:\Users\kraig\Downloads\Telegram Desktop\cs2_internal-master\cs2_internal-master\cs2_internal\src\renderer\include;$(ProjectDir)\src\renderer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>false</WholeProgramOptimization>

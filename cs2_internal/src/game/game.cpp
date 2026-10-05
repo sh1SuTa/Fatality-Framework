@@ -164,7 +164,6 @@ namespace
 		{
 			if (const auto chain = read_ready_swap_chain(slot, linked_list))
 			{
-				OutputDebugStringA("Fatality: DX11 swap-chain resolved.\n");
 				return chain;
 			}
 			Sleep(100);
@@ -348,14 +347,12 @@ void game_t::init()
 	sdk::pOldWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtrW(sdk::hWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(hooks::input_system::wnd_proc)));
 	if (sdk::pOldWndProc == nullptr)
 		return;
-	OutputDebugStringA("Fatality: init: wnd proc hooked.\n");
 
 	//load_fonts();
 
 	// load other
 	cfg.init();
 
-//#ifdef _DEBUG
 	OutputDebugStringA("Fatality: init: unlocking cvars.\n");
 	{
 		// dump the captured CCvar object so the real list offset can be
@@ -370,7 +367,6 @@ void game_t::init()
 	}
 	sdk::Cvar->unlock();
 	OutputDebugStringA("Fatality: init: cvars unlocked.\n");
-//#endif
 
 	OutputDebugStringA("Fatality: init: installing hooks.\n");
 	hook_manager.init();

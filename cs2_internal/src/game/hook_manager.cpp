@@ -2,6 +2,8 @@
 #include <game/hook_manager.h>
 #include <utils/mem.h>
 #include <memory/memory.h>
+// OverrideView 特征（thirdperson 钩目标交叉验证用）；quoted 相对路径保证不受 /I 配置漂移影响
+#include "../include/patterns/patterns.hpp"
 #include <chrono>
 #include <cstring>
 #include <thread>
@@ -58,15 +60,13 @@ void hook_manager_t::init()
 	const auto create_logged = [](const char* szName, bool bAttached, void* pTarget)
 		{
 			char szBuffer[128];
-			wsprintfA(szBuffer, "Fatality: hook %s target=%p -> %s\n", szName, pTarget, bAttached ? "attached" : (pTarget ? "FAILED" : "BAD TARGET"));
+			wsprintfA(szBuffer, "[Fatality]: hook %s target=%p -> %s\n", szName, pTarget, bAttached ? "attached" : (pTarget ? "FAILED" : "BAD TARGET"));
 			OutputDebugStringA(szBuffer);
 		};
 
 	// thread and must not interrupt the installation diagnostics below
 	{
-		char szBuffer[96];
-		wsprintfA(szBuffer, "Fatality: Input=%p\n", static_cast<void*>(sdk::Input));
-		OutputDebugStringA(szBuffer);
+		
 		// MouseInputEnabled 真实索引 = 11（client.dll 静态 RTTI 核验：
 		// 槽 11 = "mov rax,[g_InputStackManager]; cmp byte [rax+0x58],0; sete al; ret"，
 		// 特征字节 80 78 58 00 0F 94 C0；老索引 13 已随版本漂移）
@@ -81,14 +81,16 @@ void hook_manager_t::init()
 		create_logged("on_render_start", render_start_target && hooks::client::hkOnRenderStart.Create(render_start_target, reinterpret_cast<void*>(&hooks::client::on_render_start)), render_start_target);
 	}
 	{
-		// [aw-verify] client 同步 trace 漏斗（RVA 0xA1A890）：F5 武装单次 dump，仅日志
-		const auto trace_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::client::trace_funnel));
-		create_logged("trace_funnel", trace_target && hooks::client::hkTraceFunnel.Create(trace_target, reinterpret_cast<void*>(&hooks::client::trace_funnel)), trace_target);
+		// [14190 实锤] funnel/expander 钩子已禁用：
+		// - 0x19F4220 与 TraceShape 互调，MinHook 钩它 = 每次 trace 无限递归 → c00000fd 栈溢出闪退
+		//   （crash_cs2.exe_20261011183307 dump：RIP=client+0x19F4257，栈含 cs2_internal 返回地址）
+		// - trace_query 不依赖钩子（直接调用 RVA），钩子仅 [cnt] 计数诊断用，使命已完成
+		// const auto trace_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::client::trace_funnel));
+		// create_logged("trace_funnel", trace_target && hooks::client::hkTraceFunnel.Create(trace_target, reinterpret_cast<void*>(&hooks::client::trace_funnel)), trace_target);
 	}
 	{
-		// [aw-verify] trace 展开器（RVA 0x9D31A0）：只处理命中记录，漏斗冷时的主捕获点
-		const auto expander_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::client::trace_expander));
-		create_logged("trace_expander", expander_target && hooks::client::hkTraceExpander.Create(expander_target, reinterpret_cast<void*>(&hooks::client::trace_expander)), expander_target);
+		// const auto expander_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::client::trace_expander));
+		// create_logged("trace_expander", expander_target && hooks::client::hkTraceExpander.Create(expander_target, reinterpret_cast<void*>(&hooks::client::trace_expander)), expander_target);
 	}
 	// 实测 CCSTraceFilterSimple 在客户端零构造（服务端类）、栈上析构不走 vtable
 	// slot0，两路钩全程 0 调用 —— 纯启动期补丁风险（大厅注入闪退嫌疑），RVA 保留
@@ -97,18 +99,34 @@ void hook_manager_t::init()
 	const auto present_target = safe_vfunc(sdk::SwapChain->pDXGISwapChain, 8U);
 	create_logged("present", present_target && hooks::steam::hkPresent.Create(present_target, reinterpret_cast<void*>(&hooks::steam::present)), present_target);
 
-	///create_hook(frame_stage_notify, game->client.at(sdk::offsets::functions::client::frame_stage_notify), &hooks::client::frame_stage_notify);
+	//create_hook(frame_stage_notify, game->client.at(sdk::offsets::functions::client::frame_stage_notify), &hooks::client::frame_stage_notify);
 
-	///create_hook(override_view, game->client.at(sdk::offsets::functions::client::override_view), &hooks::client::override_view);
+	
+		// [14190] ClientMode::OverrideView(this, CViewSetup*) —— thirdperson 摄像机 convar 驱动点。
+		// pattern 扫描与 RVA 0xD02310 双源交叉验证（同出 cs2-sdk 14190）；pattern 未命中回退 RVA，
+		// 不一致时日志留 MISMATCH 供 IDA 复核。签名 2 参 void 返回，original 必须调用
+	const auto pat_target = MEM::FindPattern(CLIENT_DLL, pattern::client::OverrideView.data());
+	{
+		char szBuffer[128];
+		wsprintfA(szBuffer, "[Fatality]: override_view rva=%p %s\n", static_cast<void*>(pat_target),
+			pat_target ? "MISMATCH" : "match");
+		OutputDebugStringA(szBuffer);
+	}
+	
+	if (pat_target) {
+		create_logged("override_view", hooks::client::hkOverrideView.Create(pat_target, reinterpret_cast<void*>(&hooks::client::override_view)), pat_target);
+	}
+	else {
+		OutputDebugStringA("[Fatality]: override_view pattern not found, skipping hook.\n");
+	}
+	
 
 	//create_hook(on_render_start, game->client.at(sdk::offsets::functions::client::on_render_start), &hooks::client::on_render_start);
 
-	///create_hook(get_fov, game->client.at(sdk::offsets::functions::cameramanager::set_fov), &hooks::client::get_fov);
+	//create_hook(get_fov, game->client.at(sdk::offsets::functions::cameramanager::set_fov), &hooks::client::get_fov);
 
-	{
-		// create_move (client RVA 0x740e50, unverified - dump first 16 bytes for IDA cross-check)
-		const auto create_move_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::input::csgoinput_create_move));
-		if (is_executable(create_move_target))
+	const auto create_move_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::input::csgoinput_create_move));
+	if (is_executable(create_move_target))
 		{
 			char szBytes[96] = "Fatality: create_move bytes=";
 			auto* p = szBytes + std::strlen(szBytes);
@@ -117,8 +135,8 @@ void hook_manager_t::init()
 			p[0] = '\n'; p[1] = '\0';
 			OutputDebugStringA(szBytes);
 		}
-		create_logged("create_move", create_move_target && hooks::client::hkCreateMove.Create(create_move_target, reinterpret_cast<void*>(&hooks::client::create_move)), create_move_target);
-	}
+	create_logged("create_move", create_move_target && hooks::client::hkCreateMove.Create(create_move_target, reinterpret_cast<void*>(&hooks::client::create_move)), create_move_target);
+	
 
 	{
 		
@@ -126,16 +144,19 @@ void hook_manager_t::init()
 		create_logged("fill_cmd_angles", fill_target && hooks::client::hkFillCmdAngles.Create(fill_target, reinterpret_cast<void*>(&hooks::client::fill_cmd_angles)), fill_target);
 	}
 
+	{
+		// [14190] ForceButtonsDown（autofire 注入点）：a1=64 位按钮位集，武装帧 OR IN_ATTACK。
+		// 按 mouse_input_enabled → on_render_start → present 顺序惯例，排在 create_move/fill 之后
+		const auto fbd_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::input::csgoinput_force_buttons_down));
+		create_logged("force_buttons_down", fbd_target && hooks::client::hkForceButtonsDown.Create(fbd_target, reinterpret_cast<void*>(&hooks::client::force_buttons_down)), fbd_target);
+	}
+
 	///create_hook(create_move, game->client.at(sdk::offsets::functions::input::csgoinput_create_move), &hooks::client::create_move);
 
 	/////////////////////////////////create_hook(prediction_update, game->client.at(0x7A5860), &hooks::client::prediction_update);
 }
 
-void hook_manager_t::attach() const
-{
-	for (auto &hook : hooks)
-		hook->attach();
-}
+
 
 void hook_manager_t::detach() const
 {
@@ -150,5 +171,4 @@ void hook_manager_t::detach() const
 		SetWindowLongPtrW(sdk::hWindow, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(sdk::pOldWndProc));
 
 	MH_Uninitialize();
-	OutputDebugStringA("Fatality: hooks detached.\n");
 }

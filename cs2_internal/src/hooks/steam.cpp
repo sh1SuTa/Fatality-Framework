@@ -19,21 +19,30 @@ namespace hooks::steam
 	using namespace evo::ren;
 	using namespace evo::gui;
 
+	namespace
+	{
+		// present 内有需要对象展开的局部（lock_guard 等），SEH 必须隔离到 noinline 函数
+		__declspec(noinline) bool gv_time_seh(float* rt, float* ft)
+		{
+			__try
+			{
+				if (!sdk::GlobalVars)
+					return false;
+				*rt = sdk::GlobalVars->real_time;
+				*ft = sdk::GlobalVars->frame_time;
+				return true;
+			}
+			__except (EXCEPTION_EXECUTE_HANDLER)
+			{
+				return false;
+			}
+		}
+	}
+
 	HRESULT present(IDXGISwapChain*chain, UINT sync, UINT flags)
 	{
 
-		const auto oPresent = hkPresent.GetOriginal();
-
-		// [aw-verify] F5 边沿检测 → 自调用同步 trace（复刻 0x80CE65 配方，眼位→视线前方）。
-		// 被动武装（等游戏喂 trace）已废弃：漏斗/展开器/filter 三条拦截线实测全冷，
-		// trace_dump_armed 恒 false，funnel/expander 钩的捕获分支保持休眠。
-		// 不用 &1 全局边沿位：它会被进程内其他轮询者（Steam overlay 等）偷走，
-		// 改用 0x8000 按下状态位 + 自维护 prev 状态做边沿。
-		static bool f5_prev = false;
-		const bool f5_held = (GetAsyncKeyState(VK_F5) & 0x8000) != 0;
-		if (f5_held && !f5_prev)
-			hooks::client::aw_self_trace_test();
-		f5_prev = f5_held;
+		
 
 		static ID3D11RenderTargetView *view;
 
@@ -110,15 +119,49 @@ namespace hooks::steam
 
 		static_cast<ID3D11DeviceContext *>(draw.adapter->get_context())->OMSetRenderTargets(1, &view, nullptr);
 
-		// GlobalVars 不能用 init 时的缓存指针：CS2 切图/大厅会重写 client+0x222BE98
-		// 槽，旧值悬垂（dump 实锤：present+0x900 读 real_time AV @0x55671130090）。
-		// 与 var() 缓存悬垂同族问题，每帧重读 + 判空。
+		// GlobalVars 不能用 init 时的缓存指针：CS2 切图/大厅会重写槽，旧值悬垂
+		// （dump 实锤：present+0x900 读 real_time AV）。与 var() 缓存悬垂同族问题，
+		// 每帧重读 + 判空 + SEH 兜底。
+		//
+		// [font fix] 主菜单/大厅时 client 的 GlobalVars 槽未激活（实测 real_time/
+		// frame_time 全 0）—— animator（animator.h）只在 frame_time>0 时推进动画，
+		// 时间恒 0 → 菜单文字 fade-in 停在 t=0、alpha=0（症状：菜单框在、字没有）。
+		// 引擎时间不可信时改用本地单调时钟兜底，GUI 时序与游戏引擎完全解耦。
+		bool gv_time_ok = false;
 		if (game->client.handle)
 			sdk::GlobalVars = reinterpret_cast<sdk::global_vars_t*>(game->client.deref(sdk::offsets::globals::global_vars));
-		if (sdk::GlobalVars)
+		float rt = 0.f, ft = 0.f;
+		if (gv_time_seh(&rt, &ft))
 		{
-			draw.time = sdk::GlobalVars->real_time;
-			draw.frame_time = sdk::GlobalVars->frame_time;
+			// NaN 比较恒 false 也会走兜底；ft<1 排除垃圾大值
+			if (rt > 0.f && ft > 0.f && ft < 1.f)
+			{
+				draw.time = rt;
+				draw.frame_time = ft;
+				gv_time_ok = true;
+			}
+		}
+		if (!gv_time_ok)
+		{
+			static LARGE_INTEGER freq = {};
+			static LARGE_INTEGER prev = {};
+			static float local_time = 0.f;
+			if (!freq.QuadPart)
+				QueryPerformanceFrequency(&freq);
+			LARGE_INTEGER now;
+			QueryPerformanceCounter(&now);
+			if (prev.QuadPart)
+			{
+				auto dt = float(double(now.QuadPart - prev.QuadPart) / double(freq.QuadPart));
+				if (dt < 0.f)
+					dt = 0.f;
+				if (dt > 0.1f)
+					dt = 0.1f; // 断帧/断点后恢复保护
+				local_time += dt;
+				draw.time = local_time;
+				draw.frame_time = dt;
+			}
+			prev = now;
 		}
 
 		draw.refresh();
@@ -214,7 +257,7 @@ namespace hooks::steam
 			menu::men.font_was_reset = true;
 			menu::men.font_reset = false;
 		}
-
+		const auto oPresent = hkPresent.GetOriginal();
 		return oPresent(chain, sync, flags);
 	}
 } 

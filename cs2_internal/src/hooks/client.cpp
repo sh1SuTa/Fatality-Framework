@@ -1,5 +1,6 @@
-﻿#include <cstring>
+#include <cstring>
 #include <cmath>
+#include <cstdio>
 #include <intrin.h>
 #include <macros.h>
 #include <game/aimbot.h>
@@ -19,6 +20,7 @@
 #include <sdk/offsets.h>
 #include <sdk/sdk.h>
 #include <sdk/trace.h>
+#include <utils/mem.h>
 
 namespace
 {
@@ -251,6 +253,14 @@ namespace
 		}
 	}
 
+	// [14190] ForceButtonsDown 注入状态（钩子与 create_move 解除逻辑共享）。
+	// a1 = 64 位按钮位集（值传递，全量覆盖语义：+0x58 允许掩码按位与、
+	// +0x190 状态 cmp 去重）—— sub_A66050 反汇编实锤。
+	void* s_fbd_dev = nullptr;
+	unsigned long long s_fbd_mask = 0;
+	void* s_fbd_x[6] = {};   // original 其余槽位（解除时 8 槽重放）
+	bool s_fbd_injected = false;
+
 	struct aw_stack_trace_cand { const unsigned char* p; float fraction; int hit; };
 
 	__declspec(noinline) void aw_filter_dtor_event(int id, const void* self, const void* retaddr)
@@ -281,53 +291,55 @@ namespace
 
 namespace hooks::client
 {
-	// [aimbot 可见性] 可复用同步 trace 段（配方同 aw_self_trace_test，p5=1 命中挡位）。
-	// 返回 fraction，出参 hit_ent = 命中实体指针（CGameTrace+0x08，miss 时为 null）；
-	// 任何故障按"无命中"处理（trace 失败不废锁人）。
-	// 纯 POD 局部，无 C++ 对象（C2712 约束）。
+	// [aimbot 可见性] 可复用同步 trace 段（14190 配方，2026-10-12 磁盘实锤）。
+	// 复刻游戏 GameTraceLine 调用现场（client 0x84E340..0x84E36E，wrapper 全解码）：
+	//   GameTraceLine([0x221F058]=mgr, &attrs, &start, &end, a5=0, a6=1, a7=&out[0xC0])
+	//   attrs = 16B：0x203C30 构造 = desc(0x1ABC9C8, 实测全零)12B 拷贝 + float@+0xC
+	//         （wrapper 走 xmm2=0 分支，等价内联）
+	//   out 预置 = 0 清零 + [+0x6C]=-1(dword) + [+0xB0]=-1(qword) + fraction 默认 1
+	//         （游戏 0x84E2BF..0x84E2E5 段同款，另设 [0x74]=0x07000000 —— 不设也照抄结果）
+	// GameTraceLine 内部（0xA19AE0 反汇编实锤）：碰撞掩码 0x0F00FFFF 硬编码，
+	// 构造 local query（vtable 0x1ACE848）→ 0xA0FB60 → 0xA19650(mgr, attrs, start, end, &local, out)。
+	// 返回 fraction（out+0xAC，wrapper 0x84E3FA comiss [rbp+0x2C] 实锤），
+	// 出参 hit_ent = out+0x08 命中实体指针（14189 实锤沿用）；hit byte = out+0xBB（0x84E400 实锤）。
+	// 任何故障按"无命中"处理（trace 失败不废锁人）。纯 POD 局部，无 C++ 对象（C2712 约束）。
+	// 旧 funnel 配方已废弃：14190 的 0x19F4220 实为 __chkstk（调它=空转，trace 全 miss 根因）。
 	__declspec(noinline) float aw_trace_query(const float start[3], const float end[3], const void** hit_ent)
 	{
 		*hit_ent = nullptr;
 		const auto base = reinterpret_cast<uintptr_t>(game->client.handle);
 		if (!base)
 			return 1.f;
-		const auto phys = *reinterpret_cast<void**>(base + sdk::offsets::functions::client::physics_query_singleton);
-		if (!phys)
+
+		// [14191 已验 2026-10-18] trace 系 RVA 已全量重扫（tools/trace_rescan_14191.py：
+		// pattern 唯一命中 + wrapper 调用点 +0xEE/+0xC0 同位 + singleton 149 xref + RTTI vtable 全名匹配）
+		constexpr bool aw_trace_ready = true;
+		if (!aw_trace_ready)
 			return 1.f;
 
+		float frac = 1.f;
+		alignas(16) unsigned char out[0xC0] = {};
+
+		// [2026-10-20 实测] 裸调 GameTraceLine 每帧静默 miss（frac 恒 1、hit 恒 null，无异常、mgr 非空）。
+		// 反汇编 0x84EDB0 确认：游戏自己的高层 wrapper 调 GameTraceLine 前会先 CGameTrace::Init(out)
+		// 并预置 out+0x74=0x07000000，再按 desc 构造 attrs（=0x203FA0 拷贝 12B + float）。
+		// 直接走该 wrapper（rcx=start, rdx=end, xmm2=0, r9=out_copy），由游戏负责全部预置。
 		__try
 		{
-			using ctor_fn = void* (__fastcall*)(void*, const void*);
-			alignas(16) unsigned char filter[0x60] = {};
-			const auto attrs = reinterpret_cast<ctor_fn>(base + sdk::offsets::functions::client::trace_filter_ctor)(
-				filter, reinterpret_cast<const void*>(base + sdk::offsets::functions::client::trace_filter_desc));
-			if (!attrs)
-				return 1.f;
+			using wrapper_fn = bool(__fastcall*)(const float*, const float*, float, void*);
+			reinterpret_cast<wrapper_fn>(base + sdk::offsets::functions::client::trace_wrapper)(
+				start, end, 0.f, out);
 
-			unsigned char qdesc[0x30] = {};
-			std::memcpy(qdesc, attrs, 16);
-			qdesc[0x28] = (*reinterpret_cast<const float*>(reinterpret_cast<const unsigned char*>(attrs) + 0xC) > 0.f) ? 1 : 0;
-
-			alignas(16) unsigned char out[0xC0] = {};
-			*reinterpret_cast<float*>(out + 0xAC) = 1.f;                 // fraction
-			*reinterpret_cast<std::uint32_t*>(out + 0x68) = 0xffffffffu; // handle
-			*reinterpret_cast<float*>(out + 0x3C) = 1.f;                 // dmgmod
-
-			float s[3] = {start[0], start[1], start[2]};
-			float e[3] = {end[0], end[1], end[2]};
-
-			using funnel_fn = void* (__fastcall*)(void*, void*, void*, void*, void*, void*, void*);
-			reinterpret_cast<funnel_fn>(base + sdk::offsets::functions::client::trace_funnel)(
-				phys, qdesc, s, e, nullptr, reinterpret_cast<void*>(static_cast<uintptr_t>(1)), out);
-
-			const auto frac = *reinterpret_cast<const float*>(out + 0xAC);
+			frac = *reinterpret_cast<const float*>(out + 0xAC);
 			*hit_ent = *reinterpret_cast<void* const*>(out + 0x08);
-			return frac;
 		}
 		__except (EXCEPTION_EXECUTE_HANDLER)
 		{
-			return 1.f;
+			frac = 1.f;
+			*hit_ent = nullptr;
 		}
+
+		return frac;
 	}
 
 	// [aimbot 可见性] 眼位→目标点视线判定。判定链：
@@ -347,89 +359,6 @@ namespace hooks::client
 		return frac <= 0.05f;
 	}
 
-	// [aw-verify] 自调用同步 trace（F5 触发）—— 配方复刻 client 0x80CE65 现场（build 14188）：
-	// funnel(rcx=单例, rdx=&qdesc, r8=&start, r9=&end, [20]=NULL, [28]=1, [30]=&out)
-	// 单例=[client+0x2223148]；filter=0x203d00(&F, desc@0x1ABF9C8) 返回属性结构；
-	// qdesc=16B@[rax] 拷贝 + qdesc+0x28 byte=(float[rax+0xC]>0)；
-	// 出参默认态 = CGameTrace::Init 实测（fraction=1, handle=-1, dmgmod=1）
-	// 眼位读取与 visuals 的 read_local_eye_seh 同链（LocalPlayerController→pawn→node）
-	__declspec(noinline) void aw_self_trace_test()
-	{
-		const auto base = reinterpret_cast<uintptr_t>(game->client.handle);
-		if (!base)
-			return;
-
-		const auto phys = *reinterpret_cast<void**>(base + sdk::offsets::functions::client::physics_query_singleton);
-		if (!phys)
-			return;
-
-		// SEH 保护的本地眼位/视向（同 visuals::read_local_eye_seh 链，pawn 可能悬垂）
-		float eye[3] = {};
-		float yaw = 0.f;
-		__try
-		{
-			const auto ctrl = sdk::LocalPlayerController;
-			if (!ctrl)
-				return;
-			const auto pawn = ctrl->get_pawn();
-			if (!pawn)
-				return;
-			const auto node = pawn->get_m_pGameSceneNode();
-			if (!node)
-				return;
-			const auto org = node->get_vec_abs_origin();
-			eye[0] = org.x; eye[1] = org.y; eye[2] = org.z;
-			eye[2] += pawn->get_m_vecViewOffset().get_vec_z();
-			yaw = pawn->get_v_angle().y;
-		}
-		__except (EXCEPTION_EXECUTE_HANDLER)
-		{
-			return;
-		}
-
-		using ctor_fn = void* (__fastcall*)(void*, const void*);
-		const auto ctor = reinterpret_cast<ctor_fn>(base + sdk::offsets::functions::client::trace_filter_ctor);
-		alignas(16) unsigned char filter[0x60] = {};
-		const auto attrs = ctor(filter, reinterpret_cast<const void*>(base + sdk::offsets::functions::client::trace_filter_desc));
-		if (!attrs)
-			return;
-
-		unsigned char qdesc[0x30] = {};
-		std::memcpy(qdesc, attrs, 16);
-		qdesc[0x28] = (*reinterpret_cast<const float*>(reinterpret_cast<const unsigned char*>(attrs) + 0xC) > 0.f) ? 1 : 0;
-
-		using funnel_fn = void* (__fastcall*)(void*, void*, void*, void*, void*, void*, void*);
-		const auto funnel = reinterpret_cast<funnel_fn>(base + sdk::offsets::functions::client::trace_funnel);
-
-		// yaw 正方向=左转（oof 方向链同源），水平前向 dir={-sin,-cos}
-		const float rad = yaw * 3.14159265f / 180.f;
-
-		// 探针组（第六轮已定案：p5=1/3 命中路径、0/2 miss；fraction=0..1×ray_len；
-		// +0x84=真 endpos、+0x78=start 拷贝、+0xAC=fraction、+0xBC=hit bool）
-		struct aw_probe { const char* name; float delta[3]; uintptr_t p5; };
-		const float fwd_x = -std::sin(rad) * 256.f, fwd_y = -std::cos(rad) * 256.f;
-		const aw_probe probes[] = {
-			{ "fwd p5=1", { fwd_x, fwd_y, 0.f }, 1 },
-			{ "down p5=1", { 0.f, 0.f, -128.f }, 1 },
-		};
-
-		for (const auto& pr : probes)
-		{
-			// 出参（0xC0）：按 expander dump 实测默认态预填，funnel 命中后覆写
-			alignas(16) unsigned char out[0xC0] = {};
-			*reinterpret_cast<float*>(out + 0xAC) = 1.f;                 // fraction
-			*reinterpret_cast<std::uint32_t*>(out + 0x68) = 0xffffffffu; // entity handle
-			*reinterpret_cast<float*>(out + 0x3C) = 1.f;                 // dmgmod 默认
-
-			float start[3] = { eye[0], eye[1], eye[2] };
-			float end[3] = { eye[0] + pr.delta[0], eye[1] + pr.delta[1], eye[2] + pr.delta[2] };
-			funnel(phys, qdesc, start, end, nullptr, reinterpret_cast<void*>(pr.p5), out);
-
-			// [aw-verify 已收口] hex/字段/surface32 日志全部静音（代码保留备查，需要时恢复）
-			(void)out;
-		}
-	}
-
 	void prediction_update(void *pred, int a, int b)
 	{
 		//hook_manager.prediction_update->call(pred, a, b);
@@ -437,15 +366,9 @@ namespace hooks::client
 
 	void* create_move(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7)
 	{
-		// 8 槽透传（栈参数 5-8 由 MSVC 写进本函数的 outgoing area）。
-		// 先跑 aimbot（silent 目标角/非 silent 视角写入都在 original 之前就绪），
-		// 再让原函数生成当前命令——original 内部会调 fill_cmd_angles（已钩），
-		// silent 目标角在本 tick 即被消费。
+		
 
-		// [btn2] 相位检测（pre-original）+ 表 dump（post-original）。
-		// 上轮实测：a0 恒为 0x7FFC... 模块地址、+0xBD0 始终有表、cmd 递增 = 宿主 r15。
-		// 但 pre-original 读 pressed 全 -1（上帧重置后）—— 按钮态在 create_move 内部
-		// switch case 写入，必须 original 之后读。
+		
 		const char* phase = nullptr;
 		const unsigned char* btn_host = static_cast<const unsigned char*>(a0);
 		{
@@ -483,18 +406,24 @@ namespace hooks::client
 			}
 		}
 
+		// create_move 的 a0 = CCSGOInput 对象本体（14189 [host] 实锤 client+0x2572460，
+		// 14190 磁盘反汇编同构）：+0x688 实时视角槽（dwViewAngles 相对偏移三代不变）。
 		if (a0)
 		{
-			__try { aimbot_t::run(static_cast<sdk::ccsgo_input*>(a0)); }
+			__try
+			{
+				aimbot_t::run(static_cast<sdk::ccsgo_input*>(a0));
+				// ForceButtonsDown 主动注入 / 解除检查（armed→注入，!armed→重放清位）
+				autofire_inject_check();
+				autofire_release_check();
+			}
 			__except (EXCEPTION_EXECUTE_HANDLER) { }
 		}
 
 		const auto oCreateMove = hkCreateMove.GetOriginal();
 		const auto ret = oCreateMove(a0, a1, a2, a3, a4, a5, a6, a7);
 
-		// [btn2] post-original：hex dump a0 表 entry 0 全 0x60 字节。
-		// e0-e3 pressed 恒 -1，说明 +0x58 不是按下态或表被重置。
-		// 逐字节 diff held vs idle，找真正翻转的偏移。
+		
 		if (phase && btn_host)
 		{
 			unsigned long long tblv = 0;
@@ -504,31 +433,84 @@ namespace hooks::client
 				unsigned char buf[0x60];
 				if (btn_seh_copy(tbl, static_cast<int>(sizeof(buf)), buf))
 				{
-					char line[512];
-					for (int row = 0; row < 6; ++row)
+					
+				}
+			}
+		}
+
+		
+		if (sdk::LocalPlayerController)
+		{
+			static bool s_af2_prev = false;
+			const bool armed = aimbot_t::wants_autofire;
+			{
+				__try
+				{
+					using mgr_fn = void*(__fastcall*)(void*);
+					const auto ring = reinterpret_cast<unsigned char*>(
+						//client_module.value().base + 0x944530 =GetUserCmdManager 41 56 41 57 48 83 EC 48 48 8D 54 24 68 E8 AE B4
+						reinterpret_cast<mgr_fn>(client_module.value().base + 0x944530)(sdk::LocalPlayerController)
+					);
+					if (ring)
 					{
-						int pos = snprintf(line, sizeof(line), "Fatality: [btn2] %s e0 %02x:", phase, row * 16);
-						for (int i = 0; i < 16 && pos > 0 && pos < static_cast<int>(sizeof(line)) - 4; ++i)
-							pos += snprintf(line + pos, sizeof(line) - static_cast<size_t>(pos),
-								" %02x", buf[row * 16 + i]);
-						if (pos > 0)
+						
+						const int seq = *reinterpret_cast<const int*>(ring + 0x5910);
+						const auto cmd = ring + 0x98 * (static_cast<unsigned>(seq) % 150);
+						if (*reinterpret_cast<const int*>(cmd + 0x8) == seq)
 						{
-							snprintf(line + pos, sizeof(line) - static_cast<size_t>(pos), "\n");
-							OutputDebugStringA(line);
+							static int s_dbg_last_state = -1;
+							const int dbg_state =
+								((GetAsyncKeyState('W') & 0x8000) ? 1 : 0) |
+								((GetAsyncKeyState('S') & 0x8000) ? 2 : 0) |
+								((GetAsyncKeyState('A') & 0x8000) ? 4 : 0) |
+								((GetAsyncKeyState('D') & 0x8000) ? 8 : 0);
+
+							if (dbg_state != s_dbg_last_state)
+							{
+								s_dbg_last_state = dbg_state;
+
+								
+								unsigned long long held = 0, changed = 0;
+								aw_read_qword(cmd + 0x60, &held);
+								aw_read_qword(cmd + 0x68, &changed);
+
+								
+								
+							}
+							auto* const held = reinterpret_cast<unsigned long long*>(cmd + 0x60);
+							auto* const changed = reinterpret_cast<unsigned long long*>(cmd + 0x68);
+							//W 0x8 ,S 0x10,A 0x200,D 0x400
+							if (armed)
+							{
+								*held |= 1ull;
+								*changed |= 1ull;
+								char hdr[256];
+								sprintf_s(hdr, sizeof(hdr),
+									"[Fatality]: [as-general_id]=%d \n",
+									menu::group::general_id);
+								OutputDebugStringA(hdr);
+								if (cfg.weapon_config.autostop[menu::group::general_id].get()) {
+									*held &= ~0x618ull;
+									auto old_held = *held;
+									*changed |= (old_held & 0x618);
+								}
+								
+							}
+							else if (s_af2_prev)//停火
+							{
+								*held &= ~1ull;
+								*changed |= 1ull;
+							}
+							else
+							{
+								*held &= ~1ull;
+							}
 						}
 					}
 				}
-				else
-				{
-					OutputDebugStringA("Fatality: [btn2] e0 copy fail\n");
-				}
+				__except (EXCEPTION_EXECUTE_HANDLER) { }
 			}
-			else
-			{
-				char line[64];
-				snprintf(line, sizeof(line), "Fatality: [btn2] %s a0tbl=null\n", phase);
-				OutputDebugStringA(line);
-			}
+			s_af2_prev = armed;
 		}
 
 		return ret;
@@ -556,6 +538,27 @@ namespace hooks::client
 			__except (EXCEPTION_EXECUTE_HANDLER) { }
 		}
 
+		
+		if (a1 && aimbot_t::wants_autostop)
+		{
+			__try
+			{
+				const auto cmd = *reinterpret_cast<unsigned char**>(static_cast<unsigned char*>(a1) + 0x18);
+				if (cmd)
+				{
+					
+
+					// [as-sub] dump cmd+0x00~+0x40 原始 qwords 找 subtick_moves（RepeatedPtrField）：
+					// 结构是 ptr(heap) + count(small int 0~64) + capacity(≥count)，cmd+0x18 是 protobuf 声明
+					// 但 cmd+0x30 实测是 stack/code 范围（0x7FFF...）非 protobuf base
+					static DWORD s_sub = 0;
+					const auto now = GetTickCount();
+					
+				}
+			}
+			__except (EXCEPTION_EXECUTE_HANDLER) { }
+		}
+
 		return ret;
 	}
 
@@ -570,43 +573,148 @@ namespace hooks::client
 
 	void override_view(void *rcx, sdk::cview_setup *view_setup)
 	{
-		//const auto run_thirdperon = cfg.misc.thirdperson.get(); //TODO: check for cfg.misc.thirdperson_grenade.get();
+		
 
-		//var(cam_idealdist);
-		//var(cam_collision);
-		//var(cam_snapto);
-		//var(c_thirdpersonshoulder);
-		//var(c_thirdpersonshoulderaimdist);
-		//var(c_thirdpersonshoulderdist);
-		//var(c_thirdpersonshoulderheight);
-		//var(c_thirdpersonshoulderoffset);
+		static float progress = 0.f;
+		static bool was_on = false;
 
-		//static auto progress = 0.f;
-		//if (run_thirdperon)
-		//{
-		//	auto bezier = [](const float t) { return t * t * (3.0f - 2.0f * t); };
+		const bool cfg_now = cfg.misc.thirdperson.get();
+		static bool cfg_prev = false;
+		const bool cfg_rising = cfg_now && !cfg_prev;
+		cfg_prev = cfg_now;
 
-		//	progress = clamp(progress + sdk::GlobalVars->frame_time * 6.f, 40.f / cfg.misc.thirdperson_dist.get(), 1.f);
+		bool run_thirdperson = false;
+		const void* dbg_ctrl = nullptr;
+		bool dbg_alive = false;
 
-		//	cam_idealdist->value.fl = cfg.misc.thirdperson_dist.get() * (cfg.misc.thirdperson_no_interp.get() ? 1.f : bezier(progress));
-		//	cam_collision->value.i1 = true;
-		//	cam_snapto->value.i1 = true;
-		//	c_thirdpersonshoulder->value.i1 = true;
-		//	c_thirdpersonshoulderaimdist->value.fl = 0.f;
-		//	c_thirdpersonshoulderdist->value.fl = 0.f;
-		//	c_thirdpersonshoulderheight->value.fl = 0.f;
-		//	c_thirdpersonshoulderoffset->value.fl = 0.f;
+		if (cfg_now)
+		{
+			// GlobalVars/LocalPlayerController 每帧重读（切图/大厅重写槽位，缓存指针悬垂）
+			if (game->client.handle)
+				sdk::GlobalVars = reinterpret_cast<sdk::global_vars_t*>(game->client.deref(sdk::offsets::globals::global_vars));
 
-		//	game->input()->in_third_person = true;
-		//}
-		//else
-		//{
-		//	progress = cfg.misc.thirdperson.get() ? 1.f : 0.f;
-		//	game->input()->in_third_person = false;
-		//}
+			__try
+			{
+				if (const auto client_base = static_cast<const uint8_t*>(MEM::GetModuleBaseHandle(CLIENT_DLL)))
+					sdk::LocalPlayerController = *reinterpret_cast<sdk::cs2_player_controller* const*>(
+						client_base + sdk::offsets::globals::local_player_controller);
 
+				if (const auto ctrl = sdk::LocalPlayerController)
+				{
+					dbg_ctrl = ctrl;
+					dbg_alive = ctrl->get_pawn_is_alive();
+					run_thirdperson = dbg_alive || cfg.misc.thirdperson_dead.get();
+				}
+			}
+			__except (EXCEPTION_EXECUTE_HANDLER) { }
+		}
 
-		//hook_manager.override_view->call(rcx, view_setup);
+		const auto bezier = [](const float t) { return t * t * (3.0f - 2.0f * t); };
+
+		if (run_thirdperson)
+		{
+			// [14190] 进第三人称：直接调 thirdperson ConCommand 回调（原生全流程：视角快照+
+			// 状态位+vcall+0x9D8(1)）。必须【每帧重放】不能只在勾选沿调一次——实测 9D8 置位
+			// 只活一帧就被游戏相机/输入主循环复位（症状：视角闪一下回第一人称）；回调自带
+			// 幂等门（vcall+310 查到已 TP 则 no-op），被复位帧会自动重新夺位，重生后也能自愈
+			if (const auto client_base = reinterpret_cast<uintptr_t>(MEM::GetModuleBaseHandle(CLIENT_DLL)))
+			{
+				__try
+				{
+					reinterpret_cast<void(__fastcall*)()>(client_base + sdk::offsets::functions::client::cmd_thirdperson)();
+				}
+				__except (EXCEPTION_EXECUTE_HANDLER) { }
+			}
+
+			// var() 无 static：cvar 系统重建（切图/大厅）会释放 convar 对象，static 缓存悬垂
+			// 是大厅注入闪退根因（见 project 记忆）；find 本身 SEH 防护，调用方判空
+			var(cam_idealdist);
+			var(cam_collision);
+			var(cam_snapto);
+			var(c_thirdpersonshoulder);
+			var(c_thirdpersonshoulderaimdist);
+			var(c_thirdpersonshoulderdist);
+			var(c_thirdpersonshoulderheight);
+			var(c_thirdpersonshoulderoffset);
+
+			const float dist = cfg.misc.thirdperson_dist.get();
+
+			// 拉远动画：40/dist 下限 = 从 40u 起步，bezier 缓动到目标距离；no_interp = 禁用动画直取
+			if (cfg.misc.thirdperson_no_interp.get() || !sdk::GlobalVars)
+				progress = 1.f;
+			else
+				progress = clamp(progress + sdk::GlobalVars->frame_time * 6.f, 40.f / dist, 1.f);
+
+			if (cam_idealdist) cam_idealdist->value.fl = dist * (cfg.misc.thirdperson_no_interp.get() ? 1.f : bezier(progress));
+			if (cam_collision) cam_collision->value.i1 = true;
+			if (cam_snapto) cam_snapto->value.i1 = true;
+			if (c_thirdpersonshoulder) c_thirdpersonshoulder->value.i1 = true;
+			// 肩部偏移全清零 = 纯背后居中视角
+			if (c_thirdpersonshoulderaimdist) c_thirdpersonshoulderaimdist->value.fl = 0.f;
+			if (c_thirdpersonshoulderdist) c_thirdpersonshoulderdist->value.fl = 0.f;
+			if (c_thirdpersonshoulderheight) c_thirdpersonshoulderheight->value.fl = 0.f;
+			if (c_thirdpersonshoulderoffset) c_thirdpersonshoulderoffset->value.fl = 0.f;
+
+			// [14190] 相机实际距离 = 状态单例 [client+tp_state_singleton] 对象 +0x238。
+			// cam_idealdist 不被相机消费（拖到 180 相机仍钉在首次激活硬编码的 30.0f），
+			// 每帧直写覆盖，值与 convar 写入同步（含 bezier 缓动/no_interp）
+			{
+				unsigned long long obj = 0;
+				if (const auto client_base = reinterpret_cast<uintptr_t>(MEM::GetModuleBaseHandle(CLIENT_DLL)))
+				{
+					__try
+					{
+						obj = *reinterpret_cast<unsigned long long*>(client_base + sdk::offsets::functions::client::tp_state_singleton);
+						if (obj > 0x10000 && obj < 0x7FFFFFFFFFFFull)
+							*reinterpret_cast<float*>(obj + 0x238) = dist * (cfg.misc.thirdperson_no_interp.get() ? 1.f : bezier(progress));
+					}
+					__except (EXCEPTION_EXECUTE_HANDLER) { }
+				}
+			}
+
+			was_on = true;
+
+			// [tp-probe] 勾选沿一次性快照（wsprintfA 无 %f，浮点走 sprintf_s）
+			if (cfg_rising)
+			{
+				char szBuffer[224];
+				sprintf_s(szBuffer, sizeof(szBuffer),
+					"[tp] on: ctrl=%p alive=%d ideal=%p fl=%.1f shoulder=%p i1=%d dist=%.1f gv=%p\n",
+					dbg_ctrl, dbg_alive ? 1 : 0,
+					static_cast<const void*>(cam_idealdist), cam_idealdist ? cam_idealdist->value.fl : -1.f,
+					static_cast<const void*>(c_thirdpersonshoulder), c_thirdpersonshoulder ? static_cast<int>(c_thirdpersonshoulder->value.i1) : -1,
+					dist, static_cast<void*>(sdk::GlobalVars));
+				OutputDebugStringA(szBuffer);
+			}
+		}
+		else if (cfg_rising)
+		{
+			// [tp-probe] 勾选了但未激活（未进局/死亡未强制）—— 判定结果可见
+			char szBuffer[128];
+			wsprintfA(szBuffer, "[tp] cfg on but inactive: ctrl=%p alive=%d dead_force=%d\n",
+				dbg_ctrl, dbg_alive ? 1 : 0, cfg.misc.thirdperson_dead.get() ? 1 : 0);
+			OutputDebugStringA(szBuffer);
+		}
+		else if (was_on)
+		{
+			// 关闭瞬间恢复第一人称：调 firstperson ConCommand 回调（原生复位：状态标志+
+			// vcall+0x9D8(0)+FOV 恢复）；convar 复位保留兜底。只走一次（was_on 门闩），
+			// 大厅/主菜单从未开启时完全不碰
+			if (const auto client_base = reinterpret_cast<uintptr_t>(MEM::GetModuleBaseHandle(CLIENT_DLL)))
+			{
+				__try
+				{
+					reinterpret_cast<void(__fastcall*)()>(client_base + sdk::offsets::functions::client::cmd_firstperson)();
+				}
+				__except (EXCEPTION_EXECUTE_HANDLER) { }
+			}
+
+			var(c_thirdpersonshoulder);
+			if (c_thirdpersonshoulder) c_thirdpersonshoulder->value.i1 = false;
+			was_on = false;
+		}
+
+		hkOverrideView.GetOriginal()(rcx, view_setup);
 	}
 
 	float get_fov(void *rcx)
@@ -744,22 +852,77 @@ namespace hooks::client
 	AW_DEFINE_FILTER_DTOR(10, 10)
 #undef AW_DEFINE_FILTER_DTOR
 
+		
+	void force_buttons_down(void* a0, void* a1, void* a2, void* a3, void* a4, void* a5, void* a6, void* a7)
+	{
+		const auto oForce = hkForceButtonsDown.GetOriginal();
+		s_fbd_dev = a0;
+		s_fbd_mask = reinterpret_cast<unsigned long long>(a1);
+		// [fbd] 探针：原始位集变化时 dump（物理 LMB 按下/松开即翻位 → 定位 IN_ATTACK 位号）
+		static unsigned long long s_prev_mask = ~0ull;
+		if (s_fbd_mask != s_prev_mask)
+		{
+			char buf[96];
+			sprintf_s(buf, sizeof(buf), "Fatality: [fbd] mask=0x%016llx\n", s_fbd_mask);
+			OutputDebugStringA(buf);
+			s_prev_mask = s_fbd_mask;
+		}
+		s_fbd_x[0] = a2; s_fbd_x[1] = a3; s_fbd_x[2] = a4;
+		s_fbd_x[3] = a5; s_fbd_x[4] = a6; s_fbd_x[5] = a7;
+		if (aimbot_t::wants_autofire)
+		{
+			a1 = reinterpret_cast<void*>(s_fbd_mask | 1ULL); // IN_ATTACK = button code 0（btnhex 按下沿事件字段=0 实证）
+			s_fbd_injected = true;
+			static bool logged = false;
+			if (!logged)
+			{
+				OutputDebugStringA("Fatality: [fbd] IN_ATTACK injected\n");
+				logged = true;
+			}
+		}
+		oForce(a0, a1, a2, a3, a4, a5, a6, a7);
+	}
+
+	// create_move 钩子调用：武装帧主动调 ForceButtonsDown（游戏自身只在清空位集时
+	// 才调它 —— 两个调用点均 xor edx,edx，被动钩子永远等不到注入窗口，磁盘反汇编实锤）。
+	// a1 = 设备当前按下态(+0x190) | IN_ATTACK：基于当前态合成，物理按键位不受破坏；
+	// +0x190 是允许掩码过滤后的按下态镜像（sub_A66050 内 [rbx+190h] 全量覆盖写），幂等安全
+	__declspec(noinline) static auto fbd_read_state(const void* dev) -> unsigned long long
+	{
+		__try { return *reinterpret_cast<const unsigned long long*>(static_cast<const unsigned char*>(dev) + 0x190); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { return 0; }
+	}
+
+	void autofire_inject_check()
+	{
+		if (!aimbot_t::wants_autofire || s_fbd_injected || !s_fbd_dev)
+			return;
+		const auto cur = fbd_read_state(s_fbd_dev);
+		hkForceButtonsDown.GetOriginal()(s_fbd_dev, reinterpret_cast<void*>(cur | 1ULL),
+			s_fbd_x[0], s_fbd_x[1], s_fbd_x[2], s_fbd_x[3], s_fbd_x[4], s_fbd_x[5]);
+		s_fbd_injected = true;
+		
+	}
+
+	
+
+	
+
+	// create_move 钩子调用：解除帧（目标丢失/不可见/复选框关）重放原始掩码清注入位，
+	// 物理按键位保留（全量覆盖语义下本次重放=精确撤销注入，无隔墙余弹）
+	void autofire_release_check()
+	{
+		if (!s_fbd_injected || aimbot_t::wants_autofire || !s_fbd_dev)
+			return;
+		const auto oForce = hkForceButtonsDown.GetOriginal();
+		oForce(s_fbd_dev, reinterpret_cast<void*>(s_fbd_mask & ~1ULL),
+			s_fbd_x[0], s_fbd_x[1], s_fbd_x[2], s_fbd_x[3], s_fbd_x[4], s_fbd_x[5]);
+		s_fbd_injected = false;
+		
+	}
+
 }
 
 
 
 
-/*
-
-
-pandora
-onetap
-gamesense
-neverlose
-fatality
-
-
-
-dominance
-satanophobia
-*/

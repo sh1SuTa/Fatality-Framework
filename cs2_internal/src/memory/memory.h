@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "common.h"
-
+#include"../include/patterns/patterns.hpp"
 #include "keyvalue3.h"
 
 #pragma region memory_definitions

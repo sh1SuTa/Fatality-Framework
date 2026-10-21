@@ -9,7 +9,7 @@ struct hook_manager_t
 	hook_manager_t() = default;
 
 	void init();
-	void attach() const;
+	
 	void detach() const;
 
 	std::shared_ptr<utils::hook<decltype(hooks::input_system::wnd_proc)>> wnd_proc;

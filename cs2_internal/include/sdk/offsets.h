@@ -1,4 +1,4 @@
-﻿// generated on: 11/6/2023
+// generated on: 11/6/2023
 
 #ifndef SDK_OFFSETS_H
 #define SDK_OFFSETS_H
@@ -140,7 +140,7 @@ namespace sdk
 				constexpr auto legacy_game_ui001 = 0x223c0e0;
 				constexpr auto empty_world_service001_client = 0x2213230;
 				constexpr auto source2_client_ui001 = 0x223a960;
-				constexpr auto source2_client_prediction001 = 0x25605a0;
+				constexpr auto source2_client_prediction001 = 0x255c2d0;
 				constexpr auto client_tools_info_001 = 0x222f7b0;
 				constexpr auto source2_client_config001 = 0x24b7240;
 				constexpr auto game_client_exports001 = 0x222c458;
@@ -204,56 +204,84 @@ namespace sdk
 			{
 				constexpr auto frame_stage_notify = 0x71a620;
 				constexpr auto get_weapon_data = 0x4a7f40;
-				constexpr auto override_view = 0x7515d0;
+				// [14191] cvar 索引→ConVar 数据（FindVar 后半段）：tools/tp_rescan2_14191.py 静态实锤
+				// （函数 @0x19ACA80：out2 预置{-1,0} → vcall+0x148 单例[0x279CD58] → 兜底 idx*0x58
+				// 注册表[0x22ACD40] → 写 {idx, ConVar*}；与 ConvarGet 0x19AD630 同簇位移 +0x5E20 精确一致）。
+				// ConVar 布局不变（ConvarGet 14191 体仍读 flags@0x30/value@0x58/type@0x28，cvar.h 无需动）
+				constexpr auto cvar_from_index = 0x19aca80;
+				// [14191] ClientMode::OverrideView(this, CViewSetup*)：thirdperson 摄像机驱动点
+				//（tp_rescan_14191.py pattern 唯一命中 0xD02E30，14190 pattern 字节原样可用）。
+				// 旧 0xD02310/0x7515d0 均过期，勿信
+				constexpr auto override_view = 0xd02e30;
+				// [14191] thirdperson/firstperson ConCommand 回调（tp_rescan_14191.py pattern 唯一命中）。
+				// 回调反汇编逐条对齐 14190：无 cheat 门、状态门 +0x229 快照 +0x230/+0x234、
+				// +0x238=0x41F00000(30.0f 硬编码)、+0x6A8 清零、vcall+0x9D8(1)/(0)、vcall+0x310 查询全同
+				constexpr auto cmd_thirdperson = 0xb64190;
+				constexpr auto cmd_firstperson = 0xb640b0;
+				// [14191] 第三人称状态单例（thirdperson 回调 r8 宿主 = [client+0x223BD00]）：
+				// 对象布局零变化（+0x229/+0x230/+0x234/+0x238/+0x6A8 由 14191 回调反汇编直接复核）
+				constexpr auto tp_state_singleton = 0x223bd00;
 				constexpr auto get_camera = 0x841a70;
 				constexpr auto view_render = 0x732450;
 				constexpr auto on_render_start = 0x7b4060;
-				// [aw] 同步 trace 漏斗：5 个查询入口（TraceShape 族）共用（2026-10-05 server 对称分析）
-				constexpr auto trace_funnel = 0xa1a890;
-				// [aw] 0x48 记录→CGameTrace 展开器（surface 拷贝发生处，佐证 RVA）
-				constexpr auto trace_expander = 0x9d31a0;
-				// [aw] 自调用同步 trace 配方（0x80CE65 现场实锤 2026-10-05）：
-				// CTraceFilter 栈构造（返回属性结构，qdesc=16B 拷贝+flag@+0x28）、
-				// .data 描述符全局、物理查询单例槽（149 函数共读；diag a0=其值）
-				constexpr auto trace_filter_ctor = 0x203d00;
-				constexpr auto trace_filter_desc = 0x1abf9c8;
-				constexpr auto physics_query_singleton = 0x2223148;
-				// [aw] CCSTraceFilterSimple 使用现场 —— 本身即函数起始（.pdata 实证
-				// 0x8C931B..0x8C962B，首指令取该 filter vtable=栈上构造 filter 的经典模式），
-				// "用 CS filter 做 trace" 的封装函数，子弹链路必经（第三捕获点）
-				constexpr auto bullet_trace_helper = 0x8c931b;
-				// [aw] CGameTrace::Init（佐证 RVA）
+				// [14191 已验 2026-10-18] trace 系 RVA 全量重扫（tools/trace_rescan_14191.py，pattern+结构+RTTI 三路交叉）：
+				// GameTraceLine 0xA1A9A0（pattern 唯一命中 + 0x0F00FFFF 掩码 + 核心 0xA10A20/0xA1A510 同簇 +0xEC0）
+				// wrapper 0x84EDB0（GTL call @+0xEE 与 14190 同位、singleton load @+0xC0 同位、imm 0x07000000）
+				// singleton 0x2227058（pGameTraceManager pattern + wrapper 引用 + 全 DLL 149 函数 xref 与 14190 精确一致）
+				// attrs desc 0x1AC29C8（wrapper +0x7F 唯一 .rdata 12B 全零引用）
+				// expander 0x9D2F60（TraceShape call @+0x21F 与 14190 同位 + AutowallTraceData +0x38F 交叉调用）
+				// 调用配方不变：GameTraceLine(mgr, &attrs, &start, &end, nullptr, (void*)1, &out[0xC0])，
+				// attrs=desc 12B 拷贝+float@+0xC=0，out 预置 0 清零+[0x6C]=-1+[0xB0]=-1，
+				// fraction=[+0xAC]、hit 实体=[+0x08]、hit byte=[+0xBB]（14190 实锤沿用）
+				constexpr auto game_trace_line = 0xa1a9a0;
+				// [14191] 游戏高层 line trace wrapper：bool(start_vec rcx, end_vec rdx, float xmm2=0, out_copy r9)，
+				// 内部自带 out 预置(+0x74=0x07000000)+attrs 构造+GameTraceLine+结果判定
+				// （1.0>frac 或 hit byte!=0 → true）。裸调 GameTraceLine 全 miss 时的对照/替代路径
+				constexpr auto trace_wrapper = 0x84edb0;
+				// [14191] attrs 描述符（12B，.rdata 全零，wrapper 体内唯一引用）
+				constexpr auto trace_attrs_desc = 0x1ac29c8;
+				// [14191] 0x48 记录→CGameTrace 展开器（TraceShape call@+0x21F → 0x9D2F60，AW +0x38F 交叉）
+				constexpr auto trace_expander = 0x9d2f60;
+				// [14191] 物理查询单例槽：pattern 实锤 + 149 函数 xref（与 14190 数量一致）
+				constexpr auto physics_query_singleton = 0x2227058;
+				// [14191] CCSTraceFilterSimple 使用现场：唯一 lea→ccs vtable(0x1C11D00) 的函数
+				// （两个构造点 @+0x287/+0x29C；簇位移 -0x250 与 0x8BE dtor 簇一致）
+				constexpr auto bullet_trace_helper = 0x8c90cb;
+				// [14191 未验] CGameTrace::Init（佐证位，全工程零代码引用；旧 0x17761D0 已过期，
+				// 同簇 InitTraceInfo-analog 新址 0x1779300 位移 +0x5E20 可作下轮线索）
 				constexpr auto cgame_trace_init = 0x17761d0;
 			} // namespace client
 
-			// [aw] client.dll .rdata filter vtable RVA（RTTI 核验，2026-10-04）
+			// [aw] client.dll .rdata filter vtable RVA（RTTI 核验；[14191 重扫 2026-10-18]：
+			// TD 在 .data，vtable[-1]=烧录 VA(imagebase 0x180000000)+COL，全名匹配唯一命中）
 			namespace trace_vtables
 			{
-				constexpr auto ctrace_filter = 0x1ad1848;
-				constexpr auto ccs_trace_filter_simple = 0x1c0ef50;
-				constexpr auto no_npcs_or_player = 0x1bb8f80;
-				constexpr auto player_movement_cs = 0x1c0e180;
-				constexpr auto entity_sweep = 0x1c2bbe8;
-				constexpr auto omit_players = 0x1c84ea8;
-				constexpr auto no_combat_characters = 0x1c47fc8;
+				constexpr auto ctrace_filter = 0x1ad4838;        // 旧 1AD1848 +0x2FF0
+				constexpr auto ccs_trace_filter_simple = 0x1c11d00; // 旧 1C0EF50 +0x2DB0
+				constexpr auto no_npcs_or_player = 0x1bbbd60;    // 旧 1BB8F80 +0x2DE0
+				constexpr auto player_movement_cs = 0x1c10f30;   // 旧 1C0E180 +0x2DB0
+				constexpr auto entity_sweep = 0x1c2e9c8;         // 旧 1C2BBE8 +0x2DE0
+				constexpr auto omit_players = 0x1c87c98;         // 旧 1C84EA8 +0x2DF0
+				constexpr auto no_combat_characters = 0x1c4ada8; // 旧 1C47FC8 +0x2DE0
 			} // namespace trace_vtables
 
-			// [aw] 全部 trace filter 的 scalar-deleting-dtor RVA（vtable slot0，2026-10-05 静态解析）。
+			// [aw] 全部 trace filter 的 scalar-deleting-dtor RVA（vtable slot0；[14191 重扫 2026-10-18]
+			// 由新 vtable 直接取 slot0，VA 烧录已减 imagebase；同簇 dtor +0x30 间距与 14190 一致）。
 			// 栈上 filter 在 trace 函数返回前必析构一次 —— dtor 钩 + _ReturnAddress 反查开火
 			// trace 函数本体。顺序=hooks 侧 aw_filter_dtor_id。
 			namespace filter_dtors
 			{
-				constexpr auto trace_filter = 0x205a10;              // CTraceFilter（背景探针也用，热）
-				constexpr auto ccs_simple = 0x8bed20;                // CCSTraceFilterSimple（客户端零构造=死）
-				constexpr auto no_npcs_or_player = 0x783620;
-				constexpr auto player_movement_cs = 0x8bed80;
-				constexpr auto entity_sweep = 0x9c8550;
-				constexpr auto entity_push = 0x9c8520;
-				constexpr auto omit_players = 0xc62300;
-				constexpr auto no_combat_characters = 0xae2c00;
-				constexpr auto knife_ignore_teammates = 0x82cfa0;
-				constexpr auto taser_ignore_teammates = 0x82cfd0;
-				constexpr auto for_player_head_collision = 0x8bed50;
+				constexpr auto trace_filter = 0x205cb0;              // CTraceFilter（旧 205A10，背景探针也用，热）
+				constexpr auto ccs_simple = 0x8bead0;                // CCSTraceFilterSimple（旧 8BED20，客户端零构造=死）
+				constexpr auto no_npcs_or_player = 0x782a30;         // 旧 783620
+				constexpr auto player_movement_cs = 0x8beb30;        // 旧 8BED80
+				constexpr auto entity_sweep = 0x9c8370;              // 旧 9C8550
+				constexpr auto entity_push = 0x9c8340;               // 旧 9C8520
+				constexpr auto omit_players = 0xc62520;              // 旧 C62300
+				constexpr auto no_combat_characters = 0xae2e20;      // 旧 AE2C00
+				constexpr auto knife_ignore_teammates = 0x82c790;    // 旧 82CFA0
+				constexpr auto taser_ignore_teammates = 0x82c7c0;    // 旧 82CFD0
+				constexpr auto for_player_head_collision = 0x8beb00; // 旧 8BED50
 			} // namespace filter_dtors
 
 			namespace sdl3
@@ -276,18 +304,38 @@ namespace sdk
 			namespace input
 			{
 				constexpr auto get_view_angles = 0x74bd10;
-				constexpr auto set_view_angles = 0x756060;
-				constexpr auto mouse_input_enabled = 0x878390;
-				constexpr auto csgoinput_create_move = 0xd01b20; // IDA 对照序言：mov rax,rsp / [rax+18],r8 / sub rsp,1D8（build 14188，0x740e50 系误配）
-				// [silent] 命令视角填充（2026-10-05 用户 IDA+FPU 断点+NOP 实验实锤）：
-				// sub_CFA140，create_move+5A4 与 sub_CDEC40+87 调用。rcx=视角快照
-				// (+0x10 pitch/+0x14 yaw/+0x18 roll)，rdx=上下文，[rdx+18h]=CUserCmd
-				// （+10h dirty 位图、+18h/1Ch/20h=viewangles）。NOP 两条 movss → 射向 0/0。
-				constexpr auto csgoinput_fill_cmd_angles = 0xcfa140;
-				// [btn2] create_move 反汇编实锤的全局单例（.data qword_24C4FA0，r15 宿主对象）：
-				// [gs+0xBD0]=0x60 步长输入样本表，gs 的 +0x50..0x5C/+0xBC0/+0xBC4 为状态字段，
-				// byte[gs+0x58] 在 D01F52/D02060 两处被当按钮态读 —— autofire 头号直写候选
-				constexpr auto csgoinput_ctx_global = 0x24c4fa0;
+			constexpr auto set_view_angles = 0x756060;
+			// [14191 未验] 运行时走 safe_vfunc(sdk::Input, 11) 自适应钩装（槽 11 目标 14191 静态
+			// 定位未果——指纹两候选均无主虚表槽 11 引用；注入日志 "hook mouse_input_enabled
+			// target=%p" 的 RVA 即当前槽 11 实况，有异常贴回），此值仅存档
+			constexpr auto mouse_input_enabled = 0x878390;
+			// [14191] create_move（dump 崩溃复盘实锤 2026-10-18）：真入口 0xD02130，头为 14190 同款
+			// 真序言（mov rax,rsp / [rax+18],r8 / [rax+8],rcx / push rbp），且位移 +0xB20 与
+			// override_view（0xD02310→0xD02E30，pattern 独立验证）精确一致 —— 本簇整体平移。
+			// 注意：0xD02780 是 create_move 中段碎片（0xD022E6 的 `cmp ebx,4; jle 0xD02780` 跳入的
+			// EH 块），钩它会 mid-function 断帧 → 毒栈传入 fill → C0000005（已踩坑，勿再钩）
+			constexpr auto csgoinput_create_move = 0xd02130;
+			// [14191] WriteSubtickFromEntry（tp_rescan3_14191.py cs2-sdk pattern 唯一命中 0xCFA6B0）：
+			// 命令视角填充（rcx=视角快照，rdx=上下文，[rdx+18h]=CUserCmd）语义沿用
+			constexpr auto csgoinput_fill_cmd_angles = 0xcfa6b0;
+			// [14191] dwCSGOInput 同址（a2x dwCSGOInput 键）
+			constexpr auto csgoinput_ctx_global = 0x257b640;
+			// [14191] ForceButtonsDown（tp_rescan3_14191.py cs2-sdk pattern 唯一命中 0xA66F10）：
+			// 头部 cmp [rcx+0x38] 设备句柄检查与 14190 语义一致；a1=64 位按钮位集注入方案沿用
+			constexpr auto csgoinput_force_buttons_down = 0xa66f10;
+
+				// ===== pattern 表备查（cs2-sdk 14190 实测 RVA，未接线；autofire/autowall 下一步钥匙）=====
+				// 外层 CreateMove（input-stack 层）= 0xB64E60：其 call 目标 = GetCUserCmdArray
+				// 0x943800 / GetCUserCmdBySequenceNumber 0x9435E0 / GetUserCmdManager 0x943670
+				// 按钮与命令族：ReadFrameInput 0xD04A20（紧邻内层 create_move 簇）、
+				// ProcessSubTickInput 0xB5F7B0、CreateNewSubtickMoveStep 0x4F7120、ForceButtonsDown 0xA66050
+				// autowall/trace 族：AutowallTraceData 0xA18FD0、TraceShape 0xA19140、
+				// TraceHandleBulletPen 0x8A0960、TestSurfaces 0x884860、GetSurfaceData 0x9E26A0、
+				// CSBaseGunFireData 0x15F8720、ProcessImpacts 0xA651B0、TracePlayerBBox 0x8DF8E0、
+				// pGameTraceManager 0x221F058（.data）
+				// 其他：OverrideView 0xD02310（14190 新位）、pCvar 0x27939D8（.data）、
+				// GetLocalPlayerController 0x9699F0 / GetLocalPawn 0x969A30（函数版）
+				// =================================================================================
 			} // namespace input
 
 			namespace inputsystem
@@ -340,15 +388,17 @@ namespace sdk
 
 		namespace globals
 		{
-			constexpr auto mem_alloc = 0x368d98;
-			constexpr auto global_vars = 0x222be98;
-			constexpr auto ccsgo_input = 0x2576150;
-			constexpr auto game_entity_system = 0x2715818;
-			constexpr auto local_player_controller = 0x2538008;
-			constexpr auto screen_transform = 0x2566910;
-			constexpr auto view_render = 0x2565d20;
-			constexpr auto panorama_ui = 0x18f1c40;
-			constexpr auto ui_event_with_priority_vtable = 0x130c350;
+			// 14191 快照（a2x 2026-10-16 dump，D:\VAC逆向\output；14190→14191 .text/.data 重排：
+			// 位移 +0x8000~+0x9370 不等距，勿整体平移）—— 6 项均有新 dump 对应键直接换算
+			constexpr auto mem_alloc = 0x368d98; // [14191 未验] 新 dump 无对应键；当前无代码引用，仅存档
+			constexpr auto global_vars = 0x2230090; // dwGlobalVars
+			constexpr auto ccsgo_input = 0x257b640; // dwCSGOInput
+			constexpr auto game_entity_system = 0x271a908; // dwGameEntitySystem
+			constexpr auto local_player_controller = 0x253cb78; // dwLocalPlayerController
+			constexpr auto screen_transform = 0x256b020; // = a2x dwViewMatrix
+			constexpr auto view_render = 0x256b9e8; // dwViewRender
+			constexpr auto panorama_ui = 0x18f1c40; // [14191 未验] 新 dump 无对应键；ui_engine 赋值后无消费者，死值无害
+			constexpr auto ui_event_with_priority_vtable = 0x130c350; // [14191 未验] 无代码引用
 		} // namespace globals
 
 		namespace cgame_resource_service
@@ -369,6 +419,9 @@ namespace sdk
 
 		namespace ccsgo_input
 		{
+			// [已证伪] current_cmd_base_ptr=0x2598：as-hdr dump 显示目标是武器图标信息结构
+			// （"icons\equipment\knife_t" 字符串 + vtable），非命令对象，勿用。
+			// 活命令正确通道 = fill_cmd_angles 钩 [a1+0x18]（silent aim 实证）。
 			constexpr auto current_command = 0x6034;
 			constexpr auto frame_command = 0x61e0;
 			constexpr auto input_msg_frame_slots = 0x6330;

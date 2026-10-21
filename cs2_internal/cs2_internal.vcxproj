@@ -354,7 +354,7 @@
       <PrecompiledHeaderOutputFile>$(IntDir)pch\$(TargetName).pch</PrecompiledHeaderOutputFile>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>D:\CODEDEMO\Fatality-Framework-review\cs2_internal\src\renderer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Fatality-Framework-review\cs2_internal\src\renderer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -364,7 +364,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalOptions>/MAP %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>libMinHook.x64.lib;d3d11.lib;d3dx11.lib;d3dcompiler.lib;minhook.lib;minhook_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\CODEDEMO\Fatality-Framework-review\contrib\minhook;C:\Users\ПК\Desktop\minhook-master\build\VC17\lib\Release;D:\CODEDEMO\Fatality-Framework-review\contrib\luajit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Fatality-Framework-review\contrib\minhook;C:\Users\ПК\Desktop\minhook-master\build\VC17\lib\Release;D:\Fatality-Framework-review\contrib\luajit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

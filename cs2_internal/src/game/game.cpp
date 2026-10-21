@@ -9,7 +9,8 @@
 #include <sdk/engine.h>
 #include <sdk/inputsystem.h>
 #include <sdk/interface.h>
-#include <utils/mem.h>
+
+#include <utils/fnv1a.h>
 #include "memory/interfaceless.h"
 #include <sdk/offsets_build.h>
 
@@ -142,7 +143,7 @@ namespace
 		} while (GetTickCount64() < module_deadline);
 		if (!renderer)
 		{
-			OutputDebugStringA("Fatality: rendersystemdx11.dll is not loaded after 5 seconds; check renderer selection/loading.\n");
+			OutputDebugStringA("[Fatality]: rendersystemdx11.dll is not loaded after 5 seconds; check renderer selection/loading.\n");
 			return nullptr;
 		}
 		std::uint8_t* code = nullptr;
@@ -212,27 +213,31 @@ void game_t::init()
 
 	// All module-relative offsets below belong to one pinned game build.
 	const auto engine_module = find_module(FNV1A("engine2.dll"));
-	const auto client_module = find_module(FNV1A("client.dll"));
+	client_module = find_module(FNV1A("client.dll"));
 	if (!engine_module || !client_module ||
 		sdk::offsets::snapshot::engine_build_number + sizeof(uint32_t) > engine_module->size)
 	{
-		OutputDebugStringA("Fatality: required game modules are unavailable.\n");
+		OutputDebugStringA("[Fatality]: required game modules are unavailable.\n");
 		return;
 	}
-	const auto build_number = *reinterpret_cast<const uint32_t*>(
-		engine_module->base + sdk::offsets::snapshot::engine_build_number);
+	const auto build_number = *reinterpret_cast<const uint32_t*>(engine_module->base + sdk::offsets::snapshot::engine_build_number);
 	if (build_number != sdk::offsets::snapshot::build_number)
 	{
-		OutputDebugStringA("Fatality: game build does not match the offset snapshot.\n");
+		OutputDebugStringA("[Fatality]: game build does not match the offset snapshot.\n");
 		return;
 	}
-
-	// Previously these library handles were never initialized, including the
-	// client handle used by world_to_screen_matrix().
+	
+	
+	
 	tier0 = library("tier0.dll");
 	sdl3 = library("SDL3.dll");
 	gameoverlayrenderer64 = library("GameOverlayRenderer64.dll");
 	client = library("client.dll");
+	{
+		char szBuffer[128];
+		wsprintfA(szBuffer, "[Fatality]: client_library =%p\n", reinterpret_cast<void*>(client.handle));
+		OutputDebugStringA(szBuffer);
+	}
 	engine2 = library("engine2.dll");
 	inputsystem = library("inputsystem.dll");
 	localize = library("localize.dll");
@@ -242,7 +247,7 @@ void game_t::init()
 	MEM::Setup();
 
 	static auto enwndcall = [](HWND handle, LPARAM lParam) -> BOOL CALLBACK
-		{
+	{
 			const auto MainWindow = [handle]()
 				{
 					return GetWindow(handle, GW_OWNER) == nullptr &&
@@ -257,7 +262,7 @@ void game_t::init()
 
 			*reinterpret_cast<HWND*>(lParam) = handle;
 			return FALSE;
-		};
+	};
 
 	const auto pTier0Handle = MEM::GetModuleBaseHandle(TIER0_DLL);
 	if (pTier0Handle == nullptr)
@@ -295,15 +300,15 @@ void game_t::init()
 	sdk::GlobalVars = reinterpret_cast<sdk::global_vars_t*>(client.deref(sdk::offsets::globals::global_vars));
 	sdk::LocalPlayerController = reinterpret_cast<sdk::cs2_player_controller*>(client.deref(sdk::offsets::globals::local_player_controller));
 	sdk::GameEntitySystem = reinterpret_cast<sdk::cgame_entity_system*>(client.deref(sdk::offsets::globals::game_entity_system));
-	// 注意语义差异：dwGameEntitySystem 是"指针全局"（值 = 对象地址，需解引用）；
+	
 	// dwCSGOInput 是"对象内联全局"（global_vars 偏移处直接就是 CCSGOInput 对象，
 	// 解引用只会拿到它的 vftable 指针 —— 之前 Input=... 恰好等于 vftable RVA 就是
 	// 这个原因），这里必须取地址本身，不能再 deref。
 	sdk::Input = reinterpret_cast<sdk::ccsgo_input*>(client.at(sdk::offsets::globals::ccsgo_input));
+	//create_swap_chain  RENDERSYSTEM_DLL 44 88 4C 24 20 55 53 57 41 54 41 55 41 56 41 57
 	sdk::SwapChain = resolve_swap_chain();
 	if (!sdk::SwapChain)
 		return;
-	OutputDebugStringA("Fatality: init: swap chain ok, capturing remaining interfaces.\n");
 	sdk::InputSystem = iless::Capture<sdk::cinput_system>(pInputSystemRegisterList, INPUT_SYSTEM_VERSION);
 	const auto mem_alloc_export = MEM::GetExportAddress(pTier0Handle, CS_XOR("g_pMemAlloc"));
 	if (!mem_alloc_export)
@@ -353,29 +358,15 @@ void game_t::init()
 	// load other
 	cfg.init();
 
-	OutputDebugStringA("Fatality: init: unlocking cvars.\n");
-	{
-		// dump the captured CCvar object so the real list offset can be
-		// identified offline when the manual layout does not match
-		const auto dump = reinterpret_cast<const std::uint32_t*>(sdk::Cvar);
-		char buffer[384]{};
-		int pos = wsprintfA(buffer, "Fatality: CCvar dump:");
-		for (int i = 0; i < 32 && pos < static_cast<int>(sizeof(buffer)) - 16; ++i)
-			pos += wsprintfA(buffer + pos, " %08X", dump[i]);
-		wsprintfA(buffer + pos, "\n");
-		OutputDebugStringA(buffer);
-	}
+	
 	sdk::Cvar->unlock();
-	OutputDebugStringA("Fatality: init: cvars unlocked.\n");
-
-	OutputDebugStringA("Fatality: init: installing hooks.\n");
 	hook_manager.init();
-	OutputDebugStringA("Fatality: init: done.\n");
+	OutputDebugStringA("[Fatality]: init: done.\n");
 }
 
 void game_t::unload() const
 {
-	OutputDebugStringA("Fatality: unloading.\n");
+	OutputDebugStringA("[Fatality]: unloading.\n");
 
 	// 移除全部 hook 并还原窗口过程，之后游戏线程不再进入本模块代码
 	hook_manager.detach();

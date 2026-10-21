@@ -8,12 +8,51 @@
 using namespace evo::gui;
 using namespace evo::gui::helpers;
 using namespace evo::ren;
+// weapon_ids.h
+#pragma once
+#include <cstdint>
 
+enum weapon_id_t : std::uint16_t
+{
+	WEAPON_DEAGLE = 1,
+	WEAPON_ELITE = 2,
+	WEAPON_FIVESEVEN = 3,
+	WEAPON_GLOCK = 4,
+	WEAPON_AK47 = 7,
+	WEAPON_AUG = 8,
+	WEAPON_AWP = 9,
+	WEAPON_FAMAS = 10,
+	WEAPON_G3SG1 = 11,
+	WEAPON_GALILAR = 13,
+	WEAPON_M249 = 14,
+	WEAPON_M4A1 = 16,
+	WEAPON_MAC10 = 17,
+	WEAPON_P90 = 19,
+	WEAPON_MP5SD = 23,
+	WEAPON_UMP45 = 24,
+	WEAPON_XM1014 = 25,
+	WEAPON_BIZON = 26,
+	WEAPON_MAG7 = 27,
+	WEAPON_NEGEV = 28,
+	WEAPON_SAWEDOFF = 29,
+	WEAPON_TEC9 = 30,
+	WEAPON_HKP2000 = 32,
+	WEAPON_MP7 = 33,
+	WEAPON_MP9 = 34,
+	WEAPON_NOVA = 35,
+	WEAPON_P250 = 36,
+	WEAPON_SCAR20 = 38,
+	WEAPON_SG556 = 39,
+	WEAPON_SSG08 = 40,
+	WEAPON_M4A1_SILENCER = 60,
+	WEAPON_USP_SILENCER = 61,
+	WEAPON_CZ75A = 63,
+	WEAPON_REVOLVER = 64,
+};
 namespace menu::group
 {
 	// static names, not using ingame strings cause i'm LAZY!
-	// lazy enough to do redundant work, ofc
-	/*std::unordered_map<uint32_t, std::string> wpn_to_name = {
+	std::unordered_map<uint32_t, std::string> wpn_to_name = {
 		{ WEAPON_DEAGLE, XOR("Desert Eagle")},
 		{ WEAPON_ELITE, XOR("Dual Berettas")},
 		{ WEAPON_FIVESEVEN, XOR("Five-SeveN")},
@@ -58,9 +97,9 @@ namespace menu::group
 		{ group_id + 5, XOR("Heavy")},
 		{ group_id + 6, XOR("Auto Snipers")},
 		{ group_id + 7, XOR("Bolt Snipers")},
-	};*/
+	};
 
-	/*std::unordered_map<uint32_t, std::vector<uint32_t>> grp_to_wep = {
+	std::unordered_map<uint32_t, std::vector<uint32_t>> grp_to_wep = {
 		{group_id + 1, {
 			WEAPON_ELITE, WEAPON_FIVESEVEN, WEAPON_GLOCK, WEAPON_P250, WEAPON_TEC9, WEAPON_USP_SILENCER, WEAPON_CZ75A, WEAPON_HKP2000,
 		}},
@@ -82,7 +121,7 @@ namespace menu::group
 		{group_id + 7, {
 			WEAPON_AWP, WEAPON_SSG08,
 		}},
-	};*/
+	};
 
 	void rage_tab(std::shared_ptr<layout> &e)
 	{
@@ -136,14 +175,14 @@ namespace menu::group
 		}
 
 		// locate weapon in group
-		/*for (auto &[grp_id, weps] : grp_to_wep)
+		for (auto &[grp_id, weps] : grp_to_wep)
 		{
 			if (std::find(weps.begin(), weps.end(), v) != weps.end() && cfg.weapon_config.cfgs[grp_id])
 			{
 				cfg.weapon_config.copy(grp_id, v);
 				return;
 			}
-		}*/
+		}
 
 		cfg.weapon_config.copy(general_id, v);
 		//VIRTUALIZER_TIGER_WHITE_END;
@@ -161,19 +200,19 @@ namespace menu::group
 
 		bool any_added{};
 		std::vector<uint32_t> to_add_grp, to_add_wep;
-		//for (auto &[i, v] : cfg.weapon_config.cfgs)
-		//{
-		//	const auto &name = i >= group_id ? grp_to_name[i] : wpn_to_name[i];
-		//	any_added = any_added || v;
+		for (auto &[i, v] : cfg.weapon_config.cfgs)
+		{
+			const auto &name = i >= group_id ? grp_to_name[i] : wpn_to_name[i];
+			any_added = any_added || v;
 
-		//	// erase everything!
-		//	wp_tabs->remove(hash(XOR("rage>weapons>") + name));
-		//	wp_area->remove(hash(XOR("rage>weapon>") + name));
+			// erase everything!
+			wp_tabs->remove(hash(XOR("rage>weapons>") + name));
+			wp_area->remove(hash(XOR("rage>weapon>") + name));
 
-		//	// add new ones
-		//	if (v)
-		//		i >= group_id ? to_add_grp.push_back(i) : to_add_wep.push_back(i);
-		//}
+			// add new ones
+			if (v)
+				i >= group_id ? to_add_grp.push_back(i) : to_add_wep.push_back(i);
+		}
 
 		// process queues here so it doesnt delete controls right after they are created
 		wp_tabs->process_queues();
@@ -189,24 +228,24 @@ namespace menu::group
 		// add spacer
 		wp_tabs->add(MAKE("rage>weapons>spacer", spacer, vec2{ 0.f, 0.f }, vec2{ 0.f, 8.f })->make_width_automatic());
 
-		//for (auto &i : to_add_grp)
-		//{
-		//	const auto &name = grp_to_name[i];
+		for (auto &i : to_add_grp)
+		{
+			const auto &name = grp_to_name[i];
 
-		//	// make tab
-		//	const auto tb = MAKE_RUNTIME("rage>weapons>" + name, child_tab, name, hash(XOR("rage>weapon>") + name))->
-		//		make_vertical();
-		//	if (!skip_adjust)
-		//		tb->margin.maxs.y = -8.f;
+			// make tab
+			const auto tb = MAKE_RUNTIME("rage>weapons>" + name, child_tab, name, hash(XOR("rage>weapon>") + name))->
+				make_vertical();
+			if (!skip_adjust)
+				tb->margin.maxs.y = -8.f;
 
-		//	wp_tabs->add(tb);
-		//	rage_aimbot_weapon_extra(wp_area, i, XOR("rage>weapon>") + name);
-		//}
+			wp_tabs->add(tb);
+			rage_aimbot_weapon_extra(wp_area, i, XOR("rage>weapon>") + name);
+		}
 
 		if (!to_add_grp.empty() && !to_add_wep.empty())
 			wp_tabs->add(MAKE("rage>weapons>spacer2", spacer, vec2{ 0.f, 0.f }, vec2{ 0.f, 8.f })->make_width_automatic());
 
-		/*for (auto &i : to_add_wep)
+		for (auto &i : to_add_wep)
 		{
 			const auto &name = wpn_to_name[i];
 
@@ -217,7 +256,7 @@ namespace menu::group
 
 			wp_tabs->add(tb);
 			rage_aimbot_weapon_extra(wp_area, i, XOR("rage>weapon>") + name);
-		}*/
+		}
 
 		wp_tabs->process_queues();
 		wp_area->process_queues();
@@ -246,25 +285,25 @@ namespace menu::group
 		const auto ovr = MAKE("rage>override", button, XOR("Add override"), nullptr, vec2{0.f, 462.f}, vec2{ group_sz.x * .5f - 16.f, 20.f});
 		ovr->margin = {};
 		ovr->center_text = false;
-		//ovr->callback = []()
-		//{
-		//	const auto ovr = ctx->find(GUI_HASH("rage>override"));
+		ovr->callback = []()
+		{
+			const auto ovr = ctx->find(GUI_HASH("rage>override"));
 
-		//	const auto ovr_pick = std::make_shared<action_list_popup>(control_id{GUI_HASH("action_list_popup")},
-		//															  action_list_popup::params_t{
-		//																  grp_to_name, wpn_to_name},
-		//															  cfg.weapon_config.cfgs,
-		//															  ovr->area_abs().bl() + vec2{0.f, 4.f});
-		//	ovr_pick->open();
-		//	ovr_pick->callback = [](auto i, auto v)
-		//	{
-		//		// only derive if enabled
-		//		if (v)
-		//			derive_weapon_setting(i);
+			const auto ovr_pick = std::make_shared<action_list_popup>(control_id{GUI_HASH("action_list_popup")},
+																	  action_list_popup::params_t{
+																		  grp_to_name, wpn_to_name},
+																	  cfg.weapon_config.cfgs,
+																	  ovr->area_abs().bl() + vec2{0.f, 4.f});
+			ovr_pick->open();
+			ovr_pick->callback = [](auto i, auto v)
+			{
+				// only derive if enabled
+				if (v)
+					derive_weapon_setting(i);
 
-		//		rebuild_rage_layout();
-		//	};
-		//};
+				rebuild_rage_layout();
+			};
+		};
 
 		e->add(tabs);
 		e->add(area);
@@ -346,7 +385,7 @@ namespace menu::group
 			ADD_INLINE("Autostop", MAKE_RUNTIME(id + XOR("autostop"), checkbox, cfg.weapon_config.autostop[(int)grp]), e_unshadow);
 		}
 
-		/*const auto should_add_autoscope = util::in_array(grp, {
+		const auto should_add_autoscope = util::in_array(grp, {
 															 general_id, group_id + 4, group_id + 6, group_id + 7,
 															 WEAPON_AUG, WEAPON_SG556, WEAPON_AWP, WEAPON_G3SG1,
 															 WEAPON_SCAR20, WEAPON_SSG08
@@ -355,7 +394,7 @@ namespace menu::group
 		if (should_add_autoscope)
 		{
 			ADD_RUNTIME("Autoscope", id + XOR("autoscope"), checkbox, cfg.weapon_config.autoscope[(int)grp]);
-		}*/
+		}
 
 		{
 			const auto c = MAKE_RUNTIME(id + XOR("safepoint mode"), combo_box, cfg.weapon_config.fallback_mode[(int)grp], vec2{}, vec2{ 80.f, 20.f });
@@ -426,9 +465,10 @@ namespace menu::group
 		ADD("Maximum fov", "rage>aimbot>general>maximum fov", slider<float>, 0.f, 180.f, cfg.aim.fov, XOR("%.0f deg"), 1.f, vec2{80.f, 14.f});
 		ADD_INLINE(
 			"Visualize aimbot", MAKE("rage>aimbot>general>visualize aimbot", checkbox, cfg.aim.visualize),
-			MAKE("rage>aimbot>general>visualize aimbot>settings", settings, [](auto e) { ADD("Safe color", "rage>aimbot>general>visualize aimbot>settings>safe color",
-				color_picker, cfg. aim.visualize_color_safe); ADD("Aim color", "rage>aimbot>general>visualize aimbot>settings>aim color", color_picker, cfg.aim .
-				visualize_color); }));
+			MAKE("rage>aimbot>general>visualize aimbot>settings", settings, [](auto e) {
+				ADD("Safe color", "rage>aimbot>general>visualize aimbot>settings>safe color", color_picker, cfg.aim.visualize_color_safe);
+				ADD("Aim color", "rage>aimbot>general>visualize aimbot>settings>aim color", color_picker, cfg.aim.visualize_color);
+			}));
 
 		ADD("Anti-exploit", "rage>aimbot>general>anti-exploit", checkbox, cfg.aim.anti_exploit);
 		ADD("Target dormant", "rage>aimbot>general>target dormant", checkbox, cfg.aim.dormant);

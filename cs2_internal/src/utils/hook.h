@@ -14,7 +14,6 @@ public:
 	hook_interface &operator=(hook_interface &&other) = delete;
 
 	virtual ~hook_interface() = default;
-	virtual void attach() = 0;
 	virtual void detach() = 0;
 	virtual uintptr_t get_endpoint() const = 0;
 	virtual uintptr_t get_target() const = 0;

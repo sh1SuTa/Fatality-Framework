@@ -1,6 +1,7 @@
 ﻿#include <utils/murmur2.h>
 #include <cinttypes>
 #include <game/cfg.h>
+#include <game/aimbot.h>
 #include <game/draw_manager.h>
 #include <game/game.h>
 #include <game/visuals.h>
@@ -225,9 +226,11 @@ void visuals_t::run()
 		return;
 
 	// 本地玩家控制器每帧刷新：主菜单里为空，跨局会变，初始化读一次不够
-	if (const auto client_base = static_cast<const uint8_t*>(MEM::GetModuleBaseHandle(CLIENT_DLL)))
+	if (const auto client_base = static_cast<const uint8_t*>(MEM::GetModuleBaseHandle(CLIENT_DLL))) {
 		sdk::LocalPlayerController = *reinterpret_cast<sdk::cs2_player_controller* const*>(
 			client_base + sdk::offsets::globals::local_player_controller);
+	}
+		
 
 	// 安全的进局判定：有效的本地玩家控制器只在局内存在，
 	// 避免依赖未验证的引擎虚表槽位（se_call_vfunc 31/32/33 在 CS2 读到垃圾值，已弃用）
@@ -580,6 +583,24 @@ void visuals_t::run()
 			player_skeleton(player_pawn, player, layer);
 			player_box();
 			player_info();
+		}
+	}
+
+	// [aimbot visualize] RAGE>aimbot>general>Visualize aimbot：
+	// 锁定目标的瞄准点标记（圆+十字），可见用 Safe color、不可见/失效用 Aim color
+	if (cfg.aim.visualize.get() && aimbot_t::vis_valid)
+	{
+		vec2 sp{};
+		if (math::world_to_screen(aimbot_t::vis_pos, sp))
+		{
+			const auto px = ndc_to_px(sp);
+			const auto col = (aimbot_t::vis_safe ? cfg.aim.visualize_color_safe : cfg.aim.visualize_color).get();
+			auto& buf = *draw_mgr.buf;
+			buf.add_circle(px, 9.f, col, 36, 1.f, 1.5f);
+			buf.add_line({px.x - 14.f, px.y}, {px.x - 5.f, px.y}, col, 1.5f);
+			buf.add_line({px.x + 5.f, px.y}, {px.x + 14.f, px.y}, col, 1.5f);
+			buf.add_line({px.x, px.y - 14.f}, {px.x, px.y - 5.f}, col, 1.5f);
+			buf.add_line({px.x, px.y + 5.f}, {px.x, px.y + 14.f}, col, 1.5f);
 		}
 	}
 

@@ -104,5 +104,5 @@ private:
 	void load_fonts();
 	void remove_fonts() const;
 };
-
+inline std::optional<utils::module_t> client_module;
 extern std::unique_ptr<game_t> game;

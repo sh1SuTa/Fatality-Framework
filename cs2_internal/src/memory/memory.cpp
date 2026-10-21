@@ -1,4 +1,4 @@
-#include <intrin.h>
+﻿#include <intrin.h>
 // used: d3d11
 #include <d3d11.h>
 
@@ -34,7 +34,7 @@ bool MEM::Setup()
 	fnLoadKV3 = reinterpret_cast<decltype(fnLoadKV3)>(GetExportAddress(hTier0, CS_XOR("?LoadKV3@@YA_NPEAVKeyValues3@@PEAVCUtlString@@PEBDAEBUKV3ID_t@@2@Z")));
 	bSuccess &= (fnLoadKV3 != nullptr);
 
-	fnCreateMaterial = reinterpret_cast<decltype(fnCreateMaterial)>(FindPattern(MATERIAL_SYSTEM2_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 56 57 41 56 48 81 EC ? ? ? ? 48 8D 0D")));
+	fnCreateMaterial = reinterpret_cast<decltype(fnCreateMaterial)>(FindPattern(MATERIAL_SYSTEM2_DLL, pattern::materialsystem2::CreateMaterial.data()));
 	bSuccess &= (fnCreateMaterial != nullptr);
 
 	return bSuccess;
@@ -62,7 +62,7 @@ void* __cdecl operator new[](const std::size_t nSize)
 	}
 
 	void __cdecl operator delete[](void* pMemory) noexcept
-		{
+	{
 			MEM::HeapFree(pMemory);
 		}
 

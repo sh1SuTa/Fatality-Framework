@@ -35,7 +35,6 @@ public:
 	}
 
 	/// patch memory to jump to our function instead of original
-	/// @returns: true if hook has been successfully applied, false otherwise
 	bool Replace()
 	{
 		// check is hook has been created

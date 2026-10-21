@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <atomic>
 #include <D3D11.h>
@@ -24,10 +24,6 @@ namespace hooks
 	namespace client
 	{
 		void prediction_update(void* pred, int a, int b);
-		// [aw-verify] CreateMove（client RVA 0xD01B20）真签名 ≥8 参数（IDA：4 寄存器 +
-		// arg_0/8/10/18@0x10..0x28 栈传）—— 必须 8 槽透传：4 参数钩子调 original 时
-		// 栈参数槽是未初始化垃圾，实锤崩溃链（dump 2026-10-04：读 [null+0x38]）。
-		// a0 = CCSGOInput*。返回 original 的 rax 原样透传。
 		void* create_move(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7);
 		inline CBaseHookObject<decltype(&create_move)> hkCreateMove = {};
 
@@ -40,6 +36,8 @@ namespace hooks
 		inline CBaseHookObject<decltype(&fill_cmd_angles)> hkFillCmdAngles = {};
 		void frame_stage_notify(void *rcx, sdk::client_frame_stage stage);
 		void override_view(void *rcx, sdk::cview_setup *view_setup);
+		// [thirdperson] ClientMode::OverrideView 钩（RVA 0xD02310）：convar 驱动肩部摄像机
+		inline CBaseHookObject<decltype(&override_view)> hkOverrideView = {};
 		void on_render_start(sdk::cview_render *view_render);
 		float get_fov(void *rcx);
 		inline CBaseHookObject<decltype(&get_fov)> hkGetFov = {};
@@ -47,21 +45,25 @@ namespace hooks
 
 		// [aw-verify] F5 在 present 中置位，trace_funnel 下一次调用时单次 dump 仅日志
 		inline std::atomic<bool> trace_dump_armed{ false };
-		// [aw-verify] CCSTraceFilterSimple 使用现场（RVA 0x8C931B，本身即函数起始
-		// 0x8C931B..0x8C962B）—— "用 CS filter 做 trace" 的封装函数，子弹链路必经。
-		// 8 槽透传 + 命中型 trace 判定（aw_pick_hit_trace），漏斗/展开器均被实测排除
-		// （开枪时 funnel=0、展开器 8 槽从无 filter）后的第三捕获点。
+
 		void* bullet_trace_helper(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7);
 		inline CBaseHookObject<decltype(&bullet_trace_helper)> hkBulletTrace = {};
+
+		// [14190] ForceButtonsDown（sub_A66050）钩 —— autofire 注入点：
+		// a1 = 64 位按钮位集（值传递，全量覆盖语义），武装帧 OR IN_ATTACK(bit0)。
+		// 8 槽透传（该函数有栈参）。
+		void force_buttons_down(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7);
+		inline CBaseHookObject<decltype(&force_buttons_down)> hkForceButtonsDown = {};
+		// create_move 钩子调用：解除帧重放原始掩码清注入位（物理按键位保留）
+		void autofire_release_check();
+		// create_move 钩子调用：武装帧主动调 ForceButtonsDown（游戏只在清位时调它，
+		// 被动钩等不到窗口）—— a1 = dev+0x190 当前按下态 | IN_ATTACK
+		void autofire_inject_check();
 
 		// [aw-verify] 漏斗/展开器/子弹helper调用总计数（present 的超时警告读取，判断冷/热）
 		inline std::atomic<unsigned> trace_funnel_calls{ 0 };
 		inline std::atomic<unsigned> trace_expander_calls{ 0 };
 		inline std::atomic<unsigned> bullet_helper_calls{ 0 };
-
-		// [aw-verify] 自调用同步 trace（F5 直接触发，替代被动武装）：
-		// 复刻 client 0x80CE65 现场配方，眼位→视线前方 256u 打一发并 dump 出参 surface
-		void aw_self_trace_test();
 
 		// [aimbot 可见性] 眼位→目标点同步 trace（自调用漏斗，p5=1）。
 		// 返回 fraction，出参 hit_ent = 命中实体指针（+0x08，miss 为 null）；故障返回 1/null。

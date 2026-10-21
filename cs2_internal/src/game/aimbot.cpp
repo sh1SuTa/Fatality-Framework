@@ -1,4 +1,4 @@
-﻿#include <game/aimbot.h>
+#include <game/aimbot.h>
 #include <game/cfg.h>
 #include <game/game.h>
 #include <hooks/hooks.h>
@@ -7,6 +7,7 @@
 #include <sdk/offsets.h>
 #include <sdk/sdk.h>
 #include <windows.h>
+
 #include <cmath>
 #include <cstdio>
 
@@ -14,6 +15,11 @@
 bool aimbot_t::silent_valid = false;
 float aimbot_t::silent_pitch = 0.f;
 float aimbot_t::silent_yaw = 0.f;
+bool aimbot_t::wants_autofire = false;
+bool aimbot_t::vis_valid = false;
+bool aimbot_t::vis_safe = false;
+sdk::vector aimbot_t::vis_pos{};
+bool aimbot_t::wants_autostop = false;
 
 namespace
 {
@@ -146,70 +152,29 @@ namespace
 		}
 	}
 
-	// [btn 扫描机器已删] v1/v2/v3 三连败（a0 头 64KB changed=0、+0x61E0/+0x6330 恒 null、
-	// 24 条堆指针链全配对零变化）→ 按钮态在 create_move 内部每帧命令对象，静态不可达。
-	// 务实替代 = 下方 SendInput 合成点击（锁头已物理对准目标，游戏自身走 IN_ATTACK→开火）。
-
-	// [autofire] SendInput 左键「按住镜像」：按住态严格镜像本 tick 可见性——
-	// 可见目标 → DOWN 并持续按住（连发由游戏武器自身 refire 节流，射速精准）；
-	// 目标丢失/被墙挡/菜单开/开关关 → 立即 UP。
-	// 注意：DOWN+UP 不能同批注入——游戏输入泵把同消息循环内的瞬时按压丢弃，不开火
-	// （已实测）。SendInput 事件下一帧才被泵消费，架构上 UP 晚一帧生效=最多多 1 发，
-	// 彻底消除要靠 IN_ATTACK 命令位直写。
-	bool g_click_held = false;
-
-	void syn_click_down()
-	{
-		INPUT in{};
-		in.type = INPUT_MOUSE;
-		in.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-		SendInput(1, &in, sizeof(in));
-	}
-
-	void syn_click_up()
-	{
-		INPUT in{};
-		in.type = INPUT_MOUSE;
-		in.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-		SendInput(1, &in, sizeof(in));
-		g_click_held = false;
-	}
 }
 
 void aimbot_t::run(sdk::ccsgo_input* input)
 {
-	silent_valid = false; // 无新目标时让 fill_cmd_angles 钩回落原版行为
+	silent_valid = false;
+	wants_autofire = false;
+	wants_autostop = false;
+	// [visualize] 每帧先清（早期 return 分支如菜单打开/取视角失败时不留上帧残影）
+	vis_valid = false;
 
 	if (!cfg.aim.enabled.get() || !input)
-	{
-		if (g_click_held)
-			syn_click_up(); // 关开关/无输入：确保不残留合成按住
 		return;
-	}
 
-	// 菜单打开时冻结（不锁人不合成点击），松掉合成按住
 	if (menu::men.is_open())
-	{
-		if (g_click_held)
-			syn_click_up();
 		return;
-	}
 
 	float cur_p = 0.f, cur_y = 0.f, cur_r = 0.f;
 	if (!aim_read_view(input, &cur_p, &cur_y, &cur_r))
-	{
-		if (g_click_held)
-			syn_click_up();
 		return;
-	}
 
 	sdk::vector eye{};
 	if (!read_local_eye_seh(&eye))
-	{
-		if (g_click_held)
-			syn_click_up();
 		return;
-	}
 
 	const auto max_fov = cfg.aim.fov.get();
 
@@ -221,18 +186,24 @@ void aimbot_t::run(sdk::ccsgo_input* input)
 	auto pn = 0;
 	const auto hb = static_cast<uint64_t>(cfg.weapon_config.hitboxes[512].get());
 	const auto hb_on = [&](const uint32_t bit) { return (hb & (1ull << bit)) != 0; };
-	if (hb_on(cfg_t::hitboxes_head))   pts[pn++].bone = k_bone_head;
-	if (hb_on(cfg_t::hitboxes_neck))   pts[pn++].bone = k_bone_neck;
-	if (hb_on(cfg_t::hitboxes_chest))  pts[pn++].bone = k_bone_spine2;
-	if (hb_on(cfg_t::hitboxes_stomach))pts[pn++].bone = k_bone_spine1;
-	if (hb_on(cfg_t::hitboxes_arms))
-		for (auto b = k_bone_arm_first; b <= k_bone_arm_last && pn < 20; ++b) pts[pn++].bone = b;
-	if (hb_on(cfg_t::hitboxes_legs))
-		for (auto b = k_bone_leg_first; b <= k_bone_leg_last && pn < 20; ++b) pts[pn++].bone = b;
-	if (hb_on(cfg_t::hitboxes_feet))
+	const auto headshot_only = cfg.aim.hsmode.get();
+	if (headshot_only)
+		pts[pn++].bone = k_bone_head;
+	else if (hb_on(cfg_t::hitboxes_head))   pts[pn++].bone = k_bone_head;
+	if (!headshot_only)
 	{
-		pts[pn++].bone = k_bone_foot_l;
-		if (pn < 20) pts[pn++].bone = k_bone_foot_r;
+		if (hb_on(cfg_t::hitboxes_neck))   pts[pn++].bone = k_bone_neck;
+		if (hb_on(cfg_t::hitboxes_chest))  pts[pn++].bone = k_bone_spine2;
+		if (hb_on(cfg_t::hitboxes_stomach))pts[pn++].bone = k_bone_spine1;
+		if (hb_on(cfg_t::hitboxes_arms))
+			for (auto b = k_bone_arm_first; b <= k_bone_arm_last && pn < 20; ++b) pts[pn++].bone = b;
+		if (hb_on(cfg_t::hitboxes_legs))
+			for (auto b = k_bone_leg_first; b <= k_bone_leg_last && pn < 20; ++b) pts[pn++].bone = b;
+		if (hb_on(cfg_t::hitboxes_feet))
+		{
+			pts[pn++].bone = k_bone_foot_l;
+			if (pn < 20) pts[pn++].bone = k_bone_foot_r;
+		}
 	}
 	if (pn == 0)
 		pts[pn++].bone = k_bone_head;
@@ -286,27 +257,55 @@ void aimbot_t::run(sdk::ccsgo_input* input)
 	// 可见点；该敌人所有勾选点都被挡才换下一个敌人（头被掩体边缘挡住时改打身体）
 	auto found = false;
 	sdk::vector aim_pos{};
+	// [visualize] 无可见点时仍记录「会被瞄准但打不到」的点（fov 最小候选的首个优先级点），
+	// 供 visuals 层用 aim 色区分；否则 vis_safe 恒为 true，标记只有 safe 一种颜色
+	auto blocked_found = false;
+	sdk::vector blocked_pos{};
 	for (auto i = 0; i < n && !found; ++i)
 	{
 		sdk::vector bones[k_bone_max + 1]{};
 		if (!read_bones_seh(cands[i].pawn, bones))
 			continue;
 
+		if (!blocked_found)
+		{
+			blocked_pos = bones[pts[0].bone];
+			blocked_found = true;
+		}
+
 		for (auto k = 0; k < pn; ++k)
 		{
 			const auto& pt = bones[pts[k].bone];
-			const float st[3] = {eye.x, eye.y, eye.z};
-			const float ed[3] = {pt.x, pt.y, pt.z};
-			const void* hit_ent = nullptr;
-			const auto frac = hooks::client::aw_trace_query(st, ed, &hit_ent);
+			sdk::vector dir = pt;
+			dir.x -= eye.x;
+			dir.y -= eye.y;
+			dir.z -= eye.z;
+			const float dist = sqrtf(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
 
-			// 无命中（frac≥0.99 且无实体）→ 可见；命中目标 pawn 自身 → 可见（骨骼点在
-			// hitbox 内部）；frac≤0.05 → 起点内命中（眼位在本地碰撞盒内部，trace 一出发
-			// 撞自己：实测 frac=0.000~0.017 且朝向无关；真墙实测 frac≥0.38）→ 可见；
-			// 其余（远墙/别人）→ 换下一个瞄准点
-			const bool visible = (hit_ent == nullptr)
-				? (frac >= 0.99f)
-				: (hit_ent == cands[i].pawn || frac <= 0.05f);
+			// [可见性] 贴脸敌人直接判可见（不可能有墙夹在中间，且避免自身碰撞盒把 trace 挡成 frac≈0.4/dist）
+			bool visible;
+			const void* hit_ent = nullptr;
+			float frac = 1.f;
+			if (dist < 1.5f)
+			{
+				visible = true;
+			}
+			else
+			{
+				// [可见性] trace 起点向前偏移 1.2m，确保完全跳出本地碰撞胶囊体（半径 ~0.81m）
+				float t = 1.2f / dist;
+				if (t > 0.95f) t = 0.95f;
+				const float st[3] = {eye.x + dir.x * t, eye.y + dir.y * t, eye.z + dir.z * t};
+				const float ed[3] = {pt.x, pt.y, pt.z};
+				frac = hooks::client::aw_trace_query(st, ed, &hit_ent);
+
+				// 无命中（frac≥0.99 且无实体）→ 可见；命中目标 pawn 自身 → 可见（骨骼点在
+				// hitbox 内部）；其余（墙/别人）→ 换下一个瞄准点
+				visible = (hit_ent == nullptr)
+					? (frac >= 0.99f)
+					: (hit_ent == cands[i].pawn);
+			}
+
 			if (!visible)
 				continue;
 
@@ -336,21 +335,12 @@ void aimbot_t::run(sdk::ccsgo_input* input)
 		}
 	}
 
-	// [autofire] 按住镜像：可见且 autofire 开 → DOWN 一次并保持（连发由游戏武器
-	// 自身 refire 节流）；目标丢失/被挡/关 autofire → 立即 UP。
-	// 注意：user_lmb 只在「未按住」时判 DOWN 边沿——GetAsyncKeyState 读到的是含
-	// 我们自己注入事件在内的异步状态，若按住期间也查它，下一帧就会把合成 DOWN
-	// 当成"用户按压"立即松开，按压跨不过一条命令 = 永不开火（上版 bug）。
-	const bool user_lmb = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+	wants_autofire = found && cfg.aim.autofire.get();
+	// [autostop] 锁定目标时请求停止移动（读 General 组配置；cur 未实现武器组更新，恒为 0）
+	wants_autostop = found && cfg.weapon_config.autostop[menu::group::general_id].get();
 
-	if (g_click_held)
-	{
-		if (!found || !cfg.aim.autofire.get())
-			syn_click_up();
-	}
-	else if (found && cfg.aim.autofire.get() && !user_lmb)
-	{
-		syn_click_down();
-		g_click_held = true;
-	}
+	// [visualize] 快照：可见 → 实际瞄准点用 safe 色；全部被挡 → 记录候选点用 aim 色
+	vis_pos = found ? aim_pos : blocked_pos;
+	vis_safe = found;
+	vis_valid = found || blocked_found;
 }

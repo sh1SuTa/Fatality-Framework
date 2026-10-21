@@ -11,7 +11,7 @@ You can update by using this:
 
 2. extract "contrib.rar", and include libs to project 
 
-3. build the project
+3. use c++20, build the project
 
 4. run cs2.exe in -insecure and use extreme injector (NO MMAP!!!)
 ```

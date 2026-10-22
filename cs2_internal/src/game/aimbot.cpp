@@ -8,6 +8,7 @@
 #include <sdk/sdk.h>
 #include <windows.h>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 
@@ -26,21 +27,7 @@ namespace
 	// [aim-diag 已删] 64 tick 滚动统计（calls/nocmd/noeye/enemies/found/fired）——
 	// 管线已验证稳定（locks=128/128、autofire 实测成功），死计数器不再保留
 
-	// 骨骼索引表（2026-04 animgraph 后）：
-	// pelvis=1/spine_1=2/spine_2=4/neck=6/head=7/臂9-15/腿17-22（root_motion 占 0）
-	// —— 与 visuals 骨架同源
-	constexpr uint32_t k_bone_pelvis = 1;
-	constexpr uint32_t k_bone_spine1 = 2;
-	constexpr uint32_t k_bone_spine2 = 4;
-	constexpr uint32_t k_bone_neck = 6;
-	constexpr uint32_t k_bone_head = 7;
-	constexpr uint32_t k_bone_arm_first = 9;
-	constexpr uint32_t k_bone_arm_last = 15;
-	constexpr uint32_t k_bone_leg_first = 17;
-	constexpr uint32_t k_bone_leg_last = 20;
-	constexpr uint32_t k_bone_foot_l = 21;
-	constexpr uint32_t k_bone_foot_r = 22;
-	constexpr uint32_t k_bone_max = 22;
+	
 	constexpr float k_rad2deg = 180.f / 3.14159265f;
 
 	// 骨骼关节布局同 visuals.cpp（0x20 步长），数组指针在 GameSceneNode+0x1C0
@@ -89,6 +76,26 @@ namespace
 				return false;
 			*eye = node->get_vec_abs_origin();
 			eye->z += pawn->get_m_vecViewOffset().get_vec_z();
+			return true;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			return false;
+		}
+	}
+
+	// [hitchance] 本地 2D 速度读取（同 read_local_eye_seh 链，SEH 兜底）
+	__declspec(noinline) bool read_local_velocity_seh(float* vel)
+	{
+		__try
+		{
+			const auto ctrl = sdk::LocalPlayerController;
+			if (!ctrl)
+				return false;
+			const auto pawn = ctrl->get_pawn();
+			if (!pawn)
+				return false;
+			*vel = pawn->get_m_vecAbsVelocity().length_2d();
 			return true;
 		}
 		__except (EXCEPTION_EXECUTE_HANDLER)
@@ -152,10 +159,75 @@ namespace
 		}
 	}
 
+	// [weapon-group] 动态解析当前武器组 ID：读本地 pawn → weapon_services → active_weapon
+	// → item_definition_index，然后在 menu::group::grp_to_wep 反向查组。失败回落 general_id=512。
+	// SEH 只包读取链（必须是 no C++ 对象的扁平函数），std::find 在 __try 外。
+	__declspec(noinline) bool read_local_weapon_id_seh(uint32_t* out_id)
+	{
+		__try
+		{
+			const auto ctrl = sdk::LocalPlayerController;
+			if (!ctrl)
+				return false;
+			const auto pawn = ctrl->get_pawn();
+			if (!pawn)
+				return false;
+			const auto ws = pawn->get_weapon_services_ptr();
+			if (!ws)
+				return false;
+			const auto wpn = ws->get_h_active_weapon().get();
+			if (!wpn)
+				return false;
+			*out_id = wpn->get_attribute_manager().get_item().get_item_definition_index();
+			return true;
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			return false;
+		}
+	}
+
+	// [weapon-group] 非插入式读取 cfgs[slot]。arr_setting::operator[] 缺键会插入默认值
+	// （bool=false / float=0），若每帧调用会污染配置表，并与菜单线程的 rebuild 迭代冲突。
+	bool cfg_slot_enabled(evo::gui::value_param_array<bool>& arr, const uint32_t slot)
+	{
+		for (auto it = arr.begin(); it != arr.end(); ++it)
+			if (it->first == slot)
+				return it->second.get();
+		return false;
+	}
+
+	// [weapon-group] 运行时配置槽解析，优先级与 derive_weapon_setting 一致：
+	//   ① 单武器 override（菜单 Add override 里勾了具体枪）→ 该武器 ID
+	//   ② 所属组 override（勾了 Rifles 等组）→ 组 ID
+	//   ③ 都没有 → General（general_id=512）
+	// 注意：General → 组/武器是「复制」语义（derive_weapon_setting 在勾选 override 时
+	// copy 一份），之后各槽独立，改 General 不会回溯影响已启用的组。
+	uint32_t resolve_weapon_group_id()
+	{
+		uint32_t id = 0;
+		if (!read_local_weapon_id_seh(&id))
+			return menu::group::general_id;
+
+		auto& cfgs = cfg.weapon_config.cfgs;
+		if (cfg_slot_enabled(cfgs, id))
+			return id;
+
+		for (const auto& [grp, weps] : menu::group::grp_to_wep)
+			if (std::find(weps.begin(), weps.end(), id) != weps.end() && cfg_slot_enabled(cfgs, grp))
+				return grp;
+
+		return menu::group::general_id;
+	}
+
 }
 
 void aimbot_t::run(sdk::ccsgo_input* input)
 {
+	// [weapon-group] 每帧解析一次，供 hitboxes / hitchance / autostop / hitboxes 等读取
+	const auto cur_grp = resolve_weapon_group_id();
+	
+
 	silent_valid = false;
 	wants_autofire = false;
 	wants_autostop = false;
@@ -184,7 +256,7 @@ void aimbot_t::run(sdk::ccsgo_input* input)
 	struct aim_pt { uint32_t bone; };
 	aim_pt pts[20];
 	auto pn = 0;
-	const auto hb = static_cast<uint64_t>(cfg.weapon_config.hitboxes[512].get());
+	const auto hb = static_cast<uint64_t>(cfg.weapon_config.hitboxes[cur_grp].get());
 	const auto hb_on = [&](const uint32_t bit) { return (hb & (1ull << bit)) != 0; };
 	const auto headshot_only = cfg.aim.hsmode.get();
 	if (headshot_only)
@@ -335,12 +407,169 @@ void aimbot_t::run(sdk::ccsgo_input* input)
 		}
 	}
 
-	wants_autofire = found && cfg.aim.autofire.get();
-	// [autostop] 锁定目标时请求停止移动（读 General 组配置；cur 未实现武器组更新，恒为 0）
-	wants_autostop = found && cfg.weapon_config.autostop[menu::group::general_id].get();
+	// [hitchance] 门控 autofire：hc=0 不门控；hc=100 要求 2D 速度 ≤ 2 u/s（完全停稳）。
+	// 线性映射阈值 250 - hc*2.48（250 = 步枪满速）。读不到速度时不射击（保守）。
+	// 读当前武器组配置（动态解析，回落到 general_id=512）。
+	wants_autofire = false;
+	if (found && cfg.aim.autofire.get())
+	{
+		const auto hc = cfg.weapon_config.hitchance[cur_grp].get();
+		if (hc <= 0.f)
+		{
+			wants_autofire = true;
+		}
+		else
+		{
+			float vel = 0.f;
+			const auto threshold = 250.f - hc * 2.48f;
+			wants_autofire = read_local_velocity_seh(&vel) && vel <= threshold;
+		}
+	}
+	// [autostop] 锁定目标时请求停止移动（读当前武器组配置）
+	wants_autostop = found && cfg.weapon_config.autostop[cur_grp].get();
 
 	// [visualize] 快照：可见 → 实际瞄准点用 safe 色；全部被挡 → 记录候选点用 aim 色
 	vis_pos = found ? aim_pos : blocked_pos;
 	vis_safe = found;
 	vis_valid = found || blocked_found;
 }
+/* 
+void aimbot_t::scale_damage(const int hitgroup,  sdk::cs2_base_entity* entity)
+{
+	data_t& data = m_data;
+
+	// ida: server.dll; 80 78 42 00 74 08 F3 0F 59 35 ?? ?? ?? ?? 80 BE 04 0D 00 00 00
+	sdk::convar* mp_damage_scale_ct_head = sdk::Cvar->find("mp_damage_scale_ct_head");
+	if (!mp_damage_scale_ct_head || mp_damage_scale_ct_head->type != 7) return; // 7 = float
+	float damage_scale_ct_head = mp_damage_scale_ct_head->value.fl;
+
+	sdk::convar* mp_damage_scale_t_head = sdk::Cvar->find("mp_damage_scale_t_head");
+	if (!mp_damage_scale_t_head || mp_damage_scale_t_head->type != 7) return;
+	float damage_scale_t_head = mp_damage_scale_t_head->value.fl;
+
+	sdk::convar* mp_damage_scale_ct_body = sdk::Cvar->find("mp_damage_scale_ct_body");
+	if (!mp_damage_scale_ct_body || mp_damage_scale_ct_body->type != 7) return;
+	float damage_scale_ct_body = mp_damage_scale_ct_body->value.fl;
+
+	sdk::convar* mp_damage_scale_t_body = sdk::Cvar->find("mp_damage_scale_t_body");
+	if (!mp_damage_scale_t_body || mp_damage_scale_t_body->type != 7) return;
+	float damage_scale_t_body = mp_damage_scale_t_body->value.fl;
+
+	
+
+	const bool is_ct = entity->get_m_iTeamNum() == 3, is_t = entity->get_m_iTeamNum() == 2;
+
+	float head_damage_scale = is_ct ? damage_scale_ct_head : is_t ? damage_scale_t_head : 1.0f;
+	const float body_damage_scale = is_ct ? damage_scale_ct_body : is_t ? damage_scale_t_body : 1.0f;
+
+	// william: magic values u can see here: ida: server.dll; F3 0F 10 35 ?? ?? ?? ?? 0F 29 7C 24 30 44 0F 29 44 24
+	// xref: mp_heavybot_damage_reduction_scale 
+	//if (entity->get_m_bHasHeavyArmor()) { //Not considering 
+	//	head_damage_scale *= 0.5f;
+	//}
+
+	// todo: 可通过m_flHeadshotMultiplier 偏移获取
+	switch (hitgroup) {
+	case k_bone_head:
+		data.m_dmg *= data.m_wpn_data->m_flHeadshotMultiplier() * head_damage_scale;
+		break;
+	case game_sdk::entity::e_hitgroups::hitgroup_chest:
+	case game_sdk::entity::e_hitgroups::hitgroup_left_arm:
+	case game_sdk::entity::e_hitgroups::hitgroup_right_arm:
+	case k_bone_neck:
+		data.m_dmg *= body_damage_scale;
+		break;
+	case game_sdk::entity::e_hitgroups::hitgroup_stomach:
+		data.m_dmg *= 1.25f * body_damage_scale;
+		break;
+	case game_sdk::entity::e_hitgroups::hitgroup_left_leg:
+	case game_sdk::entity::e_hitgroups::hitgroup_right_leg:
+		data.m_dmg *= 0.75f * body_damage_scale;
+		break;
+	default:
+		break;
+	}
+
+	if (!entity->is_armored(hitgroup))
+		return;
+
+	float heavy_armor_bonus = 1.0f, armor_bonus = 0.5f, armor_ratio = data.m_wpn_data->m_flArmorRatio() * 0.5f;
+
+	//if (entity->m_bHasHeavyArmor()) { //无需考虑重装甲
+	//	heavy_armor_bonus = 0.25f;
+	//	armor_bonus = 0.33f;
+	//	armor_ratio *= 0.20f;
+	//}
+
+	float damage_to_health = data.m_dmg * armor_ratio;
+	const float damage_to_armor = (data.m_dmg - damage_to_health) * (heavy_armor_bonus * armor_bonus);
+
+	if (damage_to_armor > static_cast<float>(entity->m_ArmorValue())) {
+		damage_to_health = data.m_dmg - static_cast<float>(entity->m_ArmorValue()) / armor_bonus;
+	}
+
+	data.m_dmg = damage_to_health;
+}
+*/
+/* 
+bool c_auto_wall::fire_bullet() {
+	data_t& data = m_data;
+	CS2_ASSERT(data.m_local != nullptr || data.m_target != nullptr || data.m_wpn_data != nullptr);
+
+	game_sdk::trace_data_t trace_data{ };
+	trace_data.m_arr_pointer = &trace_data.m_arr;
+
+	const utilities::vec3_t direction =
+		data.m_pos.at(data_t::e_pos::e_target) - data.m_pos.at(data_t::e_pos::e_local),
+		end_pos = direction * data.m_wpn_data->m_flRange();
+
+	const game_sdk::trace_filter_t filter(game_sdk::k_main_pen_mask, data.m_local, 3);
+	create_trace(&trace_data, data.m_pos.at(data_t::e_pos::e_local), end_pos, filter, 4);
+
+	struct handle_bullet_data_t {
+		handle_bullet_data_t(const float dmg_mod, const float pen, const float range_mod, const float range,
+			const int pen_count, const bool failed) :
+			m_dmg(dmg_mod),
+			m_pen(pen),
+			m_range_mod(range_mod),
+			m_range(range),
+			m_pen_count(pen_count),
+			m_failed(failed) {
+		}
+
+		float m_dmg{ }, m_pen{ }, m_range_mod{ }, m_range{ };
+		int m_pen_count{ };
+		bool m_failed{ };
+	} handle_bullet_data(static_cast<float>(data.m_wpn_data->m_nDamage()),
+		data.m_wpn_data->m_flPenetration(), data.m_wpn_data->m_flRange(),
+		data.m_wpn_data->m_flRangeModifier(), 4, false);
+	if (trace_data.m_num_update > 0) {
+		for (int i{ }; i < trace_data.m_num_update; i++) {
+			auto* value = reinterpret_cast<game_sdk::update_value_t* const>(
+				reinterpret_cast<std::uintptr_t>(trace_data.m_pointer_update_value)
+				+ i * sizeof(game_sdk::update_value_t));
+
+			game_sdk::game_trace_t game_trace{ };
+			init_trace_info(&game_trace);
+			get_trace_info(
+				&trace_data, &game_trace, 0.0f,
+				reinterpret_cast<void*>(
+					reinterpret_cast<std::uintptr_t>(trace_data.m_arr.data())
+					+ sizeof(game_sdk::trace_arr_element_t) * (value->m_handle_idx & game_sdk::entity::k_ent_entry_mask)));
+
+			if (game_trace.m_hit_entity == data.m_target) {
+				if (data.m_dmg > 0.0f) // huh?
+					scale_damage(game_trace.m_hitbox_data->m_hitgroup, game_trace.m_hit_entity);
+				return true;
+			}
+
+			if (handle_bullet_penetration(&trace_data, &handle_bullet_data, value))
+				return false;
+
+			data.m_dmg = handle_bullet_data.m_dmg;
+		}
+	}
+
+	return false;
+}
+*/

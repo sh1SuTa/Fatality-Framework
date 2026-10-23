@@ -24,6 +24,15 @@ struct aimbot_t
 	static bool wants_autostop;
 	
 };
+
+// [anti-aim] Rage > Anti-aim > Angles backend (implementation in aimbot.cpp).
+// Called from the fill_cmd_angles hook, the only writer of outgoing viewangles.
+// Returns true when pitch/yaw were rewritten; caller writes them back to CUserCmd.
+namespace antiaim
+{
+	bool apply(float& pitch, float& yaw);
+}
+
 // 骨骼索引表（2026-04 animgraph 后）：
 	// pelvis=1/spine_1=2/spine_2=4/neck=6/head=7/臂9-15/腿17-22（root_motion 占 0）
 	// —— 与 visuals 骨架同源

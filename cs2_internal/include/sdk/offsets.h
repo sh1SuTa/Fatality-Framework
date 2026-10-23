@@ -208,19 +208,26 @@ namespace sdk
 				// （函数 @0x19ACA80：out2 预置{-1,0} → vcall+0x148 单例[0x279CD58] → 兜底 idx*0x58
 				// 注册表[0x22ACD40] → 写 {idx, ConVar*}；与 ConvarGet 0x19AD630 同簇位移 +0x5E20 精确一致）。
 				// ConVar 布局不变（ConvarGet 14191 体仍读 flags@0x30/value@0x58/type@0x28，cvar.h 无需动）
-				constexpr auto cvar_from_index = 0x19aca80;
+				// [14192] 0x19ACA80 + 0x2260 = 0x19AECE0 (NOTE: the earlier 0x19ACEE0 was a one-digit
+				// typo; it lands mid-instruction inside function 0x19AC8C1, which is what produced
+				// exception 0xc000001d / illegal instruction at client+0x19ACEE1).
+				// Disasm at 0x19AECE0 confirms the full recipe:
+				// mov [rcx],0xFFFFFFFF / mov [rcx+8],0 (out) -> [rip+0xDEFFE8] (pCvar 0x279ECF8)
+				// -> call [rax+0x148] -> fallback imul rsi,0x58 + registry [rip+0x900038]
+				// -> writes {idx, ConVar*} and returns out. ConVar layout unchanged.
+				constexpr auto cvar_from_index = 0x19aece0;
 				// [14191] ClientMode::OverrideView(this, CViewSetup*)：thirdperson 摄像机驱动点
 				//（tp_rescan_14191.py pattern 唯一命中 0xD02E30，14190 pattern 字节原样可用）。
 				// 旧 0xD02310/0x7515d0 均过期，勿信
-				constexpr auto override_view = 0xd02e30;
+				constexpr auto override_view = 0xd04490; // [14192] cs2-sdk pattern 命中（旧 0xD02E30 +0x1660）
 				// [14191] thirdperson/firstperson ConCommand 回调（tp_rescan_14191.py pattern 唯一命中）。
 				// 回调反汇编逐条对齐 14190：无 cheat 门、状态门 +0x229 快照 +0x230/+0x234、
 				// +0x238=0x41F00000(30.0f 硬编码)、+0x6A8 清零、vcall+0x9D8(1)/(0)、vcall+0x310 查询全同
-				constexpr auto cmd_thirdperson = 0xb64190;
-				constexpr auto cmd_firstperson = 0xb640b0;
-				// [14191] 第三人称状态单例（thirdperson 回调 r8 宿主 = [client+0x223BD00]）：
-				// 对象布局零变化（+0x229/+0x230/+0x234/+0x238/+0x6A8 由 14191 回调反汇编直接复核）
-				constexpr auto tp_state_singleton = 0x223bd00;
+				constexpr auto cmd_thirdperson = 0xb64fd0; // [14192] old 0xB64190 +0xE40
+				constexpr auto cmd_firstperson = 0xb64ef0; // [14192] old 0xB640B0 +0xE40
+				// [14192] 第三人称状态单例（thirdperson 回调 r8 宿主 = [client+0x223DC00]）：
+				// 对象布局零变化（+0x229/+0x230/+0x234/+0x238/+0x6A8 反汇编复核）
+				constexpr auto tp_state_singleton = 0x223dc00;
 				constexpr auto get_camera = 0x841a70;
 				constexpr auto view_render = 0x732450;
 				constexpr auto on_render_start = 0x7b4060;
@@ -233,17 +240,17 @@ namespace sdk
 				// 调用配方不变：GameTraceLine(mgr, &attrs, &start, &end, nullptr, (void*)1, &out[0xC0])，
 				// attrs=desc 12B 拷贝+float@+0xC=0，out 预置 0 清零+[0x6C]=-1+[0xB0]=-1，
 				// fraction=[+0xAC]、hit 实体=[+0x08]、hit byte=[+0xBB]（14190 实锤沿用）
-				constexpr auto game_trace_line = 0xa1a9a0;
+				constexpr auto game_trace_line = 0xa1b7d0; // [14192] old 0xA1A9A0 +0xE30
 				// [14191] 游戏高层 line trace wrapper：bool(start_vec rcx, end_vec rdx, float xmm2=0, out_copy r9)，
 				// 内部自带 out 预置(+0x74=0x07000000)+attrs 构造+GameTraceLine+结果判定
 				// （1.0>frac 或 hit byte!=0 → true）。裸调 GameTraceLine 全 miss 时的对照/替代路径
-				constexpr auto trace_wrapper = 0x84edb0;
+				constexpr auto trace_wrapper = 0x84fbe0; // [14192] old 0x84EDB0 +0xE30（反汇编复核：call GameTraceLine/InitTraceInfo）
 				// [14191] attrs 描述符（12B，.rdata 全零，wrapper 体内唯一引用）
-				constexpr auto trace_attrs_desc = 0x1ac29c8;
+				constexpr auto trace_attrs_desc = 0x1ac49d0; // [14192] old 0x1AC29C8（wrapper 内 lea 实读）
 				// [14191] 0x48 记录→CGameTrace 展开器（TraceShape call@+0x21F → 0x9D2F60，AW +0x38F 交叉）
 				constexpr auto trace_expander = 0x9d2f60;
 				// [14191] 物理查询单例槽：pattern 实锤 + 149 函数 xref（与 14190 数量一致）
-				constexpr auto physics_query_singleton = 0x2227058;
+				constexpr auto physics_query_singleton = 0x2229020; // [14192] pGameTraceManager（wrapper 内 mov rcx,[rip+...] 实读）
 				// [14191] CCSTraceFilterSimple 使用现场：唯一 lea→ccs vtable(0x1C11D00) 的函数
 				// （两个构造点 @+0x287/+0x29C；簇位移 -0x250 与 0x8BE dtor 簇一致）
 				constexpr auto bullet_trace_helper = 0x8c90cb;
@@ -314,15 +321,15 @@ namespace sdk
 			// override_view（0xD02310→0xD02E30，pattern 独立验证）精确一致 —— 本簇整体平移。
 			// 注意：0xD02780 是 create_move 中段碎片（0xD022E6 的 `cmp ebx,4; jle 0xD02780` 跳入的
 			// EH 块），钩它会 mid-function 断帧 → 毒栈传入 fill → C0000005（已踩坑，勿再钩）
-			constexpr auto csgoinput_create_move = 0xd02130;
-			// [14191] WriteSubtickFromEntry（tp_rescan3_14191.py cs2-sdk pattern 唯一命中 0xCFA6B0）：
+			constexpr auto csgoinput_create_move = 0xd03790;
+			// [14192] old 0xCFA6B0 +0x1660：WriteSubtickFromEntry（cs2-sdk pattern 命中 0xCFBD10）：
 			// 命令视角填充（rcx=视角快照，rdx=上下文，[rdx+18h]=CUserCmd）语义沿用
-			constexpr auto csgoinput_fill_cmd_angles = 0xcfa6b0;
-			// [14191] dwCSGOInput 同址（a2x dwCSGOInput 键）
-			constexpr auto csgoinput_ctx_global = 0x257b640;
-			// [14191] ForceButtonsDown（tp_rescan3_14191.py cs2-sdk pattern 唯一命中 0xA66F10）：
-			// 头部 cmp [rcx+0x38] 设备句柄检查与 14190 语义一致；a1=64 位按钮位集注入方案沿用
-			constexpr auto csgoinput_force_buttons_down = 0xa66f10;
+			constexpr auto csgoinput_fill_cmd_angles = 0xcfbd10;
+			// [14192] dwCSGOInput 同址（a2x dwCSGOInput 键）
+			constexpr auto csgoinput_ctx_global = 0x257d780;
+			// [14192] old 0xA66F10 +0xE30：ForceButtonsDown（cs2-sdk pattern 命中 0xA67D40）：
+			// 头部 cmp [rcx+0x38] 设备句柄检查与旧版语义一致；a1=64 位按钮位集注入方案沿用
+			constexpr auto csgoinput_force_buttons_down = 0xa67d40;
 
 				// ===== pattern 表备查（cs2-sdk 14190 实测 RVA，未接线；autofire/autowall 下一步钥匙）=====
 				// 外层 CreateMove（input-stack 层）= 0xB64E60：其 call 目标 = GetCUserCmdArray
@@ -388,15 +395,14 @@ namespace sdk
 
 		namespace globals
 		{
-			// 14191 快照（a2x 2026-10-16 dump，D:\VAC逆向\output；14190→14191 .text/.data 重排：
-			// 位移 +0x8000~+0x9370 不等距，勿整体平移）—— 6 项均有新 dump 对应键直接换算
-			constexpr auto mem_alloc = 0x368d98; // [14191 未验] 新 dump 无对应键；当前无代码引用，仅存档
-			constexpr auto global_vars = 0x2230090; // dwGlobalVars
-			constexpr auto ccsgo_input = 0x257b640; // dwCSGOInput
-			constexpr auto game_entity_system = 0x271a908; // dwGameEntitySystem
-			constexpr auto local_player_controller = 0x253cb78; // dwLocalPlayerController
-			constexpr auto screen_transform = 0x256b020; // = a2x dwViewMatrix
-			constexpr auto view_render = 0x256b9e8; // dwViewRender
+			// 14192 快照（cs2-dumper 2026-10-23 11:21 UTC，src/output/offsets.hpp 逐键对应）
+			constexpr auto mem_alloc = 0x368d98; // [未验] 新 dump 无对应键；当前无代码引用，仅存档
+			constexpr auto global_vars = 0x2232088; // dwGlobalVars
+			constexpr auto ccsgo_input = 0x257d780; // dwCSGOInput
+			constexpr auto game_entity_system = 0x271c8b8; // dwGameEntitySystem
+			constexpr auto local_player_controller = 0x253eef8; // dwLocalPlayerController
+			constexpr auto screen_transform = 0x256cfe0; // == dwViewMatrix
+			constexpr auto view_render = 0x256d9a8; // dwViewRender
 			constexpr auto panorama_ui = 0x18f1c40; // [14191 未验] 新 dump 无对应键；ui_engine 赋值后无消费者，死值无害
 			constexpr auto ui_event_with_priority_vtable = 0x130c350; // [14191 未验] 无代码引用
 		} // namespace globals

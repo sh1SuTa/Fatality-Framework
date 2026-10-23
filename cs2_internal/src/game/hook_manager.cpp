@@ -128,7 +128,7 @@ void hook_manager_t::init()
 		const auto create_move_target = reinterpret_cast<void*>(game->client.at(sdk::offsets::functions::input::csgoinput_create_move));
 		if (is_executable(create_move_target))
 		{
-			char szBytes[96] = "Fatality: create_move bytes=";
+			char szBytes[96] = "[Fatality]: create_move bytes=";
 			auto* p = szBytes + std::strlen(szBytes);
 			for (int i = 0; i < 16; ++i)
 				p += wsprintfA(p, "%02X", static_cast<const unsigned char*>(create_move_target)[i]);

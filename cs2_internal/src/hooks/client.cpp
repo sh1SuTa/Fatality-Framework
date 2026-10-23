@@ -1,4 +1,4 @@
-#include <cstring>
+﻿#include <cstring>
 #include <cmath>
 #include <cstdio>
 #include <intrin.h>
@@ -292,7 +292,50 @@ namespace
 
 namespace hooks::client
 {
-	
+	// [anti-aim] 本 tick 实际写进 CUserCmd 的假角（以真实视角为基准算出的绝对值）。
+	// fill_cmd_angles（输入线程）写，on_render_start（渲染线程）消费：本地第三人称模型的
+	// m_angEyeAngles 必须显示"发给服务端的那份角"，否则本地看到的仍是真实朝向。
+	// 32 位对齐读写，x86 下天然原子；最坏情况只差一帧，不加锁。
+	float aa_model_pitch = 0.f;
+	float aa_model_yaw = 0.f;
+	bool aa_model_valid = false;
+
+	// [anti-aim] 本地第三人称模型朝向写入（14192 client_dll dump：C_CSPlayerPawn
+	// m_angEyeAngles = +0x3600，pitch/yaw 为前两个 float）。pawn 可能悬垂 → SEH 兜底。
+	// [aa-mdl] 1s 一次的探针：before 是游戏上一帧留下的值（若恒等于 wrote 说明本写入
+	// 没被覆盖；若不断变化说明 original 会重算，需把写入点继续前移）。
+	__declspec(noinline) void aa_write_local_model(float pitch, float yaw)
+	{
+		__try
+		{
+			const auto ctrl = sdk::LocalPlayerController;
+			if (!ctrl)
+				return;
+
+			auto* const pawn = ctrl->get_pawn();
+			if (!pawn)
+				return;
+
+			auto* const ea = reinterpret_cast<float*>(reinterpret_cast<unsigned char*>(pawn) + 0x3600);
+			const float before_pitch = ea[0];
+			const float before_yaw = ea[1];
+			ea[0] = pitch;
+			ea[1] = yaw;
+
+			static DWORD s_log = 0;
+			const DWORD now = GetTickCount();
+			if (now - s_log >= 1000)
+			{
+				s_log = now;
+				char buf[192];
+				sprintf_s(buf, sizeof(buf), "[aa-mdl] pawn=%p before=%.1f/%.1f wrote=%.1f/%.1f read=%.1f/%.1f\n",
+					pawn, before_pitch, before_yaw, pitch, yaw, ea[0], ea[1]);
+				OutputDebugStringA(buf);
+			}
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER) { }
+	}
+
 	// 复刻游戏 GameTraceLine 调用现场（client 0x84E340..0x84E36E，wrapper 全解码）：
 	//   GameTraceLine([0x221F058]=mgr, &attrs, &start, &end, a5=0, a6=1, a7=&out[0xC0])
 	//   attrs = 16B：0x203C30 构造 = desc(0x1ABC9C8, 实测全零)12B 拷贝 + float@+0xC
@@ -411,6 +454,8 @@ namespace hooks::client
 			__try
 			{
 				aimbot_t::run(static_cast<sdk::ccsgo_input*>(a0));
+				// [anti-aim] the local view slot (a0+0x688) must stay untouched:
+				// real AA keeps your camera normal and only fakes the CUserCmd angle.
 				// ForceButtonsDown 主动注入 / 解除检查（armed→注入，!armed→重放清位）
 				autofire_inject_check();
 				autofire_release_check();
@@ -446,8 +491,8 @@ namespace hooks::client
 				{
 					using mgr_fn = void*(__fastcall*)(void*);
 					const auto ring = reinterpret_cast<unsigned char*>(
-						//client_module.value().base + 0x944530 =GetUserCmdManager 41 56 41 57 48 83 EC 48 48 8D 54 24 68 E8 AE B4
-						reinterpret_cast<mgr_fn>(client_module.value().base + 0x944530)(sdk::LocalPlayerController)
+						//client_module.value().base + 0x945360 =GetUserCmdManager [14192]（旧 0x944530 +0xE30）41 56 41 57 48 83 EC 48 48 8D 54 24 68 E8 AE B4
+						reinterpret_cast<mgr_fn>(client_module.value().base + 0x945360)(sdk::LocalPlayerController)
 					);
 					if (ring)
 					{
@@ -456,7 +501,6 @@ namespace hooks::client
 						const auto cmd = ring + 0x98 * (static_cast<unsigned>(seq) % 150);
 						if (*reinterpret_cast<const int*>(cmd + 0x8) == seq)
 						{
-							
 							auto* const held = reinterpret_cast<unsigned long long*>(cmd + 0x60);
 							auto* const changed = reinterpret_cast<unsigned long long*>(cmd + 0x68);
 							if (aimbot_t::wants_autostop) {
@@ -526,7 +570,7 @@ namespace hooks::client
 			sprintf_s(hdr, sizeof(hdr),
 				"[TLI] out=%p size=%d elements=%p\n",
 				out, cur_out->size, cur_out->elements);
-			OutputDebugStringA(hdr);
+			//OutputDebugStringA(hdr);
 
 			// 最多只打前 8 项，size 很大时避免一次几百行
 			const int dump_items = (cur_out->size < 8) ? cur_out->size : 8;
@@ -550,7 +594,7 @@ namespace hooks::client
 					sprintf_s(line, sizeof(line),
 						"  [%02d]+0x%02X %016llX  u32=[%08X %08X]  f=[% .4f % .4f]\n",
 						i, q * 8, v, lo_u, hi_u, lo_f, hi_f);
-					OutputDebugStringA(line);
+					//OutputDebugStringA(line);
 				}
 			}
 
@@ -560,7 +604,7 @@ namespace hooks::client
 				sprintf_s(tail, sizeof(tail),
 					"  ... (%d more items omitted)\n",
 					cur_out->size - dump_items);
-				OutputDebugStringA(tail);
+				//OutputDebugStringA(tail);
 			}
 		}
 		
@@ -575,15 +619,73 @@ namespace hooks::client
 		// [silent aim] a1 = 命令上下文 rdx：[+0x18]=CUserCmd，+0x18/+0x1C=viewangles P/Y。
 		// original 已填 live 视角并置 dirty 位（bit0/1/2），此处覆写为目标头角即可
 		// （用户 NOP 实验证明这是 viewangles 唯一写入点，之后无覆盖）。
-		if (a1 && aimbot_t::silent_valid)
+		if (a1)
 		{
 			__try
 			{
 				const auto cmd = *reinterpret_cast<unsigned char**>(static_cast<unsigned char*>(a1) + 0x18);
 				if (cmd)
 				{
-					*reinterpret_cast<float*>(cmd + 0x18) = aimbot_t::silent_pitch;
-					*reinterpret_cast<float*>(cmd + 0x1C) = aimbot_t::silent_yaw;
+					if (aimbot_t::silent_valid)
+					{
+						*reinterpret_cast<float*>(cmd + 0x18) = aimbot_t::silent_pitch;
+						*reinterpret_cast<float*>(cmd + 0x1C) = aimbot_t::silent_yaw;
+						// 本地模型镜像出站角（silent 也只影响模型朝向，不动相机）；
+						// AA 关闭时不产生任何本地视觉残留
+						if (cfg.aa.enabled.get())
+						{
+							aa_model_pitch = aimbot_t::silent_pitch;
+							aa_model_yaw = aimbot_t::silent_yaw;
+							aa_model_valid = true;
+						}
+						else
+						{
+							aa_model_valid = false;
+						}
+					}
+					else
+					{
+						// [anti-aim] fake the angle sent to the server (model facing) while
+						// the local camera (a0+0x688) stays untouched. Skipped on firing
+						// frames so bullets still leave along the real view.
+						const bool aa_on = cfg.aa.enabled.get();
+						if (!aa_on)
+							aa_model_valid = false;
+
+						const bool firing = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0
+							|| aimbot_t::wants_autofire;
+						if (!firing)
+						{
+							float aa_pitch = *reinterpret_cast<float*>(cmd + 0x18);
+							float aa_yaw = *reinterpret_cast<float*>(cmd + 0x1C);
+							const bool ok = antiaim::apply(aa_pitch, aa_yaw);
+							if (ok)
+							{
+								*reinterpret_cast<float*>(cmd + 0x18) = aa_pitch;
+								*reinterpret_cast<float*>(cmd + 0x1C) = aa_yaw;
+							}
+							// [aa] 把这份假角存给 on_render_start，本地模型显示同一份角
+							// （旧实现两处分别调 apply，渲染侧基准角恒为 0 → 模型朝向错误）。
+							// 先写角再置 valid，避免渲染线程读到"valid 但角还没落"的中间态
+							if (ok)
+							{
+								aa_model_pitch = aa_pitch;
+								aa_model_yaw = aa_yaw;
+							}
+							aa_model_valid = ok;
+							// [aa-dbg] confirm the AA path is reached and what it computes
+							static DWORD s_aa_log = 0;
+							const DWORD now = GetTickCount();
+							if (now - s_aa_log >= 500)
+							{
+								s_aa_log = now;
+								char buf[192];
+								sprintf_s(buf, sizeof(buf), "[aa] en=%d ok=%d out=%.1f/%.1f\n",
+									cfg.aa.enabled.get() ? 1 : 0, ok ? 1 : 0, aa_pitch, aa_yaw);
+								OutputDebugStringA(buf);
+							}
+						}
+					}
 				}
 			}
 			__except (EXCEPTION_EXECUTE_HANDLER) { }
@@ -761,6 +863,14 @@ namespace hooks::client
 
 	void on_render_start(sdk::cview_render *view_render)
 	{
+		// [anti-aim] 本地第三人称模型朝向：直接复用本 tick 已写入 CUserCmd 的那份假角
+		// （fill_cmd_angles 以真实视角为基准算出的绝对值）。绝不在这里再调 apply——
+		// 渲染侧没有真实基准角（旧实现传 0/0，Backwards 恒输出 180°，模型朝向错误），
+		// 且每帧多调一次会打乱 jitter 的 tick 相位。
+		// 必须在 original 之前写：original 会跑客户端动画/姿态更新，写在之后只落下一帧，
+		// 还会被下一帧预测覆盖（旧实现"apply(0,0) + original 之后写"= 模型不转的根因）。
+		if (aa_model_valid)
+			aa_write_local_model(aa_model_pitch, aa_model_yaw);
 
 		const auto oOnRenderStart = hkOnRenderStart.GetOriginal();
 

@@ -223,7 +223,7 @@ namespace
 
 void aimbot_t::run(sdk::ccsgo_input* input)
 {
-	// [weapon-group] 每帧解析一次，供 hitboxes / hitchance / autostop / hitboxes 等读取
+	// [weapon-group] 每帧解析一次，供 hitboxes / hitchance / autostop 等读取
 	const auto cur_grp = resolve_weapon_group_id();
 	
 
@@ -572,3 +572,73 @@ bool c_auto_wall::fire_bullet() {
 	return false;
 }
 */
+
+// ---------------------------------------------------------------------------
+// [anti-aim] Rage > Anti-aim > Angles backend
+// Only rewrites the "real" angles sent to the server (CUserCmd +0x18 pitch / +0x1C yaw).
+// The local camera is untouched. Silent aim wins on frames where we actually shoot.
+// No desync / fake yaw / fakelag here: those need subtick dual-angle writes.
+namespace antiaim
+{
+	static float normalize_yaw(float yaw)
+	{
+		while (yaw > 180.f)
+			yaw -= 360.f;
+		while (yaw < -180.f)
+			yaw += 360.f;
+		return yaw;
+	}
+
+	bool apply(float& pitch, float& yaw)
+	{
+		if (!cfg.aa.enabled.get())
+			return false;
+
+		// create_move runs once per tick, used for jitter side flipping
+		static uint32_t s_tick = 0;
+		++s_tick;
+
+		const float base_yaw = yaw;
+		float out_yaw = base_yaw;
+
+		// manual override (left/right/back) takes priority over automatic yaw
+		if (cfg.aa.manual.get())
+		{
+			if (cfg.aa.manual_back.get())
+				out_yaw = base_yaw + 180.f;
+			else if (cfg.aa.manual_left.get())
+				out_yaw = base_yaw - 90.f;
+			else if (cfg.aa.manual_right.get())
+				out_yaw = base_yaw + 90.f;
+		}
+		else if (cfg.aa.yaw->test(cfg_t::aa_yaw_backwards))
+			out_yaw = base_yaw + 180.f;
+		else if (cfg.aa.yaw->test(cfg_t::aa_yaw_custom))
+			out_yaw = base_yaw + cfg.aa.yaw_value.get();
+
+		const float jitter = cfg.aa.yaw_jitter_value.get();
+		if (jitter != 0.f)
+		{
+			if (cfg.aa.yaw_jitter->test(cfg_t::aa_yaw_jitter_center))
+				out_yaw += (s_tick & 1u) ? jitter * 0.5f : -jitter * 0.5f;
+			else if (cfg.aa.yaw_jitter->test(cfg_t::aa_yaw_jitter_offset))
+				out_yaw += (s_tick & 1u) ? jitter : -jitter;
+		}
+
+		// pitch: +89 = look down (engine limit), -89 = look up
+		if (cfg.aa.pitch->test(cfg_t::aa_pitch_down))
+			pitch = 89.f;
+		else if (cfg.aa.pitch->test(cfg_t::aa_pitch_up))
+			pitch = -89.f;
+		else if (cfg.aa.pitch->test(cfg_t::aa_pitch_zero))
+			pitch = 0.f;
+		else if (cfg.aa.pitch->test(cfg_t::aa_pitch_custom))
+		{
+			pitch = cfg.aa.pitch_value.get();
+			pitch = pitch > 89.f ? 89.f : (pitch < -89.f ? -89.f : pitch);
+		}
+
+		yaw = normalize_yaw(out_yaw);
+		return true;
+	}
+}

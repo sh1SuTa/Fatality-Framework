@@ -324,8 +324,7 @@ void game_t::init()
 		return;
 	}
 
-	// 注意：fn.get_weapon_data 的接线已弃用 —— 实测其偏移（0x4a7f40）在当前 build
-	// 指向错误函数，调用后触发 fail-fast 终止（__except 无法兜底，进程直接终止）。
+	
 	// ammo 功能已改为 weapon_id 查表获取弹匣容量，见 visuals.cpp 的 mag_sizes。
 
 	/* // old interface

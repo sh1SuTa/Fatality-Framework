@@ -1,5 +1,8 @@
 #include <gui/controls/checkbox.h>
 
+#include <windows.h>
+#include <cstdio>
+
 GUI_NAMESPACE;
 
 void gui::checkbox::render()
@@ -53,6 +56,21 @@ void checkbox::reset()
 void checkbox::on_mouse_enter()
 {
 	using namespace ren;
+
+	// [mdbg] 悬停探针：确认该复选框是否真的在控件树里、输入锁是否被别的控件占用
+	{
+		static DWORD s_t = 0;
+		const auto now = GetTickCount();
+		if (now - s_t >= 400)
+		{
+			s_t = now;
+			char b[192];
+			sprintf_s(b, sizeof(b), "Fatality: [cb] hover id=%016llX locked=%d vis=%d\n",
+				static_cast<unsigned long long>(id), is_input_locked() ? 1 : 0, is_visible ? 1 : 0);
+			OutputDebugStringA(b);
+		}
+	}
+
 	if (value)
 		return;
 
@@ -70,6 +88,15 @@ void checkbox::on_mouse_leave()
 
 void checkbox::on_mouse_down(char key)
 {
+	// [mdbg] 点击探针：区分「控件没收到点击」与「收到了但被输入锁挡掉」
+	if (key == m_left)
+	{
+		char b[192];
+		sprintf_s(b, sizeof(b), "Fatality: [cb] down id=%016llX locked=%d val=%d\n",
+			static_cast<unsigned long long>(id), is_input_locked() ? 1 : 0, value ? 1 : 0);
+		OutputDebugStringA(b);
+	}
+
 	if (key == m_left && !is_input_locked())
 	{
 		ctx->do_tick_sound();

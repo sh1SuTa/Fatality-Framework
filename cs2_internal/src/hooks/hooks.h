@@ -26,7 +26,8 @@ namespace hooks
 		void prediction_update(void* pred, int a, int b);
 		void* create_move(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7);
 		inline CBaseHookObject<decltype(&create_move)> hkCreateMove = {};
-
+		__int64 myTraceLineIntervals(__int64* a1, int* out, __int64 a3, __int64 a4, BYTE* a5, int a6);
+		inline CBaseHookObject<decltype(&myTraceLineIntervals)> hkTraceLineIntervals = {};
 		// [silent aim] sub_CFA140（create_move 内部"填命令视角"，用户 IDA+FPU 断点+
 		// NOP 实验实锤：命令 viewangles 唯一写入点）。rcx=输入视角快照（+0x10 pitch/
 		// +0x14 yaw/+0x18 roll），rdx=命令上下文，[rdx+0x18]=CUserCmd（+0x10 dirty

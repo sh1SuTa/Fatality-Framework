@@ -21,7 +21,8 @@
 #include <sdk/sdk.h>
 #include <sdk/trace.h>
 #include <utils/mem.h>
-
+#include"../sdk/utl/utl_vector.h"
+#include"../sdk/trace.h"
 namespace
 {
 	// [aw-verify] 可读性检查（VirtualQuery 版，与 hook_manager.cpp 同款）
@@ -267,7 +268,7 @@ namespace
 	{
 		hooks::client::filter_dtor_calls[id].fetch_add(1, std::memory_order_relaxed);
 
-		// 每次 F5 重新武装时清零日志预算（dtor 很热，事件持续触发可观察边沿）
+		
 		static bool prev_armed = false;
 		const bool now_armed = hooks::client::trace_dump_armed.load(std::memory_order_relaxed);
 		if (now_armed && !prev_armed)
@@ -291,7 +292,7 @@ namespace
 
 namespace hooks::client
 {
-	// [aimbot 可见性] 可复用同步 trace 段（14190 配方，2026-10-12 磁盘实锤）。
+	
 	// 复刻游戏 GameTraceLine 调用现场（client 0x84E340..0x84E36E，wrapper 全解码）：
 	//   GameTraceLine([0x221F058]=mgr, &attrs, &start, &end, a5=0, a6=1, a7=&out[0xC0])
 	//   attrs = 16B：0x203C30 构造 = desc(0x1ABC9C8, 实测全零)12B 拷贝 + float@+0xC
@@ -366,9 +367,6 @@ namespace hooks::client
 
 	void* create_move(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7)
 	{
-		
-
-		
 		const char* phase = nullptr;
 		const unsigned char* btn_host = static_cast<const unsigned char*>(a0);
 		{
@@ -458,42 +456,24 @@ namespace hooks::client
 						const auto cmd = ring + 0x98 * (static_cast<unsigned>(seq) % 150);
 						if (*reinterpret_cast<const int*>(cmd + 0x8) == seq)
 						{
-							static int s_dbg_last_state = -1;
-							const int dbg_state =
-								((GetAsyncKeyState('W') & 0x8000) ? 1 : 0) |
-								((GetAsyncKeyState('S') & 0x8000) ? 2 : 0) |
-								((GetAsyncKeyState('A') & 0x8000) ? 4 : 0) |
-								((GetAsyncKeyState('D') & 0x8000) ? 8 : 0);
-
-							if (dbg_state != s_dbg_last_state)
-							{
-								s_dbg_last_state = dbg_state;
-
-								
-								unsigned long long held = 0, changed = 0;
-								aw_read_qword(cmd + 0x60, &held);
-								aw_read_qword(cmd + 0x68, &changed);
-
-								
-								
-							}
+							
 							auto* const held = reinterpret_cast<unsigned long long*>(cmd + 0x60);
 							auto* const changed = reinterpret_cast<unsigned long long*>(cmd + 0x68);
+							if (aimbot_t::wants_autostop) {
+								auto old_held = *held;
+								*held &= ~0x618ull;
+								*changed |= (old_held & 0x618);
+							}
 							//W 0x8 ,S 0x10,A 0x200,D 0x400
 							if (armed)
 							{
-								*held |= 1ull;
-								*changed |= 1ull;
-								char hdr[256];
-								sprintf_s(hdr, sizeof(hdr),
-									"[Fatality]: [as-general_id]=%d \n",
-									menu::group::general_id);
-								OutputDebugStringA(hdr);
-								if (cfg.weapon_config.autostop[menu::group::general_id].get()) {
-									*held &= ~0x618ull;
-									auto old_held = *held;
-									*changed |= (old_held & 0x618);
-								}
+								
+								
+									*held |= 1ull;
+									*changed |= 1ull;
+								
+								
+								
 								
 							}
 							else if (s_af2_prev)//停火
@@ -514,6 +494,77 @@ namespace hooks::client
 		}
 
 		return ret;
+	}
+
+	__int64 myTraceLineIntervals(__int64* a1, int* out, __int64 a3, __int64 a4, BYTE* a5, int a6)
+	{
+		
+		auto res=hkTraceLineIntervals.GetOriginal()(a1, out, a3, a4, a5, a6);
+
+		auto* cur_out = reinterpret_cast<cutl_vector<sdk::trace_interval_t>*>(out);
+
+		
+		
+
+		static uintptr_t s_last_out = 0;
+		static int       s_last_size = -1;
+		static DWORD     s_last_tick = 0;
+
+		const DWORD now = GetTickCount();
+		const bool out_changed = reinterpret_cast<uintptr_t>(out) != s_last_out;
+		const bool size_changed = cur_out->size != s_last_size;
+		const bool time_ready = (now - s_last_tick) >= 500;
+
+		// 只在 out/size 变化、且距离上次至少 500ms 时才打，避免刷屏
+		if ((out_changed || size_changed) && time_ready)
+		{
+			s_last_out = reinterpret_cast<uintptr_t>(out);
+			s_last_size = cur_out->size;
+			s_last_tick = now;
+
+			char hdr[192];
+			sprintf_s(hdr, sizeof(hdr),
+				"[TLI] out=%p size=%d elements=%p\n",
+				out, cur_out->size, cur_out->elements);
+			OutputDebugStringA(hdr);
+
+			// 最多只打前 8 项，size 很大时避免一次几百行
+			const int dump_items = (cur_out->size < 8) ? cur_out->size : 8;
+
+			for (int i = 0; i < dump_items; ++i)
+			{
+				const auto* base = reinterpret_cast<const unsigned char*>(cur_out->elements) + i * 56;
+				for (int q = 0; q < 7; ++q)
+				{
+					unsigned long long v = 0;
+					if (!aw_read_qword(base + q * 8, &v))
+						break;
+
+					const auto lo_u = static_cast<unsigned int>(v & 0xFFFFFFFFull);
+					const auto hi_u = static_cast<unsigned int>(v >> 32);
+					float lo_f = 0.f, hi_f = 0.f;
+					std::memcpy(&lo_f, &v, 4);
+					std::memcpy(&hi_f, reinterpret_cast<const char*>(&v) + 4, 4);
+
+					char line[256];
+					sprintf_s(line, sizeof(line),
+						"  [%02d]+0x%02X %016llX  u32=[%08X %08X]  f=[% .4f % .4f]\n",
+						i, q * 8, v, lo_u, hi_u, lo_f, hi_f);
+					OutputDebugStringA(line);
+				}
+			}
+
+			if (cur_out->size > dump_items)
+			{
+				char tail[128];
+				sprintf_s(tail, sizeof(tail),
+					"  ... (%d more items omitted)\n",
+					cur_out->size - dump_items);
+				OutputDebugStringA(tail);
+			}
+		}
+		
+		return res;
 	}
 
 	void* fill_cmd_angles(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7)
@@ -539,25 +590,7 @@ namespace hooks::client
 		}
 
 		
-		if (a1 && aimbot_t::wants_autostop)
-		{
-			__try
-			{
-				const auto cmd = *reinterpret_cast<unsigned char**>(static_cast<unsigned char*>(a1) + 0x18);
-				if (cmd)
-				{
-					
-
-					// [as-sub] dump cmd+0x00~+0x40 原始 qwords 找 subtick_moves（RepeatedPtrField）：
-					// 结构是 ptr(heap) + count(small int 0~64) + capacity(≥count)，cmd+0x18 是 protobuf 声明
-					// 但 cmd+0x30 实测是 stack/code 范围（0x7FFF...）非 protobuf base
-					static DWORD s_sub = 0;
-					const auto now = GetTickCount();
-					
-				}
-			}
-			__except (EXCEPTION_EXECUTE_HANDLER) { }
-		}
+		
 
 		return ret;
 	}

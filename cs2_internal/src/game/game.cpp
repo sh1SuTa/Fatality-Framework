@@ -56,7 +56,7 @@ namespace
 				continue;
 			if (matches.size() != 1)
 			{
-				OutputDebugStringA("Fatality: swap-chain pattern is ambiguous; initialization stopped.\n");
+				OutputDebugStringA("[Fatality]: swap-chain pattern is ambiguous; initialization stopped.\n");
 				return nullptr;
 			}
 			std::int32_t displacement = 0;
@@ -67,18 +67,18 @@ namespace
 			const auto address = static_cast<std::uintptr_t>(target);
 			if (module_size < sizeof(void*) || address < module_base || address - module_base > module_size - sizeof(void*))
 			{
-				OutputDebugStringA("Fatality: swap-chain RIP target is outside the renderer module.\n");
+				OutputDebugStringA("[Fatality]: swap-chain RIP target is outside the renderer module.\n");
 				return nullptr;
 			}
 			auto candidate = reinterpret_cast<std::uint8_t*>(address);
 			if (pattern.list && (module_size < 24 || address - module_base < 8 || address - module_base > module_size - 16))
 			{
-				OutputDebugStringA("Fatality: swap-chain list metadata is outside the renderer module.\n");
+				OutputDebugStringA("[Fatality]: swap-chain list metadata is outside the renderer module.\n");
 				return nullptr;
 			}
 			if (slot && (slot != candidate || slot_is_list != pattern.list))
 			{
-				OutputDebugStringA("Fatality: swap-chain patterns resolve to different slots.\n");
+				OutputDebugStringA("[Fatality]: swap-chain patterns resolve to different slots.\n");
 				return nullptr;
 			}
 			slot = candidate;
@@ -87,7 +87,7 @@ namespace
 		if (linked_list)
 			*linked_list = slot_is_list;
 		if (!slot)
-			OutputDebugStringA("Fatality: no supported swap-chain pattern in rendersystemdx11.dll; renderer binary verification is required.\n");
+			OutputDebugStringA("[Fatality]: no supported swap-chain pattern in rendersystemdx11.dll; renderer binary verification is required.\n");
 		return slot;
 	}
 
@@ -150,7 +150,7 @@ namespace
 		std::size_t code_size = 0;
 		if (!MEM::GetSectionInfo(renderer, ".text", &code, &code_size))
 		{
-			OutputDebugStringA("Fatality: renderer .text section is unavailable.\n");
+			OutputDebugStringA("[Fatality]: renderer .text section is unavailable.\n");
 			return nullptr;
 		}
 		const auto module = reinterpret_cast<const std::uint8_t*>(renderer);
@@ -313,14 +313,14 @@ void game_t::init()
 	const auto mem_alloc_export = MEM::GetExportAddress(pTier0Handle, CS_XOR("g_pMemAlloc"));
 	if (!mem_alloc_export)
 	{
-		OutputDebugStringA("Fatality: init: g_pMemAlloc export not found.\n");
+		OutputDebugStringA("[Fatality]: init: g_pMemAlloc export not found.\n");
 		return;
 	}
 	sdk::MemAlloc = *reinterpret_cast<sdk::cmem_alloc**>(mem_alloc_export);
 	if (!sdk::Client || !sdk::GameResourceService || !sdk::Engine || !sdk::Cvar ||
 		!sdk::Input || !sdk::InputSystem || !sdk::MemAlloc)
 	{
-		OutputDebugStringA("Fatality: init: one or more required interfaces are missing.\n");
+		OutputDebugStringA("[Fatality]: init: one or more required interfaces are missing.\n");
 		return;
 	}
 

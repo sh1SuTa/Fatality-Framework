@@ -14,98 +14,97 @@ namespace offsets {
         constexpr std::ptrdiff_t pAnimationSystemUtils = 0x83F6B8;
     }
     namespace client {
-        constexpr std::ptrdiff_t CInputPtrGlobal = 0x223BD00;
-        constexpr std::ptrdiff_t CSGOInput = 0x257B640;
-        constexpr std::ptrdiff_t ClientBugBugServic001_Client = 0x22336E0;
-        constexpr std::ptrdiff_t ClientToolsInfo_001 = 0x22336B0;
-        constexpr std::ptrdiff_t EmptyWorldService001_Client = 0x22170F0;
-        constexpr std::ptrdiff_t EntityList = 0x271A908;
-        constexpr std::ptrdiff_t GameClientExports001 = 0x2230358;
-        constexpr std::ptrdiff_t GameEntitySystem = 0x271A908;
+        constexpr std::ptrdiff_t CInputPtrGlobal = 0x223DC00;
+        constexpr std::ptrdiff_t CSGOInput = 0x257D780;
+        constexpr std::ptrdiff_t ClientBugBugServic001_Client = 0x22356E0;
+        constexpr std::ptrdiff_t ClientToolsInfo_001 = 0x22356B0;
+        constexpr std::ptrdiff_t EmptyWorldService001_Client = 0x2219130;
+        constexpr std::ptrdiff_t EntityList = 0x271C8B8;
+        constexpr std::ptrdiff_t GameClientExports001 = 0x2232358;
+        constexpr std::ptrdiff_t GameEntitySystem = 0x271C8B8;
         constexpr std::ptrdiff_t GameEntitySystem_highestEntityIndex = 0x2120;
-        constexpr std::ptrdiff_t GameRules = 0x25651D0;
-        constexpr std::ptrdiff_t GetAbsOrigin = 0x219A80;
-        constexpr std::ptrdiff_t GetBombsiteACenter = 0x8CCC20;
-        constexpr std::ptrdiff_t GetBombsiteBCenter = 0x8CCC80;
-        constexpr std::ptrdiff_t GlobalVars = 0x2230090;
-        constexpr std::ptrdiff_t GlowManager = 0x2561EF0;
-        constexpr std::ptrdiff_t LegacyGameUI001 = 0x22400F0;
-        constexpr std::ptrdiff_t LocalPlayerController = 0x253CB78;
-        constexpr std::ptrdiff_t LocalPlayerPawn = 0x2565718;
-        constexpr std::ptrdiff_t ManageGlowSceneObject = 0xB78090;
-        constexpr std::ptrdiff_t PlantedC4 = 0x24CB3C0;
-        constexpr std::ptrdiff_t Prediction = 0x2565620;
-        constexpr std::ptrdiff_t Sensitivity = 0x2562A18;
+        constexpr std::ptrdiff_t GameRules = 0x2567188;
+        constexpr std::ptrdiff_t GetAbsOrigin = 0x219A60;
+        constexpr std::ptrdiff_t GetBombsiteACenter = 0x8CDA50;
+        constexpr std::ptrdiff_t GetBombsiteBCenter = 0x8CDAB0;
+        constexpr std::ptrdiff_t GlobalVars = 0x2232088;
+        constexpr std::ptrdiff_t GlowManager = 0x2563EB0;
+        constexpr std::ptrdiff_t LegacyGameUI001 = 0x2242100;
+        constexpr std::ptrdiff_t LocalPlayerController = 0x253EEF8;
+        constexpr std::ptrdiff_t LocalPlayerPawn = 0x25676D8;
+        constexpr std::ptrdiff_t ManageGlowSceneObject = 0xB78ED0;
+        constexpr std::ptrdiff_t PlantedC4 = 0x24CD930;
+        constexpr std::ptrdiff_t Prediction = 0x25675E0;
+        constexpr std::ptrdiff_t Sensitivity = 0x25649D8;
         constexpr std::ptrdiff_t Sensitivity_sensitivity = 0x58;
-        constexpr std::ptrdiff_t SetItemItemIdFunction = 0xE5D440;
-        constexpr std::ptrdiff_t SetSceneObjectAttributeFloat4 = 0x16AE20;
-        constexpr std::ptrdiff_t Source2Client002 = 0x255F3E0;
-        constexpr std::ptrdiff_t Source2ClientConfig001 = 0x24BBF70;
-        constexpr std::ptrdiff_t Source2ClientPrediction001 = 0x2565620;
-        constexpr std::ptrdiff_t Source2ClientUI001 = 0x223E870;
-        constexpr std::ptrdiff_t TransformScale3dVMT = 0x1CBE038;
-        constexpr std::ptrdiff_t TransformTranslate3dVMT = 0x1CBDFF8;
-        constexpr std::ptrdiff_t ViewAngles = 0x257BCC8;
-        constexpr std::ptrdiff_t ViewMatrix = 0x256B020;
-        constexpr std::ptrdiff_t ViewRender = 0x256B9E8;
-        constexpr std::ptrdiff_t WeaponC4 = 0x24C9B30;
-        constexpr std::ptrdiff_t pCSGOInputInstance = 0x257B640;
-        constexpr std::ptrdiff_t pCSInventoryManager = 0x24D8AA0;
-        constexpr std::ptrdiff_t pClientMode = 0x25793A0;
-        constexpr std::ptrdiff_t pCvar = 0x279CD58;
-        constexpr std::ptrdiff_t pDynamicLightManager = 0x255C048;
-        constexpr std::ptrdiff_t pEconItemSystem = 0x25F41C8;
-        constexpr std::ptrdiff_t pEntitySystem = 0x23BB848;
-        constexpr std::ptrdiff_t pGameEntitySystem = 0x271A908;
-        constexpr std::ptrdiff_t pGameEventManager = 0x254BC08;
-        constexpr std::ptrdiff_t pGameRules = 0x25651D0;
-        constexpr std::ptrdiff_t pGameTraceManager = 0x2227058;
-        constexpr std::ptrdiff_t pGlobalVariables = 0x2230090;
-        constexpr std::ptrdiff_t pGlowManager = 0x2561EF0;
-        constexpr std::ptrdiff_t pHudPanel = 0x25D6460;
-        constexpr std::ptrdiff_t pInterpolationPhase = 0x21BF098;
-        constexpr std::ptrdiff_t pInventoryCategoryTree = 0x25F26C8;
-        constexpr std::ptrdiff_t pLocalPlayerController = 0x253CB78;
-        constexpr std::ptrdiff_t pMainMenuPanel = 0x25C96F0;
-        constexpr std::ptrdiff_t pMatchFramework = 0x279CE70;
-        constexpr std::ptrdiff_t pMatchmakingReservation = 0x257CB58;
-        constexpr std::ptrdiff_t pMaterialManager = 0x279CFB0;
-        constexpr std::ptrdiff_t pParticleManager = 0x22271D8;
-        constexpr std::ptrdiff_t pPlantedC4s = 0x24CB3C0;
-        constexpr std::ptrdiff_t pPrediction = 0x2565620;
-        constexpr std::ptrdiff_t pPredictionPlayer = 0x2556B28;
-        constexpr std::ptrdiff_t pPredictionRandomSeed = 0x21C2BF8;
-        constexpr std::ptrdiff_t pRenderGameSystem = 0x23BD0F0;
-        constexpr std::ptrdiff_t pSensitivity = 0x2562A18;
-        constexpr std::ptrdiff_t pUIInventory = 0x252B598;
-        constexpr std::ptrdiff_t pUiEngine = 0x2733F40;
-        constexpr std::ptrdiff_t pViewRender = 0x256B9E8;
-        constexpr std::ptrdiff_t pViewToProjectionMatrix = 0x256AFE0;
-        constexpr std::ptrdiff_t pWeaponC4 = 0x24C9B30;
-        constexpr std::ptrdiff_t pWeaponRecoilTable = 0x22195E8;
-        constexpr std::ptrdiff_t pWorldToProjectionMatrix = 0x256B020;
+        constexpr std::ptrdiff_t SetItemItemIdFunction = 0xE5EED0;
+        constexpr std::ptrdiff_t SetSceneObjectAttributeFloat4 = 0x16AE00;
+        constexpr std::ptrdiff_t Source2Client002 = 0x25613A0;
+        constexpr std::ptrdiff_t Source2ClientConfig001 = 0x24BDFD0;
+        constexpr std::ptrdiff_t Source2ClientPrediction001 = 0x25675E0;
+        constexpr std::ptrdiff_t Source2ClientUI001 = 0x2240880;
+        constexpr std::ptrdiff_t TransformScale3dVMT = 0x1CBFFA8;
+        constexpr std::ptrdiff_t TransformTranslate3dVMT = 0x1CBFF68;
+        constexpr std::ptrdiff_t ViewAngles = 0x257DE08;
+        constexpr std::ptrdiff_t ViewMatrix = 0x256CFE0;
+        constexpr std::ptrdiff_t ViewRender = 0x256D9A8;
+        constexpr std::ptrdiff_t WeaponC4 = 0x24CBEE8;
+        constexpr std::ptrdiff_t pCSGOInputInstance = 0x257D780;
+        constexpr std::ptrdiff_t pCSInventoryManager = 0x24DAB10;
+        constexpr std::ptrdiff_t pClientMode = 0x257B4E0;
+        constexpr std::ptrdiff_t pCvar = 0x279ECF8;
+        constexpr std::ptrdiff_t pDynamicLightManager = 0x255BB20;
+        constexpr std::ptrdiff_t pEconItemSystem = 0x25F6190;
+        constexpr std::ptrdiff_t pEntitySystem = 0x23BD878;
+        constexpr std::ptrdiff_t pGameEntitySystem = 0x271C8B8;
+        constexpr std::ptrdiff_t pGameEventManager = 0x254DC00;
+        constexpr std::ptrdiff_t pGameRules = 0x2567188;
+        constexpr std::ptrdiff_t pGameTraceManager = 0x2229020;
+        constexpr std::ptrdiff_t pGlobalVariables = 0x2232088;
+        constexpr std::ptrdiff_t pGlowManager = 0x2563EB0;
+        constexpr std::ptrdiff_t pHudPanel = 0x25D8448;
+        constexpr std::ptrdiff_t pInterpolationPhase = 0x21C10A0;
+        constexpr std::ptrdiff_t pInventoryCategoryTree = 0x25F4EE8;
+        constexpr std::ptrdiff_t pLocalPlayerController = 0x253EEF8;
+        constexpr std::ptrdiff_t pMainMenuPanel = 0x25CB6C8;
+        constexpr std::ptrdiff_t pMatchFramework = 0x279EE10;
+        constexpr std::ptrdiff_t pMatchmakingReservation = 0x257EC88;
+        constexpr std::ptrdiff_t pMaterialManager = 0x279EF50;
+        constexpr std::ptrdiff_t pParticleManager = 0x2229218;
+        constexpr std::ptrdiff_t pPlantedC4s = 0x24CD930;
+        constexpr std::ptrdiff_t pPrediction = 0x25675E0;
+        constexpr std::ptrdiff_t pPredictionPlayer = 0x2558890;
+        constexpr std::ptrdiff_t pPredictionRandomSeed = 0x21C4E90;
+        constexpr std::ptrdiff_t pRenderGameSystem = 0x23BF128;
+        constexpr std::ptrdiff_t pSensitivity = 0x25649D8;
+        constexpr std::ptrdiff_t pUIInventory = 0x252D600;
+        constexpr std::ptrdiff_t pUiEngine = 0x2735EE0;
+        constexpr std::ptrdiff_t pViewRender = 0x256D9A8;
+        constexpr std::ptrdiff_t pViewToProjectionMatrix = 0x256CFA0;
+        constexpr std::ptrdiff_t pWeaponC4 = 0x24CBEE8;
+        constexpr std::ptrdiff_t pWorldToProjectionMatrix = 0x256CFE0;
     }
     namespace engine2 {
-        constexpr std::ptrdiff_t BenchmarkService001 = 0x622C80;
-        constexpr std::ptrdiff_t BugBugService001 = 0x622D80;
-        constexpr std::ptrdiff_t BugService001 = 0x8DB7F0;
-        constexpr std::ptrdiff_t BuildNumber = 0x61CFEC;
-        constexpr std::ptrdiff_t ClientServerEngineLoopService_001 = 0x91CE30;
-        constexpr std::ptrdiff_t ClientServerSharedHandleSystem001 = 0x91C440;
-        constexpr std::ptrdiff_t EngineGameUI001 = 0x6206E0;
-        constexpr std::ptrdiff_t EngineServiceMgr001 = 0x91C700;
-        constexpr std::ptrdiff_t GameEventSystemClientV001 = 0x91C9E0;
-        constexpr std::ptrdiff_t GameEventSystemServerV001 = 0x91CB10;
-        constexpr std::ptrdiff_t GameResourceServiceClientV001 = 0x622DC0;
-        constexpr std::ptrdiff_t GameResourceServiceServerV001 = 0x622E20;
-        constexpr std::ptrdiff_t GameUIService_001 = 0x8DBC40;
-        constexpr std::ptrdiff_t HostStateMgr001 = 0x623540;
-        constexpr std::ptrdiff_t INETSUPPORT_001 = 0x61BC30;
-        constexpr std::ptrdiff_t InputService_001 = 0x8DBF20;
-        constexpr std::ptrdiff_t KeyValueCache001 = 0x6235F0;
-        constexpr std::ptrdiff_t MapListService_001 = 0x91AD90;
-        constexpr std::ptrdiff_t NetworkClientService_001 = 0x91AF20;
-        constexpr std::ptrdiff_t NetworkGameClient = 0x91AFC0;
+        constexpr std::ptrdiff_t BenchmarkService001 = 0x6BFCC0;
+        constexpr std::ptrdiff_t BugBugService001 = 0x6BFDC0;
+        constexpr std::ptrdiff_t BugService001 = 0x9790F0;
+        constexpr std::ptrdiff_t BuildNumber = 0x6BA02C;
+        constexpr std::ptrdiff_t ClientServerEngineLoopService_001 = 0x9BAAE0;
+        constexpr std::ptrdiff_t ClientServerSharedHandleSystem001 = 0x9BA0F0;
+        constexpr std::ptrdiff_t EngineGameUI001 = 0x6BD720;
+        constexpr std::ptrdiff_t EngineServiceMgr001 = 0x9BA3B0;
+        constexpr std::ptrdiff_t GameEventSystemClientV001 = 0x9BA690;
+        constexpr std::ptrdiff_t GameEventSystemServerV001 = 0x9BA7C0;
+        constexpr std::ptrdiff_t GameResourceServiceClientV001 = 0x6BFE00;
+        constexpr std::ptrdiff_t GameResourceServiceServerV001 = 0x6BFE60;
+        constexpr std::ptrdiff_t GameUIService_001 = 0x979540;
+        constexpr std::ptrdiff_t HostStateMgr001 = 0x6C02A0;
+        constexpr std::ptrdiff_t INETSUPPORT_001 = 0x6B8C70;
+        constexpr std::ptrdiff_t InputService_001 = 0x979820;
+        constexpr std::ptrdiff_t KeyValueCache001 = 0x6C0350;
+        constexpr std::ptrdiff_t MapListService_001 = 0x9B8690;
+        constexpr std::ptrdiff_t NetworkClientService_001 = 0x9B8820;
+        constexpr std::ptrdiff_t NetworkGameClient = 0x9B88C0;
         constexpr std::ptrdiff_t NetworkGameClient_clientTickCount = 0x398;
         constexpr std::ptrdiff_t NetworkGameClient_deltaTick = 0x24C;
         constexpr std::ptrdiff_t NetworkGameClient_isBackgroundMap = 0x2C143F;
@@ -113,31 +112,31 @@ namespace offsets {
         constexpr std::ptrdiff_t NetworkGameClient_maxClients = 0x240;
         constexpr std::ptrdiff_t NetworkGameClient_serverTickCount = 0x24C;
         constexpr std::ptrdiff_t NetworkGameClient_signOnState = 0x230;
-        constexpr std::ptrdiff_t NetworkP2PService_001 = 0x91B260;
-        constexpr std::ptrdiff_t NetworkServerService_001 = 0x91B410;
-        constexpr std::ptrdiff_t NetworkService_001 = 0x622F90;
-        constexpr std::ptrdiff_t RenderService_001 = 0x91B680;
-        constexpr std::ptrdiff_t ScreenshotService001 = 0x91B940;
-        constexpr std::ptrdiff_t SimpleEngineLoopService_001 = 0x623650;
-        constexpr std::ptrdiff_t SoundService_001 = 0x622FD0;
-        constexpr std::ptrdiff_t Source2EngineToClient001 = 0x61FFF0;
-        constexpr std::ptrdiff_t Source2EngineToClientStringTable001 = 0x620050;
-        constexpr std::ptrdiff_t Source2EngineToServer001 = 0x6200C8;
-        constexpr std::ptrdiff_t Source2EngineToServerStringTable001 = 0x6200F0;
-        constexpr std::ptrdiff_t SplitScreenService_001 = 0x6232B0;
-        constexpr std::ptrdiff_t StatsService_001 = 0x91BC80;
-        constexpr std::ptrdiff_t ToolService_001 = 0x6233B0;
-        constexpr std::ptrdiff_t VENGINE_GAMEUIFUNCS_VERSION005 = 0x620770;
-        constexpr std::ptrdiff_t VProfService_001 = 0x6233F0;
-        constexpr std::ptrdiff_t WindowHeight = 0x91F33C;
-        constexpr std::ptrdiff_t WindowWidth = 0x91F338;
-        constexpr std::ptrdiff_t pBuildNumber = 0x61CFEC;
-        constexpr std::ptrdiff_t pFrameInputRing = 0x91D000;
-        constexpr std::ptrdiff_t pFrameInputRingIndex = 0x91CCEC;
-        constexpr std::ptrdiff_t pNetworkGameClient = 0x91AFC0;
-        constexpr std::ptrdiff_t pPVSManager = 0x6236A0;
-        constexpr std::ptrdiff_t pWindowHeight = 0x91F33C;
-        constexpr std::ptrdiff_t pWindowWidth = 0x91F338;
+        constexpr std::ptrdiff_t NetworkP2PService_001 = 0x9B8B60;
+        constexpr std::ptrdiff_t NetworkServerService_001 = 0x9B8D10;
+        constexpr std::ptrdiff_t NetworkService_001 = 0x6BFFD0;
+        constexpr std::ptrdiff_t RenderService_001 = 0x9B8F80;
+        constexpr std::ptrdiff_t ScreenshotService001 = 0x9B9240;
+        constexpr std::ptrdiff_t SimpleEngineLoopService_001 = 0x6C03B0;
+        constexpr std::ptrdiff_t SoundService_001 = 0x9B93F0;
+        constexpr std::ptrdiff_t Source2EngineToClient001 = 0x6BD030;
+        constexpr std::ptrdiff_t Source2EngineToClientStringTable001 = 0x6BD090;
+        constexpr std::ptrdiff_t Source2EngineToServer001 = 0x6BD108;
+        constexpr std::ptrdiff_t Source2EngineToServerStringTable001 = 0x6BD130;
+        constexpr std::ptrdiff_t SplitScreenService_001 = 0x6C0010;
+        constexpr std::ptrdiff_t StatsService_001 = 0x9B9930;
+        constexpr std::ptrdiff_t ToolService_001 = 0x6C0110;
+        constexpr std::ptrdiff_t VENGINE_GAMEUIFUNCS_VERSION005 = 0x6BD7B0;
+        constexpr std::ptrdiff_t VProfService_001 = 0x6C0150;
+        constexpr std::ptrdiff_t WindowHeight = 0x9BCFF4;
+        constexpr std::ptrdiff_t WindowWidth = 0x9BCFF0;
+        constexpr std::ptrdiff_t pBuildNumber = 0x6BA02C;
+        constexpr std::ptrdiff_t pFrameInputRing = 0x9BACB0;
+        constexpr std::ptrdiff_t pFrameInputRingIndex = 0x9BA99C;
+        constexpr std::ptrdiff_t pNetworkGameClient = 0x9B88C0;
+        constexpr std::ptrdiff_t pPVSManager = 0x6C0400;
+        constexpr std::ptrdiff_t pWindowHeight = 0x9BCFF4;
+        constexpr std::ptrdiff_t pWindowWidth = 0x9BCFF0;
     }
     namespace filesystem_stdio {
         constexpr std::ptrdiff_t VAsyncFileSystem2_001 = 0x214610;
@@ -200,8 +199,8 @@ namespace offsets {
         constexpr std::ptrdiff_t PanoramaUIClient001 = 0x270710;
     }
     namespace particles {
-        constexpr std::ptrdiff_t GetParticleManager = 0x5FD890;
-        constexpr std::ptrdiff_t ParticleSystemMgr003 = 0x65AEB0;
+        constexpr std::ptrdiff_t GetParticleManager = 0x5FD7A8;
+        constexpr std::ptrdiff_t ParticleSystemMgr003 = 0x65ADD0;
     }
     namespace pulse_system {
         constexpr std::ptrdiff_t IPulseSystem_001 = 0x238120;
@@ -212,16 +211,16 @@ namespace offsets {
         constexpr std::ptrdiff_t VRenderDeviceMgrBackdoor001 = 0x434390;
     }
     namespace resourcesystem {
-        constexpr std::ptrdiff_t ResourceSystem013 = 0x892B0;
+        constexpr std::ptrdiff_t ResourceSystem013 = 0x89230;
     }
     namespace scenefilecache {
         constexpr std::ptrdiff_t ResponseRulesCache001 = 0x11D350;
         constexpr std::ptrdiff_t SceneFileCache002 = 0x11D478;
     }
     namespace scenesystem {
-        constexpr std::ptrdiff_t RenderingPipelines_001 = 0x675A00;
+        constexpr std::ptrdiff_t RenderingPipelines_001 = 0x6759F0;
         constexpr std::ptrdiff_t SceneSystem_002 = 0x91FB20;
-        constexpr std::ptrdiff_t SceneUtils_001 = 0x676760;
+        constexpr std::ptrdiff_t SceneUtils_001 = 0x676750;
         constexpr std::ptrdiff_t pSceneLightDataQueue = 0x921A28;
         constexpr std::ptrdiff_t pSceneSystem = 0x91FB20;
     }
@@ -230,27 +229,25 @@ namespace offsets {
         constexpr std::ptrdiff_t pSchemaSystem = 0x76710;
     }
     namespace server {
-        constexpr std::ptrdiff_t EmptyWorldService001_Server = 0x1E04020;
-        constexpr std::ptrdiff_t EntitySubclassUtilsV001 = 0x1DB3BD0;
-        constexpr std::ptrdiff_t NavGameTest001 = 0x1E4BCB8;
-        constexpr std::ptrdiff_t ServerToolsInfo_001 = 0x1E2ABC8;
-        constexpr std::ptrdiff_t Source2GameClients001 = 0x1E2A0F0;
-        constexpr std::ptrdiff_t Source2GameDirector001 = 0x1F94370;
-        constexpr std::ptrdiff_t Source2GameEntities001 = 0x1E2A370;
-        constexpr std::ptrdiff_t Source2Server001 = 0x1E2A1B0;
-        constexpr std::ptrdiff_t Source2ServerConfig001 = 0x210FBF8;
-        constexpr std::ptrdiff_t customnavsystem001 = 0x1DA14E8;
+        constexpr std::ptrdiff_t EmptyWorldService001_Server = 0x1E110C0;
+        constexpr std::ptrdiff_t EntitySubclassUtilsV001 = 0x1DC0C60;
+        constexpr std::ptrdiff_t NavGameTest001 = 0x1E58D48;
+        constexpr std::ptrdiff_t ServerToolsInfo_001 = 0x1E37C48;
+        constexpr std::ptrdiff_t Source2GameClients001 = 0x1E37170;
+        constexpr std::ptrdiff_t Source2GameDirector001 = 0x1FA1490;
+        constexpr std::ptrdiff_t Source2GameEntities001 = 0x1E373F0;
+        constexpr std::ptrdiff_t Source2Server001 = 0x1E37230;
+        constexpr std::ptrdiff_t Source2ServerConfig001 = 0x211CD98;
+        constexpr std::ptrdiff_t customnavsystem001 = 0x1DAE558;
     }
     namespace soundsystem {
-        constexpr std::ptrdiff_t SoundBugBugService001_Client = 0x535BB0;
-        constexpr std::ptrdiff_t SoundOpSystem001 = 0x535A90;
-        constexpr std::ptrdiff_t SoundOpSystemEdit001 = 0x5359A0;
-        constexpr std::ptrdiff_t SoundSystem = 0x535350;
-        constexpr std::ptrdiff_t SoundSystem001 = 0x535350;
+        constexpr std::ptrdiff_t SoundBugBugService001_Client = 0x532C80;
+        constexpr std::ptrdiff_t SoundOpSystem001 = 0x532B60;
+        constexpr std::ptrdiff_t SoundOpSystemEdit001 = 0x532A70;
+        constexpr std::ptrdiff_t SoundSystem = 0x532460;
+        constexpr std::ptrdiff_t SoundSystem001 = 0x532460;
         constexpr std::ptrdiff_t SoundSystem_engineViewData = 0x6C;
-        constexpr std::ptrdiff_t VMixEditTool001 = 0x5943D7F;
-        constexpr std::ptrdiff_t pSoundChannels = 0x657C68;
-        constexpr std::ptrdiff_t pSoundSystem = 0x535350;
+        constexpr std::ptrdiff_t VMixEditTool001 = 0x5941BFF;
     }
     namespace steamaudio {
         constexpr std::ptrdiff_t SteamAudio001 = 0x35C1A0;
@@ -276,6 +273,6 @@ namespace offsets {
         constexpr std::ptrdiff_t VScriptManager010 = 0x13E430;
     }
     namespace worldrenderer {
-        constexpr std::ptrdiff_t WorldRendererMgr001 = 0x236D00;
+        constexpr std::ptrdiff_t WorldRendererMgr001 = 0x236D40;
     }
 }

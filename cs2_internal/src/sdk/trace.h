@@ -6,7 +6,7 @@
 // 用途：autowall 只读这些偏移，零游戏函数调用。
 
 #include <cstdint>
-
+#include"vec.h"
 namespace sdk
 {
 	// 32B surfaceprop 数据表元素。
@@ -61,4 +61,14 @@ namespace sdk
 	};
 
 	static_assert(sizeof(cgame_trace_t) == 0xC0);
-} // namespace sdk
+	struct trace_interval_t
+	{
+		vec3   start;        // +0x00
+		vec3   end;          // +0x0C
+		vec3   normal;       // +0x18
+		float  fraction;     // +0x24
+		void* surface;      // +0x28
+		void* hit_entity;   // +0x30
+	};
+	static_assert(sizeof(trace_interval_t) == 0x38);
+} 

@@ -2,8 +2,8 @@
 //
 // module:        soundsystem.dll
 // classes:       158
-// enums:         34
-// generated_at:  2026-10-18T13:23:18.099504600+00:00
+// enums:         35
+// generated_at:  2026-10-23T11:22:04.060686900+00:00
 //
 // Use:
 //   auto* pawn = reinterpret_cast<C_CSPlayerPawn*>(addr);
@@ -172,6 +172,11 @@ namespace soundsystem {
     class ISndSeqInstruments;
     class VMixFlangerDesc_t;
     class VMixDynamicsDesc_t;
+
+    enum class VMixUpMixRule_t : std::uint8_t {
+        DIVIDE = 0x0, // MPropertyFriendlyName
+        BROADCAST = 0x1, // MPropertyFriendlyName
+    };
 
     enum class SndSeqInstrumentType_t : std::uint32_t {
         eSndSeqInstNull = 0x0,
@@ -506,231 +511,79 @@ namespace soundsystem {
         Gate = 0x1, // MPropertyFriendlyName
     };
 
-    // CVoiceContainerGenerator
-    //   fields: 0
-    //   size: 0x70
-    //   @MGetKV3ClassDefaults
-    class CVoiceContainerGenerator {
-    public:
-    };
-
-    // CVoiceContainerAmpedDecayingSineWave
-    //   fields: 1
-    //   size: 0x80
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerAmpedDecayingSineWave {
-    public:
-        SCHEMA_FIELD(float                           , m_flGainAmount                                  , 0x78) // float32 [MPropertyFriendlyName, MPropertyDescription]
-    };
-
-    // CDSPPresetMixgroupModifierTable
-    //   fields: 1
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    //   @MVDataNodeType
-    class CDSPPresetMixgroupModifierTable {
-    public:
-        SCHEMA_FIELD(CUtlVector<CDspPresetModifierList>, m_table                                         , 0x0) // CUtlVector<CDspPresetModifierList> [MPropertyDescription, MPropertyFriendlyName]
-    };
-
-    // CVMixSteamAudioHRTFProcessorDesc
-    //   fields: 9
-    //   size: 0x50
-    //   @MGetKV3ClassDefaults
-    class CVMixSteamAudioHRTFProcessorDesc {
-    public:
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionX                                , 0x28) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionY                                , 0x2C) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionZ                                , 0x30) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramInterpolation                            , 0x34) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDirectMixLevel                           , 0x38) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPerspectiveCorrection                    , 0x3C) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramRelativePosition                         , 0x40) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayLeft                                , 0x44) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayRight                               , 0x48) // CVMixParameterFloat
-    };
-
-    // VMixPannerDesc_t
-    //   fields: 2
-    //   size: 0x8
-    //   @MGetKV3ClassDefaults
-    class VMixPannerDesc_t {
-    public:
-        SCHEMA_FIELD(VMixPannerType_t                , m_type                                          , 0x0) // VMixPannerType_t
-        SCHEMA_FIELD(float                           , m_flStrength                                    , 0x4) // float32
-    };
-
-    // CVMixFreeverbProcessorDesc
-    //   fields: 1
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    class CVMixFreeverbProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixFreeverbDesc_t              , m_desc                                          , 0x28) // VMixFreeverbDesc_t
-    };
-
-    // CVMixDelayProcessorDesc
-    //   fields: 3
-    //   size: 0x58
-    //   @MGetKV3ClassDefaults
-    class CVMixDelayProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixDelayDesc_t                 , m_desc                                          , 0x28) // VMixDelayDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramCutoffFrequency                          , 0x50) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelay                                    , 0x54) // CVMixParameterFloat
-    };
-
-    // CVoiceContainerBlender
-    //   fields: 3
-    //   size: 0xB8
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerBlender {
-    public:
-        SCHEMA_FIELD(CSoundContainerReference        , m_firstSound                                    , 0x70) // CSoundContainerReference
-        SCHEMA_FIELD(CSoundContainerReference        , m_secondSound                                   , 0x90) // CSoundContainerReference
-        SCHEMA_FIELD(float                           , m_flBlendFactor                                 , 0xB0) // float32
-    };
-
-    // SndBeatEventKeys_t
-    //   fields: 1
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    //   @MVDataNodeType
-    class SndBeatEventKeys_t {
-    public:
-        SCHEMA_FIELD(float                           , m_flKey                                         , 0x8) // float32 [MPropertyFriendlyName]
-    };
-
-    // CSosGroupActionTimeBlockLimitSchema
-    //   fields: 2
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionTimeBlockLimitSchema {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nMaxCount                                     , 0x8) // int32
-        SCHEMA_FIELD(float                           , m_flMaxDuration                                 , 0xC) // float32
-    };
-
-    // CVMixFlangerProcessorDesc
+    // CVoiceContainerStaticAdditiveSynth::CGainScalePerInstance
     //   fields: 4
-    //   size: 0x58
+    //   size: 0x10
     //   @MGetKV3ClassDefaults
-    class CVMixFlangerProcessorDesc {
+    class CVoiceContainerStaticAdditiveSynth_CGainScalePerInstance {
     public:
-        SCHEMA_FIELD(VMixFlangerDesc_t               , m_desc                                          , 0x28) // VMixFlangerDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelay                                    , 0x4C) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramModRate                                  , 0x50) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramModDepth                                 , 0x54) // CVMixParameterFloat
+        SCHEMA_FIELD(float                           , m_flMinVolume                                   , 0x0) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_nInstancesAtMinVolume                         , 0x4) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flMaxVolume                                   , 0x8) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_nInstancesAtMaxVolume                         , 0xC) // int32 [MPropertyFriendlyName]
     };
 
-    // CVoiceContainerDefault
-    //   fields: 0
-    //   size: 0x70
+    // CVoiceContainerVsndRadioButton
+    //   fields: 17
+    //   size: 0x900
     //   @MGetKV3ClassDefaults
     //   @MPropertyFriendlyName
     //   @MPropertyDescription
-    class CVoiceContainerDefault {
+    class CVoiceContainerVsndRadioButton {
     public:
+        SCHEMA_FIELD(::CUtlString                    , m_namespace                                     , 0x78) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot1                                         , 0x80) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot2                                         , 0x108) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot3                                         , 0x190) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot4                                         , 0x218) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot5                                         , 0x2A0) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot6                                         , 0x328) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot7                                         , 0x3B0) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot8                                         , 0x438) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot9                                         , 0x4C0) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot10                                        , 0x548) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot11                                        , 0x5D0) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot12                                        , 0x658) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot13                                        , 0x6E0) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot14                                        , 0x768) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot15                                        , 0x7F0) // CVsndRadioButtonSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot16                                        , 0x878) // CVsndRadioButtonSlot [MPropertyFriendlyName]
     };
 
-    // CVMixBoxverb2ProcessorDesc
-    //   fields: 1
-    //   size: 0x78
-    //   @MGetKV3ClassDefaults
-    class CVMixBoxverb2ProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixBoxverbDesc_t               , m_desc                                          , 0x28) // VMixBoxverbDesc_t
-    };
-
-    // CVoiceContainerBase
-    //   fields: 2
-    //   size: 0x70
-    //   @MGetKV3ClassDefaults
-    //   @MVDataNodeType
-    //   @MVDataFileExtension
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerBase {
-    public:
-        SCHEMA_FIELD(CVSound                         , m_vSound                                        , 0x28) // CVSound [MPropertySuppressField]
-        SCHEMA_FIELD(CVoiceContainerAnalysisBase*    , m_pEnvelopeAnalyzer                             , 0x68) // CVoiceContainerAnalysisBase* [MPropertySuppressExpr]
-    };
-
-    // VMixPlateverbDesc_t
-    //   fields: 7
-    //   size: 0x1C
-    //   @MGetKV3ClassDefaults
-    class VMixPlateverbDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_flPrefilter                                   , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flInputDiffusion1                             , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flInputDiffusion2                             , 0x8) // float32
-        SCHEMA_FIELD(float                           , m_flDecay                                       , 0xC) // float32
-        SCHEMA_FIELD(float                           , m_flDamp                                        , 0x10) // float32
-        SCHEMA_FIELD(float                           , m_flFeedbackDiffusion1                          , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flFeedbackDiffusion2                          , 0x18) // float32
-    };
-
-    // CVMixDataOffset
+    // CVMixParameterEffectName
     //   fields: 1
     //   size: 0x4
-    class CVMixDataOffset {
+    //   @MGetKV3ClassDefaults
+    class CVMixParameterEffectName {
     public:
-        SCHEMA_FIELD(std::uint32_t                   , m_nOffset                                       , 0x0) // uint32
+        SCHEMA_FIELD(CVMixDataOffset                 , m_offset                                        , 0x0) // CVMixDataOffset
     };
 
-    // CSndSeqInstBaseSchema
+    // CSndBeatTrack
     //   fields: 5
-    //   size: 0x20
+    //   size: 0x98
+    //   @MPropertyArrayElementNameKey
+    //   @MVDataOutlinerNameExpr
     //   @MGetKV3ClassDefaults
-    class CSndSeqInstBaseSchema {
+    class CSndBeatTrack {
     public:
-        SCHEMA_FIELD(SndSeqInstrumentType_t          , m_nType                                         , 0x8) // SndSeqInstrumentType_t
-        SCHEMA_FIELD(bool                            , m_bStopCurrentEvents                            , 0xE) // bool
-        SCHEMA_FIELD(float                           , m_flBPM                                         , 0x10) // float32
-        SCHEMA_FIELD(float                           , m_flBPMFactor                                   , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flBPMInvFactor                                , 0x18) // float32
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(SndBeatTrackPlaybackType_t      , m_playbackType                                  , 0x20) // SndBeatTrackPlaybackType_t [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_nTranspose                                    , 0x24) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bSyncToVoice                                  , 0x28) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flBPM                                         , 0x2C) // float32 [MPropertyFriendlyName]
     };
 
-    // SamplerVoice_t
-    //   fields: 1
-    //   size: 0x8
-    class SamplerVoice_t {
-    public:
-        SCHEMA_FIELD(std::uint8_t                    , nNoteNum                                        , 0x0) // uint8
-    };
-
-    // VMixDynamics3BandDesc_t
-    //   fields: 10
-    //   size: 0x90
+    // CVMixDynamicsCompressorProcessorDesc
+    //   fields: 4
+    //   size: 0x60
     //   @MGetKV3ClassDefaults
-    class VMixDynamics3BandDesc_t {
+    class CVMixDynamicsCompressorProcessorDesc {
     public:
-        SCHEMA_FIELD(float                           , m_fldbGainOutput                                , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x8) // float32
-        SCHEMA_FIELD(float                           , m_flDepth                                       , 0xC) // float32
-        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x10) // float32
-        SCHEMA_FIELD(float                           , m_flTimeScale                                   , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flLowCutoffFreq                               , 0x18) // float32
-        SCHEMA_FIELD(float                           , m_flHighCutoffFreq                              , 0x1C) // float32
-        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x20) // bool
-        SCHEMA_FIELD(VMixDynamicsBand_t              , m_bandDesc                                      , 0x24) // VMixDynamicsBand_t[3]
-    };
-
-    // CVoiceContainerVMixSnd
-    //   fields: 0
-    //   size: 0x180
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerVMixSnd {
-    public:
+        SCHEMA_FIELD(VMixDynamicsCompressorDesc_t    , m_desc                                          , 0x28) // VMixDynamicsCompressorDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamLevel                                 , 0x50) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamdBLevel                               , 0x54) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamReduction                             , 0x58) // CVMixParameterFloat
     };
 
     // CVoiceContainerStaticAdditiveSynth::CHarmonic
@@ -748,6 +601,219 @@ namespace soundsystem {
         SCHEMA_FIELD(CVoiceContainerStaticAdditiveSynth_CGainScalePerInstance, m_volumeScaling                                 , 0x50) // CVoiceContainerStaticAdditiveSynth::CGainScalePerInstance
     };
 
+    // CVMixRuntimeGraph
+    //   fields: 5
+    //   size: 0x128
+    //   @MGetKV3ClassDefaults
+    class CVMixRuntimeGraph {
+    public:
+        SCHEMA_FIELD(CUtlLeanVector<CVMixSubmix>     , m_submixes                                      , 0xD0) // CUtlLeanVector<CVMixSubmix> [MKV3TransferName]
+        SCHEMA_FIELD(CUtlLeanVector<uint64>          , m_impulseResponseValues                         , 0xE0) // CUtlLeanVector<uint64>
+        SCHEMA_FIELD(KeyValues3                      , m_inputDefaultValues                            , 0xF0) // KeyValues3
+        SCHEMA_FIELD(KeyValues3                      , m_sources                                       , 0x100) // KeyValues3
+        SCHEMA_FIELD(CUtlVector<VMixPointerFixupEntry_t>, m_fixups                                        , 0x110) // CUtlVector<VMixPointerFixupEntry_t>
+    };
+
+    // CSndSeqInstruments
+    //   fields: 0
+    //   size: 0x28
+    class CSndSeqInstruments {
+    public:
+    };
+
+    // CSosGroupActionSchema
+    //   fields: 0
+    //   size: 0x8
+    //   @MGetKV3ClassDefaults
+    class CSosGroupActionSchema {
+    public:
+    };
+
+    // CVMixSteamAudioHybridReverbProcessorDesc
+    //   fields: 5
+    //   size: 0x40
+    //   @MGetKV3ClassDefaults
+    class CVMixSteamAudioHybridReverbProcessorDesc {
+    public:
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramReverbTimeLow                            , 0x28) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramReverbTimeMid                            , 0x2C) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramReverbTimeHigh                           , 0x30) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramBand                                     , 0x34) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixDataOffset                 , m_paramReverbTime                               , 0x38) // CVMixDataOffset
+    };
+
+    // CVMixEQ8ProcessorDesc
+    //   fields: 2
+    //   size: 0xD0
+    //   @MGetKV3ClassDefaults
+    class CVMixEQ8ProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixEQ8Desc_t                   , m_desc                                          , 0x28) // VMixEQ8Desc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramEQScale                                  , 0xC8) // CVMixParameterFloat
+    };
+
+    // VMixDynamicsBand_t
+    //   fields: 10
+    //   size: 0x24
+    //   @MGetKV3ClassDefaults
+    class VMixDynamicsBand_t {
+    public:
+        SCHEMA_FIELD(float                           , m_fldbGainInput                                 , 0x0) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbGainOutput                                , 0x4) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbThresholdBelow                            , 0x8) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbThresholdAbove                            , 0xC) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flRatioBelow                                  , 0x10) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flRatioAbove                                  , 0x14) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x18) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x1C) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnable                                       , 0x20) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bSolo                                         , 0x21) // bool [MPropertyFriendlyName]
+    };
+
+    // VMixEnvelopeDesc_t
+    //   fields: 3
+    //   size: 0xC
+    //   @MGetKV3ClassDefaults
+    class VMixEnvelopeDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flHoldTimeMS                                  , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x8) // float32
+    };
+
+    // CVMixEffectChainProcessorDesc
+    //   fields: 2
+    //   size: 0x38
+    //   @MGetKV3ClassDefaults
+    class CVMixEffectChainProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixEffectChainDesc_t           , m_desc                                          , 0x28) // VMixEffectChainDesc_t
+        SCHEMA_FIELD(CVMixParameterEffectName        , m_paramEffectName                               , 0x30) // CVMixParameterEffectName
+    };
+
+    // CVoiceContainerSwitch
+    //   fields: 1
+    //   size: 0x90
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerSwitch {
+    public:
+        SCHEMA_FIELD(CUtlVector<CSoundContainerReference>, m_soundsToPlay                                  , 0x78) // CUtlVector<CSoundContainerReference> [MPropertyFriendlyName]
+    };
+
+    // VMixEffectChainDesc_t
+    //   fields: 1
+    //   size: 0x8
+    //   @MGetKV3ClassDefaults
+    class VMixEffectChainDesc_t {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_effectName                                    , 0x0) // CUtlString
+    };
+
+    // CVMixFreeverbProcessorDesc
+    //   fields: 1
+    //   size: 0x38
+    //   @MGetKV3ClassDefaults
+    class CVMixFreeverbProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixFreeverbDesc_t              , m_desc                                          , 0x28) // VMixFreeverbDesc_t
+    };
+
+    // CDspPresetModifierList
+    //   fields: 2
+    //   size: 0x20
+    //   @MGetKV3ClassDefaults
+    class CDspPresetModifierList {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_dspName                                       , 0x0) // CUtlString [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(CUtlVector<CDSPMixgroupModifier>, m_modifiers                                     , 0x8) // CUtlVector<CDSPMixgroupModifier> [MPropertyDescription, MPropertyFriendlyName]
+    };
+
+    // CVMixFlangerProcessorDesc
+    //   fields: 4
+    //   size: 0x58
+    //   @MGetKV3ClassDefaults
+    class CVMixFlangerProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixFlangerDesc_t               , m_desc                                          , 0x28) // VMixFlangerDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelay                                    , 0x4C) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramModRate                                  , 0x50) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramModDepth                                 , 0x54) // CVMixParameterFloat
+    };
+
+    // CSubmix
+    //   fields: 0
+    //   size: 0x50
+    //   @MGetKV3ClassDefaults
+    class CSubmix {
+    public:
+    };
+
+    // CVoiceContainerSet
+    //   fields: 1
+    //   size: 0xA8
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerSet {
+    public:
+        SCHEMA_FIELD(CUtlVector<CVoiceContainerSetElement>, m_soundsToPlay                                  , 0x78) // CUtlVector<CVoiceContainerSetElement> [MPropertyFriendlyName]
+    };
+
+    // CVMixDiffusorProcessorDesc
+    //   fields: 1
+    //   size: 0x38
+    //   @MGetKV3ClassDefaults
+    class CVMixDiffusorProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixDiffusorDesc_t              , m_desc                                          , 0x28) // VMixDiffusorDesc_t
+    };
+
+    // CSosGroupActionSoundeventPrioritySchema
+    //   fields: 4
+    //   size: 0x38
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionSoundeventPrioritySchema {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_priorityValue                                 , 0x8) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_priorityVolumeScalar                          , 0x10) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_priorityContributeButDontRead                 , 0x18) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_bPriorityReadButDontContribute                , 0x20) // CUtlString [MPropertyFriendlyName]
+    };
+
+    // CDSPPresetMixgroupModifierTable
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    //   @MVDataNodeType
+    class CDSPPresetMixgroupModifierTable {
+    public:
+        SCHEMA_FIELD(CUtlVector<CDspPresetModifierList>, m_table                                         , 0x0) // CUtlVector<CDspPresetModifierList> [MPropertyDescription, MPropertyFriendlyName]
+    };
+
+    // CVMixBoxverb2ProcessorDesc
+    //   fields: 1
+    //   size: 0x78
+    //   @MGetKV3ClassDefaults
+    class CVMixBoxverb2ProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixBoxverbDesc_t               , m_desc                                          , 0x28) // VMixBoxverbDesc_t
+    };
+
+    // VMixPitchShiftDesc_t
+    //   fields: 4
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    class VMixPitchShiftDesc_t {
+    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nGrainSampleCount                             , 0x0) // int32
+        SCHEMA_FIELD(float                           , m_flPitchShift                                  , 0x4) // float32
+        SCHEMA_FIELD(std::int32_t                    , m_nQuality                                      , 0x8) // int32
+        SCHEMA_FIELD(std::int32_t                    , m_nProcType                                     , 0xC) // int32
+    };
+
     // CVMixFilterProcessorDesc
     //   fields: 3
     //   size: 0x40
@@ -759,57 +825,23 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixParameterFloat             , m_paramQ                                        , 0x3C) // CVMixParameterFloat
     };
 
-    // CVMixVsndInput
+    // CVMixPlateReverbProcessorDesc
     //   fields: 1
-    //   size: 0x18
+    //   size: 0x48
     //   @MGetKV3ClassDefaults
-    class CVMixVsndInput {
+    class CVMixPlateReverbProcessorDesc {
     public:
-        SCHEMA_FIELD(::CUtlString                    , m_defaultValue                                  , 0x0) // CUtlString
+        SCHEMA_FIELD(VMixPlateverbDesc_t             , m_desc                                          , 0x28) // VMixPlateverbDesc_t
     };
 
-    // SndBeatTimeSignature_t
+    // CVMixPitchShiftProcessorDesc
     //   fields: 2
-    //   size: 0x2
-    //   @MGetKV3ClassDefaults
-    class SndBeatTimeSignature_t {
-    public:
-        SCHEMA_FIELD(std::uint8_t                    , nNumerator                                      , 0x0) // uint8 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::uint8_t                    , nDenominator                                    , 0x1) // uint8 [MPropertyFriendlyName]
-    };
-
-    // CVMixOscProcessorDesc
-    //   fields: 3
     //   size: 0x40
     //   @MGetKV3ClassDefaults
-    class CVMixOscProcessorDesc {
+    class CVMixPitchShiftProcessorDesc {
     public:
-        SCHEMA_FIELD(VMixOscDesc_t                   , m_desc                                          , 0x28) // VMixOscDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramFrequency                                , 0x34) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPhase                                    , 0x38) // CVMixParameterFloat
-    };
-
-    // VMixFreeverbDesc_t
-    //   fields: 4
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class VMixFreeverbDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_flRoomSize                                    , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flDamp                                        , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flWidth                                       , 0x8) // float32
-        SCHEMA_FIELD(float                           , m_flLateReflections                             , 0xC) // float32
-    };
-
-    // CVoiceContainerStaticAdditiveSynth::CTone
-    //   fields: 3
-    //   size: 0x60
-    //   @MGetKV3ClassDefaults
-    class CVoiceContainerStaticAdditiveSynth_CTone {
-    public:
-        SCHEMA_FIELD(CUtlVector<CVoiceContainerStaticAdditiveSynth_CHarmonic>, m_harmonics                                     , 0x0) // CUtlVector<CVoiceContainerStaticAdditiveSynth::CHarmonic> [MPropertyFriendlyName]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve                                         , 0x18) // CPiecewiseCurve [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bSyncInstances                                , 0x58) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(VMixPitchShiftDesc_t            , m_desc                                          , 0x28) // VMixPitchShiftDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPitchScale                               , 0x38) // CVMixParameterFloat
     };
 
     // CVMixSteamAudioDirectProcessorDesc
@@ -845,293 +877,22 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixDataOffset                 , m_paramTransmission                             , 0x88) // CVMixDataOffset
     };
 
-    // CSosGroupActionSoundeventClusterSchema
-    //   fields: 7
-    //   size: 0x50
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionSoundeventClusterSchema {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nMinNearby                                    , 0x8) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flClusterEpsilon                              , 0xC) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_shouldPlayOpvar                               , 0x10) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_shouldPlayClusterChild                        , 0x18) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_clusterSizeOpvar                              , 0x20) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_groupBoundingBoxMinsOpvar                     , 0x28) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_groupBoundingBoxMaxsOpvar                     , 0x30) // CUtlString [MPropertyFriendlyName]
-    };
-
-    // CVMixDynamicsProcessorDesc
-    //   fields: 3
-    //   size: 0x60
-    //   @MGetKV3ClassDefaults
-    class CVMixDynamicsProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixDynamicsDesc_t              , m_desc                                          , 0x28) // VMixDynamicsDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamLevel                                 , 0x58) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamdBLevel                               , 0x5C) // CVMixParameterFloat
-    };
-
-    // VMixDynamicsBand_t
-    //   fields: 10
-    //   size: 0x24
-    //   @MGetKV3ClassDefaults
-    class VMixDynamicsBand_t {
-    public:
-        SCHEMA_FIELD(float                           , m_fldbGainInput                                 , 0x0) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fldbGainOutput                                , 0x4) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fldbThresholdBelow                            , 0x8) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fldbThresholdAbove                            , 0xC) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flRatioBelow                                  , 0x10) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flRatioAbove                                  , 0x14) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x18) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x1C) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnable                                       , 0x20) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bSolo                                         , 0x21) // bool [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerEnum
-    //   fields: 3
-    //   size: 0xB0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerEnum {
-    public:
-        SCHEMA_FIELD(CSoundContainerReferenceArray   , m_soundsToPlay                                  , 0x70) // CSoundContainerReferenceArray [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_iSelection                                    , 0xA8) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flCrossfadeTime                               , 0xAC) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVMixAdditionalOutput
+    // CVMixUtilityProcessorDesc
     //   fields: 1
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class CVMixAdditionalOutput {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
-    };
-
-    // VMixDelayDesc_t
-    //   fields: 7
-    //   size: 0x28
-    //   @MGetKV3ClassDefaults
-    class VMixDelayDesc_t {
-    public:
-        SCHEMA_FIELD(VMixFilterDesc_t                , m_feedbackFilter                                , 0x0) // VMixFilterDesc_t
-        SCHEMA_FIELD(bool                            , m_bEnableFilter                                 , 0x10) // bool
-        SCHEMA_FIELD(float                           , m_flDelay                                       , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flDirectGain                                  , 0x18) // float32
-        SCHEMA_FIELD(float                           , m_flDelayGain                                   , 0x1C) // float32
-        SCHEMA_FIELD(float                           , m_flFeedbackGain                                , 0x20) // float32
-        SCHEMA_FIELD(float                           , m_flWidth                                       , 0x24) // float32
-    };
-
-    // CVMixHeap
-    //   fields: 1
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class CVMixHeap {
-    public:
-        SCHEMA_FIELD(CUtlLeanVector<uint32>          , m_storage                                       , 0x0) // CUtlLeanVector<uint32>
-    };
-
-    // CSosGroupActionSoundeventCountSchema
-    //   fields: 2
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionSoundeventCountSchema {
-    public:
-        SCHEMA_FIELD(bool                            , m_bExcludeStoppedSounds                         , 0x8) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_strCountKeyName                               , 0x10) // CUtlString [MPropertyFriendlyName]
-    };
-
-    // CVSound
-    //   fields: 9
     //   size: 0x40
     //   @MGetKV3ClassDefaults
-    class CVSound {
+    class CVMixUtilityProcessorDesc {
     public:
-        SCHEMA_FIELD(CUtlLeanVector<CAudioSentence>  , m_Sentences                                     , 0x0) // CUtlLeanVector<CAudioSentence>
-        SCHEMA_FIELD(std::int32_t                    , m_nRate                                         , 0x10) // int32
-        SCHEMA_FIELD(CVSoundFormat_t                 , m_nFormat                                       , 0x14) // CVSoundFormat_t
-        SCHEMA_FIELD(std::uint32_t                   , m_nChannels                                     , 0x18) // uint32
-        SCHEMA_FIELD(std::int32_t                    , m_nLoopStart                                    , 0x1C) // int32
-        SCHEMA_FIELD(std::uint32_t                   , m_nSampleCount                                  , 0x20) // uint32
-        SCHEMA_FIELD(float                           , m_flDuration                                    , 0x24) // float32
-        SCHEMA_FIELD(std::uint32_t                   , m_nStreamingSize                                , 0x28) // uint32
-        SCHEMA_FIELD(std::int32_t                    , m_nLoopEnd                                      , 0x2C) // int32
+        SCHEMA_FIELD(VMixUtilityDesc_t               , m_desc                                          , 0x28) // VMixUtilityDesc_t
     };
 
-    // VMixDynamicsCompressorDesc_t
-    //   fields: 11
-    //   size: 0x28
-    //   @MGetKV3ClassDefaults
-    class VMixDynamicsCompressorDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_fldbOutputGain                                , 0x0) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fldbCompressionThreshold                      , 0x4) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x8) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flCompressionRatio                            , 0xC) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x10) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x14) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x18) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x1C) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flSCHighPassFreq                              , 0x20) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x24) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bAutoMakeupGain                               , 0x25) // bool [MPropertyFriendlyName]
-    };
-
-    // CSoundContainerReferenceArray
-    //   fields: 3
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CSoundContainerReferenceArray {
-    public:
-        SCHEMA_FIELD(bool                            , m_bUseReference                                 , 0x0) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>>, m_sounds                                        , 0x8) // CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>> [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(CUtlVector<CVoiceContainerBase*>, m_pSounds                                       , 0x20) // CUtlVector<CVoiceContainerBase*> [MPropertySuppressExpr, MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerVsndTrigger
-    //   fields: 17
-    //   size: 0x8F8
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerVsndTrigger {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_namespace                                     , 0x70) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot1                                         , 0x78) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot2                                         , 0x100) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot3                                         , 0x188) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot4                                         , 0x210) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot5                                         , 0x298) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot6                                         , 0x320) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot7                                         , 0x3A8) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot8                                         , 0x430) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot9                                         , 0x4B8) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot10                                        , 0x540) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot11                                        , 0x5C8) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot12                                        , 0x650) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot13                                        , 0x6D8) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot14                                        , 0x760) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot15                                        , 0x7E8) // CVsndTriggerSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot16                                        , 0x870) // CVsndTriggerSlot [MPropertyFriendlyName]
-    };
-
-    // CSndSeqInstMidiSampler
-    //   fields: 11
-    //   size: 0xE0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSndSeqInstMidiSampler {
-    public:
-        SCHEMA_FIELD(bool                            , m_bIsSoundEvent                                 , 0x20) // bool
-        SCHEMA_FIELD(bool                            , m_bStopPrevious                                 , 0x21) // bool
-        SCHEMA_FIELD(std::uint8_t                    , m_nMinNote                                      , 0x22) // uint8
-        SCHEMA_FIELD(std::uint8_t                    , m_nMaxNote                                      , 0x23) // uint8
-        SCHEMA_FIELD(float                           , m_flMinVelocityAtten                            , 0x24) // float32
-        SCHEMA_FIELD(float                           , m_flMaxVelocityAtten                            , 0x28) // float32
-        SCHEMA_FIELD(float                           , m_flAttack                                      , 0x2C) // float32
-        SCHEMA_FIELD(float                           , m_flRelease                                     , 0x30) // float32
-        SCHEMA_FIELD(bool                            , m_bBeatEnvelopes                                , 0x34) // bool
-        SCHEMA_FIELD(std::uint8_t                    , m_nNextVoiceSlot                                , 0xD4) // uint8
-        SCHEMA_FIELD(std::uint32_t                   , m_hSoundEventHash                               , 0xD8) // uint32
-    };
-
-    // CSosGroupActionMemberCountEnvelopeSchema
-    //   fields: 8
-    //   size: 0x30
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionMemberCountEnvelopeSchema {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nBaseCount                                    , 0x8) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_nTargetCount                                  , 0xC) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flBaseValue                                   , 0x10) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flTargetValue                                 , 0x14) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flAttack                                      , 0x18) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flDecay                                       , 0x1C) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_resultVarName                                 , 0x20) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bSaveToGroup                                  , 0x28) // bool [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerSwitch
+    // CVMixInputBase
     //   fields: 1
-    //   size: 0x88
+    //   size: 0x10
     //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerSwitch {
+    class CVMixInputBase {
     public:
-        SCHEMA_FIELD(CUtlVector<CSoundContainerReference>, m_soundsToPlay                                  , 0x70) // CUtlVector<CSoundContainerReference> [MPropertyFriendlyName]
-    };
-
-    // CVsndTriggerSlot
-    //   fields: 9
-    //   size: 0x88
-    //   @MGetKV3ClassDefaults
-    class CVsndTriggerSlot {
-    public:
-        SCHEMA_FIELD(bool                            , m_bEnableVsnd                                   , 0x0) // bool [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_vsnd                                          , 0x8) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnableEndcap                                 , 0x28) // bool [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_endcapVsnd                                    , 0x30) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnableLoopcap                                , 0x50) // bool [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_loopcapVsnd                                   , 0x58) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_volume                                        , 0x78) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fadeOut                                       , 0x7C) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(EVsndTriggerMode                , m_mode                                          , 0x80) // EVsndTriggerMode [MPropertyFriendlyName]
-    };
-
-    // CSndSeqInstruments
-    //   fields: 0
-    //   size: 0x28
-    class CSndSeqInstruments {
-    public:
-    };
-
-    // CVMixDynamicsCompressorProcessorDesc
-    //   fields: 4
-    //   size: 0x60
-    //   @MGetKV3ClassDefaults
-    class CVMixDynamicsCompressorProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixDynamicsCompressorDesc_t    , m_desc                                          , 0x28) // VMixDynamicsCompressorDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamLevel                                 , 0x50) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamdBLevel                               , 0x54) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamReduction                             , 0x58) // CVMixParameterFloat
-    };
-
-    // VMixEffectChainDesc_t
-    //   fields: 1
-    //   size: 0x8
-    //   @MGetKV3ClassDefaults
-    class VMixEffectChainDesc_t {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_effectName                                    , 0x0) // CUtlString
-    };
-
-    // CVsndRadioButtonSlot
-    //   fields: 10
-    //   size: 0x88
-    //   @MGetKV3ClassDefaults
-    class CVsndRadioButtonSlot {
-    public:
-        SCHEMA_FIELD(bool                            , m_bEnableVsnd                                   , 0x0) // bool [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_vsnd                                          , 0x8) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnableEndcap                                 , 0x28) // bool [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_endcapVsnd                                    , 0x30) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnableLoopcap                                , 0x50) // bool [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_loopcapVsnd                                   , 0x58) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_group                                         , 0x78) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_volume                                        , 0x7C) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fadeOut                                       , 0x80) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(EVsndPlaybackMode               , m_mode                                          , 0x84) // EVsndPlaybackMode [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
     };
 
     // VMixBoxverbDesc_t
@@ -1159,184 +920,46 @@ namespace soundsystem {
         SCHEMA_FIELD(float                           , m_flTaps                                        , 0x4C) // float32
     };
 
-    // CSndBeatPatternManager
-    //   fields: 2
-    //   size: 0x90
-    //   @MPropertyFriendlyName
-    //   @MGetKV3ClassDefaults
-    class CSndBeatPatternManager {
-    public:
-        SCHEMA_FIELD(CUtlVector<CSndBeatPattern>     , m_vecPatterns                                   , 0x38) // CUtlVector<CSndBeatPattern> [MPropertyFriendlyName, MVDataPromoteField]
-        SCHEMA_FIELD(CUtlVector<CSndBeatTrack>       , m_vecActiveTracks                               , 0x70) // CUtlVector<CSndBeatTrack> [MPropertyFriendlyName, MVDataPromoteField]
-    };
-
-    // CAudioEmphasisSample
-    //   fields: 2
-    //   size: 0x8
-    //   @MGetKV3ClassDefaults
-    class CAudioEmphasisSample {
-    public:
-        SCHEMA_FIELD(float                           , m_flTime                                        , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flValue                                       , 0x4) // float32
-    };
-
-    // CVMixPitchShiftProcessorDesc
-    //   fields: 2
-    //   size: 0x40
-    //   @MGetKV3ClassDefaults
-    class CVMixPitchShiftProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixPitchShiftDesc_t            , m_desc                                          , 0x28) // VMixPitchShiftDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPitchScale                               , 0x38) // CVMixParameterFloat
-    };
-
-    // SndBeatEventKeyedFloats_t
-    //   fields: 1
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    class SndBeatEventKeyedFloats_t {
-    public:
-        SCHEMA_FIELD(float                           , m_flFloat                                       , 0x10) // float32 [MPropertyFriendlyName]
-    };
-
-    // CDspPresetModifierList
-    //   fields: 2
+    // CDSPMixgroupModifier
+    //   fields: 6
     //   size: 0x20
     //   @MGetKV3ClassDefaults
-    class CDspPresetModifierList {
+    class CDSPMixgroupModifier {
     public:
-        SCHEMA_FIELD(::CUtlString                    , m_dspName                                       , 0x0) // CUtlString [MPropertyDescription, MPropertyFriendlyName]
-        SCHEMA_FIELD(CUtlVector<CDSPMixgroupModifier>, m_modifiers                                     , 0x8) // CUtlVector<CDSPMixgroupModifier> [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_mixgroup                                      , 0x0) // CUtlString [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flModifier                                    , 0x8) // float32 [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flModifierMin                                 , 0xC) // float32 [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flSourceModifier                              , 0x10) // float32 [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flSourceModifierMin                           , 0x14) // float32 [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flListenerReverbModifierWhenSourceReverbIsActive, 0x18) // float32 [MPropertyDescription, MPropertyFriendlyName]
     };
 
-    // CVMixParameterBool
+    // CVMixParameterFloat
     //   fields: 1
     //   size: 0x4
     //   @MGetKV3ClassDefaults
-    class CVMixParameterBool {
+    class CVMixParameterFloat {
     public:
         SCHEMA_FIELD(CVMixDataOffset                 , m_offset                                        , 0x0) // CVMixDataOffset
     };
 
-    // CVMixControlMeter
-    //   fields: 1
+    // CVMixAutomaticControlInput
+    //   fields: 3
     //   size: 0x18
     //   @MGetKV3ClassDefaults
-    class CVMixControlMeter {
+    class CVMixAutomaticControlInput {
     public:
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nValueIndex                                   , 0x10) // CVMixDataOffset
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
+        SCHEMA_FIELD(std::int32_t                    , m_nGraphInputIndex                              , 0xC) // int32
+        SCHEMA_FIELD(VMixAutoControlType_t           , m_nControlType                                  , 0x10) // VMixAutoControlType_t
     };
 
-    // CVoiceContainerParameterBlender
-    //   fields: 8
-    //   size: 0x1C0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerParameterBlender {
-    public:
-        SCHEMA_FIELD(CSoundContainerReference        , m_firstSound                                    , 0x70) // CSoundContainerReference [MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReference        , m_secondSound                                   , 0x90) // CSoundContainerReference [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnableOcclusionBlend                         , 0xB0) // bool [MPropertyStartGroup, MPropertyFriendlyName]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve1                                        , 0xB8) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve2                                        , 0xF8) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bEnableDistanceBlend                          , 0x138) // bool [MPropertyStartGroup, MPropertyFriendlyName]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve3                                        , 0x140) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve4                                        , 0x180) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-    };
-
-    // CAudioMorphData
-    //   fields: 6
-    //   size: 0x68
-    //   @MGetKV3ClassDefaults
-    class CAudioMorphData {
-    public:
-        SCHEMA_FIELD(CUtlVector<float32>             , m_times                                         , 0x0) // CUtlVector<float32>
-        SCHEMA_FIELD(CUtlVector<uint32>              , m_nameHashCodes                                 , 0x18) // CUtlVector<uint32>
-        SCHEMA_FIELD(CUtlVector<CUtlString>          , m_nameStrings                                   , 0x30) // CUtlVector<CUtlString>
-        SCHEMA_FIELD(CUtlVector<CUtlVector<float32>> , m_samples                                       , 0x48) // CUtlVector<CUtlVector<float32>>
-        SCHEMA_FIELD(float                           , m_flEaseIn                                      , 0x60) // float32
-        SCHEMA_FIELD(float                           , m_flEaseOut                                     , 0x64) // float32
-    };
-
-    // VMixConvolutionDesc_t
-    //   fields: 8
-    //   size: 0x20
-    //   @MGetKV3ClassDefaults
-    class VMixConvolutionDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_fldbGain                                      , 0x0) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_flPreDelayMS                                  , 0x4) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x8) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_fldbLow                                       , 0xC) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_fldbMid                                       , 0x10) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_fldbHigh                                      , 0x14) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_flLowCutoffFreq                               , 0x18) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flHighCutoffFreq                              , 0x1C) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerLoopTriggerWithRandomPanner
+    // CVMixDataOffset
     //   fields: 1
-    //   size: 0xC0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerLoopTriggerWithRandomPanner {
+    //   size: 0x4
+    class CVMixDataOffset {
     public:
-        SCHEMA_FIELD(CRandomPannerControls           , m_randomPannerControls                          , 0xA0) // CRandomPannerControls [MPropertyFriendlyName]
-    };
-
-    // VMixAutoFilterDesc_t
-    //   fields: 8
-    //   size: 0x2C
-    //   @MGetKV3ClassDefaults
-    class VMixAutoFilterDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_flEnvelopeAmount                              , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x8) // float32
-        SCHEMA_FIELD(VMixFilterDesc_t                , m_filter                                        , 0xC) // VMixFilterDesc_t
-        SCHEMA_FIELD(float                           , m_flLFOAmount                                   , 0x1C) // float32
-        SCHEMA_FIELD(float                           , m_flLFORate                                     , 0x20) // float32
-        SCHEMA_FIELD(float                           , m_flPhase                                       , 0x24) // float32
-        SCHEMA_FIELD(VMixLFOShape_t                  , m_nLFOShape                                     , 0x28) // VMixLFOShape_t
-    };
-
-    // CVoiceContainerStaticAdditiveSynth::CGainScalePerInstance
-    //   fields: 4
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class CVoiceContainerStaticAdditiveSynth_CGainScalePerInstance {
-    public:
-        SCHEMA_FIELD(float                           , m_flMinVolume                                   , 0x0) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_nInstancesAtMinVolume                         , 0x4) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flMaxVolume                                   , 0x8) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_nInstancesAtMaxVolume                         , 0xC) // int32 [MPropertyFriendlyName]
-    };
-
-    // CVMixAutoFilterProcessorDesc
-    //   fields: 1
-    //   size: 0x58
-    //   @MGetKV3ClassDefaults
-    class CVMixAutoFilterProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixAutoFilterDesc_t            , m_desc                                          , 0x28) // VMixAutoFilterDesc_t
-    };
-
-    // CVMixCommand
-    //   fields: 8
-    //   size: 0x20
-    //   @MGetKV3ClassDefaults
-    class CVMixCommand {
-    public:
-        SCHEMA_FIELD(VMixGraphCommandID_t            , m_nCommand                                      , 0x0) // VMixGraphCommandID_t [MKV3TransferName]
-        SCHEMA_FIELD(std::uint32_t                   , m_nParameterNameHash                            , 0x4) // uint32 [MKV3TransferName]
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nOutputSubmix                                 , 0x8) // CVMixDataOffset [MKV3TransferName]
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputSubmix0                                 , 0xC) // CVMixDataOffset [MKV3TransferName]
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputSubmix1                                 , 0x10) // CVMixDataOffset [MKV3TransferName]
-        SCHEMA_FIELD(std::int32_t                    , m_nProcessor                                    , 0x14) // int32 [MKV3TransferName]
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputValue0                                  , 0x18) // CVMixDataOffset
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputValue1                                  , 0x1C) // CVMixDataOffset
+        SCHEMA_FIELD(std::uint32_t                   , m_nOffset                                       , 0x0) // uint32
     };
 
     // CVoiceContainerEnvelopeAnalyzer
@@ -1352,64 +975,15 @@ namespace soundsystem {
         SCHEMA_FIELD(float                           , m_flThreshold                                   , 0x50) // float32 [MPropertyFriendlyName]
     };
 
-    // CVMixSteamAudioPathingProcessorDesc
-    //   fields: 7
-    //   size: 0x48
+    // CVoiceContainerStaticAdditiveSynth::CTone
+    //   fields: 3
+    //   size: 0x60
     //   @MGetKV3ClassDefaults
-    class CVMixSteamAudioPathingProcessorDesc {
+    class CVoiceContainerStaticAdditiveSynth_CTone {
     public:
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionX                                , 0x28) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionY                                , 0x2C) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionZ                                , 0x30) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPathingMixLevel                          , 0x34) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramBand                                     , 0x38) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixDataOffset                 , m_paramArrayPathingEQ                           , 0x3C) // CVMixDataOffset
-        SCHEMA_FIELD(CVMixDataOffset                 , m_paramArrayPathingCoefficients                 , 0x40) // CVMixDataOffset
-    };
-
-    // VMixSubgraphSwitchDesc_t
-    //   fields: 6
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    class VMixSubgraphSwitchDesc_t {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
-        SCHEMA_FIELD(::CUtlString                    , m_effectName                                    , 0x8) // CUtlString
-        SCHEMA_FIELD(CUtlVector<CUtlString>          , m_subgraphs                                     , 0x10) // CUtlVector<CUtlString>
-        SCHEMA_FIELD(VMixSubgraphSwitchInterpolationType_t, m_interpolationMode                             , 0x28) // VMixSubgraphSwitchInterpolationType_t
-        SCHEMA_FIELD(bool                            , m_bOnlyTailsOnFadeOut                           , 0x2C) // bool
-        SCHEMA_FIELD(float                           , m_flInterpolationTime                           , 0x30) // float32
-    };
-
-    // CVoiceContainerLoopXFade
-    //   fields: 8
-    //   size: 0xA8
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerLoopXFade {
-    public:
-        SCHEMA_FIELD(CSoundContainerReference        , m_sound                                         , 0x70) // CSoundContainerReference [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flLoopEnd                                     , 0x90) // float32
-        SCHEMA_FIELD(float                           , m_flLoopStart                                   , 0x94) // float32
-        SCHEMA_FIELD(float                           , m_flFadeOut                                     , 0x98) // float32
-        SCHEMA_FIELD(float                           , m_flFadeIn                                      , 0x9C) // float32
-        SCHEMA_FIELD(bool                            , m_bPlayHead                                     , 0xA0) // bool
-        SCHEMA_FIELD(bool                            , m_bPlayTail                                     , 0xA1) // bool
-        SCHEMA_FIELD(bool                            , m_bEqualPow                                     , 0xA2) // bool
-    };
-
-    // VMixShaperDesc_t
-    //   fields: 5
-    //   size: 0x14
-    //   @MGetKV3ClassDefaults
-    class VMixShaperDesc_t {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nShape                                        , 0x0) // int32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_fldbDrive                                     , 0x4) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_fldbOutputGain                                , 0x8) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0xC) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_nOversampleFactor                             , 0x10) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(CUtlVector<CVoiceContainerStaticAdditiveSynth_CHarmonic>, m_harmonics                                     , 0x0) // CUtlVector<CVoiceContainerStaticAdditiveSynth::CHarmonic> [MPropertyFriendlyName]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve                                         , 0x18) // CPiecewiseCurve [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bSyncInstances                                , 0x58) // bool [MPropertyFriendlyName]
     };
 
     // VMixPresetDSPDesc_t
@@ -1421,46 +995,418 @@ namespace soundsystem {
         SCHEMA_FIELD(::CUtlString                    , m_effectName                                    , 0x0) // CUtlString
     };
 
-    // CRandomPannerControls
-    //   fields: 5
-    //   size: 0x20
-    //   @MGetKV3ClassDefaults
+    // CSndBeatPatternManager
+    //   fields: 2
+    //   size: 0x90
     //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CRandomPannerControls {
+    //   @MGetKV3ClassDefaults
+    class CSndBeatPatternManager {
     public:
-        SCHEMA_FIELD(::CUtlString                    , m_panningControlInputName                       , 0x0) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_volumeControlInputName                        , 0x8) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flMinVolume                                   , 0x10) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flMaxVolume                                   , 0x14) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_strVectorStackParam                           , 0x18) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(CUtlVector<CSndBeatPattern>     , m_vecPatterns                                   , 0x38) // CUtlVector<CSndBeatPattern> [MPropertyFriendlyName, MVDataPromoteField]
+        SCHEMA_FIELD(CUtlVector<CSndBeatTrack>       , m_vecActiveTracks                               , 0x70) // CUtlVector<CSndBeatTrack> [MPropertyFriendlyName, MVDataPromoteField]
     };
 
-    // CVMixInputBase
+    // CVMixDynamics3BandProcessorDesc
+    //   fields: 1
+    //   size: 0xB8
+    //   @MGetKV3ClassDefaults
+    class CVMixDynamics3BandProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixDynamics3BandDesc_t         , m_desc                                          , 0x28) // VMixDynamics3BandDesc_t
+    };
+
+    // CVMixShaperProcessorDesc
+    //   fields: 2
+    //   size: 0x40
+    //   @MGetKV3ClassDefaults
+    class CVMixShaperProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixShaperDesc_t                , m_desc                                          , 0x28) // VMixShaperDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDrive                                    , 0x3C) // CVMixParameterFloat
+    };
+
+    // CVMixAdditionalOutput
     //   fields: 1
     //   size: 0x10
     //   @MGetKV3ClassDefaults
-    class CVMixInputBase {
+    class CVMixAdditionalOutput {
     public:
         SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
     };
 
-    // CVMixParameterEffectName
+    // CVoiceContainerAmpedDecayingSineWave
+    //   fields: 1
+    //   size: 0x88
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerAmpedDecayingSineWave {
+    public:
+        SCHEMA_FIELD(float                           , m_flGainAmount                                  , 0x80) // float32 [MPropertyFriendlyName, MPropertyDescription]
+    };
+
+    // SelectedEditItemInfo_t
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class SelectedEditItemInfo_t {
+    public:
+        SCHEMA_FIELD(CUtlVector<SosEditItemInfo_t>   , m_EditItems                                     , 0x0) // CUtlVector<SosEditItemInfo_t>
+    };
+
+    // CVMixImpulseResponseInput
+    //   fields: 0
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    class CVMixImpulseResponseInput {
+    public:
+    };
+
+    // VelocityZone_t
+    //   fields: 4
+    //   size: 0x14
+    class VelocityZone_t {
+    public:
+        SCHEMA_FIELD(std::uint8_t                    , nMaxVel                                         , 0x0) // uint8
+        SCHEMA_FIELD(std::uint8_t                    , nNextSelection                                  , 0x1) // uint8
+        SCHEMA_FIELD(std::uint8_t                    , nNumSamples                                     , 0x2) // uint8
+        SCHEMA_FIELD(std::uint32_t                   , pSamples                                        , 0x4) // uint32[4]
+    };
+
+    // CVoiceContainerSelector
+    //   fields: 3
+    //   size: 0xF0
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerSelector {
+    public:
+        SCHEMA_FIELD(PlayBackMode_t                  , m_mode                                          , 0x78) // PlayBackMode_t [MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReferenceArray   , m_soundsToPlay                                  , 0x80) // CSoundContainerReferenceArray [MPropertyFriendlyName]
+        SCHEMA_FIELD(CUtlVector<float32>             , m_fProbabilityWeights                           , 0xB8) // CUtlVector<float32> [MPropertyFriendlyName]
+    };
+
+    // CSosGroupActionMemberCountEnvelopeSchema
+    //   fields: 8
+    //   size: 0x30
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionMemberCountEnvelopeSchema {
+    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nBaseCount                                    , 0x8) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_nTargetCount                                  , 0xC) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flBaseValue                                   , 0x10) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flTargetValue                                 , 0x14) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flAttack                                      , 0x18) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flDecay                                       , 0x1C) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_resultVarName                                 , 0x20) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bSaveToGroup                                  , 0x28) // bool [MPropertyFriendlyName]
+    };
+
+    // CSosGroupActionTimeLimitSchema
+    //   fields: 1
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionTimeLimitSchema {
+    public:
+        SCHEMA_FIELD(float                           , m_flMaxDuration                                 , 0x8) // float32
+    };
+
+    // VMixModDelayDesc_t
+    //   fields: 9
+    //   size: 0x30
+    //   @MGetKV3ClassDefaults
+    class VMixModDelayDesc_t {
+    public:
+        SCHEMA_FIELD(VMixFilterDesc_t                , m_feedbackFilter                                , 0x0) // VMixFilterDesc_t
+        SCHEMA_FIELD(bool                            , m_bPhaseInvert                                  , 0x10) // bool
+        SCHEMA_FIELD(float                           , m_flGlideTime                                   , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flDelay                                       , 0x18) // float32
+        SCHEMA_FIELD(float                           , m_flOutputGain                                  , 0x1C) // float32
+        SCHEMA_FIELD(float                           , m_flFeedbackGain                                , 0x20) // float32
+        SCHEMA_FIELD(float                           , m_flModRate                                     , 0x24) // float32
+        SCHEMA_FIELD(float                           , m_flModDepth                                    , 0x28) // float32
+        SCHEMA_FIELD(bool                            , m_bApplyAntialiasing                            , 0x2C) // bool
+    };
+
+    // VMixOscDesc_t
+    //   fields: 3
+    //   size: 0xC
+    //   @MGetKV3ClassDefaults
+    class VMixOscDesc_t {
+    public:
+        SCHEMA_FIELD(VMixLFOShape_t                  , oscType                                         , 0x0) // VMixLFOShape_t [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_freq                                          , 0x4) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_flPhase                                       , 0x8) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+    };
+
+    // VMixFreeverbDesc_t
+    //   fields: 4
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    class VMixFreeverbDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_flRoomSize                                    , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flDamp                                        , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flWidth                                       , 0x8) // float32
+        SCHEMA_FIELD(float                           , m_flLateReflections                             , 0xC) // float32
+    };
+
+    // CSosGroupActionLimitSchema
+    //   fields: 5
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionLimitSchema {
+    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nMaxCount                                     , 0x8) // int32
+        SCHEMA_FIELD(SosActionStopType_t             , m_nStopType                                     , 0xC) // SosActionStopType_t
+        SCHEMA_FIELD(SosActionLimitSortType_t        , m_nSortType                                     , 0x10) // SosActionLimitSortType_t
+        SCHEMA_FIELD(bool                            , m_bStopImmediate                                , 0x14) // bool
+        SCHEMA_FIELD(bool                            , m_bCountStopped                                 , 0x15) // bool [MPropertyFriendlyName]
+    };
+
+    // CVoiceContainerLoopXFade
+    //   fields: 8
+    //   size: 0xB0
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerLoopXFade {
+    public:
+        SCHEMA_FIELD(CSoundContainerReference        , m_sound                                         , 0x78) // CSoundContainerReference [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flLoopEnd                                     , 0x98) // float32
+        SCHEMA_FIELD(float                           , m_flLoopStart                                   , 0x9C) // float32
+        SCHEMA_FIELD(float                           , m_flFadeOut                                     , 0xA0) // float32
+        SCHEMA_FIELD(float                           , m_flFadeIn                                      , 0xA4) // float32
+        SCHEMA_FIELD(bool                            , m_bPlayHead                                     , 0xA8) // bool
+        SCHEMA_FIELD(bool                            , m_bPlayTail                                     , 0xA9) // bool
+        SCHEMA_FIELD(bool                            , m_bEqualPow                                     , 0xAA) // bool
+    };
+
+    // CVoiceContainerAsyncGenerator
+    //   fields: 0
+    //   size: 0x88
+    //   @MGetKV3ClassDefaults
+    class CVoiceContainerAsyncGenerator {
+    public:
+    };
+
+    // CVoiceContainerDefault
+    //   fields: 0
+    //   size: 0x78
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerDefault {
+    public:
+    };
+
+    // CVoiceContainerEnum
+    //   fields: 3
+    //   size: 0xB8
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerEnum {
+    public:
+        SCHEMA_FIELD(CSoundContainerReferenceArray   , m_soundsToPlay                                  , 0x78) // CSoundContainerReferenceArray [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_iSelection                                    , 0xB0) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flCrossfadeTime                               , 0xB4) // float32 [MPropertyFriendlyName]
+    };
+
+    // CSoundContainerReference
+    //   fields: 4
+    //   size: 0x20
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CSoundContainerReference {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_namespace                                     , 0x0) // CUtlString
+        SCHEMA_FIELD(bool                            , m_bUseReference                                 , 0x8) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(CStrongHandle<InfoForResourceTypeCVoiceContainerBase>, m_sound                                         , 0x10) // CStrongHandle<InfoForResourceTypeCVoiceContainerBase> [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(CVoiceContainerBase*            , m_pSound                                        , 0x18) // CVoiceContainerBase* [MPropertySuppressExpr, MPropertyFriendlyName]
+    };
+
+    // CVoiceContainerLoopTriggerWithRandomPanner
+    //   fields: 1
+    //   size: 0xC8
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerLoopTriggerWithRandomPanner {
+    public:
+        SCHEMA_FIELD(CRandomPannerControls           , m_randomPannerControls                          , 0xA8) // CRandomPannerControls [MPropertyFriendlyName]
+    };
+
+    // CVMixStereoDelayProcessorDesc
+    //   fields: 2
+    //   size: 0x30
+    //   @MGetKV3ClassDefaults
+    class CVMixStereoDelayProcessorDesc {
+    public:
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayLeft                                , 0x28) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayRight                               , 0x2C) // CVMixParameterFloat
+    };
+
+    // CVMixControlMeter
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class CVMixControlMeter {
+    public:
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nValueIndex                                   , 0x10) // CVMixDataOffset
+    };
+
+    // VMixDelayDesc_t
+    //   fields: 7
+    //   size: 0x28
+    //   @MGetKV3ClassDefaults
+    class VMixDelayDesc_t {
+    public:
+        SCHEMA_FIELD(VMixFilterDesc_t                , m_feedbackFilter                                , 0x0) // VMixFilterDesc_t
+        SCHEMA_FIELD(bool                            , m_bEnableFilter                                 , 0x10) // bool
+        SCHEMA_FIELD(float                           , m_flDelay                                       , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flDirectGain                                  , 0x18) // float32
+        SCHEMA_FIELD(float                           , m_flDelayGain                                   , 0x1C) // float32
+        SCHEMA_FIELD(float                           , m_flFeedbackGain                                , 0x20) // float32
+        SCHEMA_FIELD(float                           , m_flWidth                                       , 0x24) // float32
+    };
+
+    // VMixFlangerDesc_t
+    //   fields: 9
+    //   size: 0x24
+    //   @MGetKV3ClassDefaults
+    class VMixFlangerDesc_t {
+    public:
+        SCHEMA_FIELD(bool                            , m_bPhaseInvert                                  , 0x0) // bool
+        SCHEMA_FIELD(float                           , m_flGlideTime                                   , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flDelay                                       , 0x8) // float32
+        SCHEMA_FIELD(float                           , m_flOutputGain                                  , 0xC) // float32
+        SCHEMA_FIELD(float                           , m_flFeedbackGain                                , 0x10) // float32
+        SCHEMA_FIELD(float                           , m_flFeedforwardGain                             , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flModRate                                     , 0x18) // float32
+        SCHEMA_FIELD(float                           , m_flModDepth                                    , 0x1C) // float32
+        SCHEMA_FIELD(bool                            , m_bApplyAntialiasing                            , 0x20) // bool
+    };
+
+    // CVMixSteamAudioHRTFProcessorDesc
+    //   fields: 9
+    //   size: 0x50
+    //   @MGetKV3ClassDefaults
+    class CVMixSteamAudioHRTFProcessorDesc {
+    public:
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionX                                , 0x28) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionY                                , 0x2C) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionZ                                , 0x30) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramInterpolation                            , 0x34) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDirectMixLevel                           , 0x38) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPerspectiveCorrection                    , 0x3C) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramRelativePosition                         , 0x40) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayLeft                                , 0x44) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayRight                               , 0x48) // CVMixParameterFloat
+    };
+
+    // VMixPannerDesc_t
+    //   fields: 2
+    //   size: 0x8
+    //   @MGetKV3ClassDefaults
+    class VMixPannerDesc_t {
+    public:
+        SCHEMA_FIELD(VMixPannerType_t                , m_type                                          , 0x0) // VMixPannerType_t
+        SCHEMA_FIELD(float                           , m_flStrength                                    , 0x4) // float32
+    };
+
+    // CVMixBaseProcessorDesc
+    //   fields: 7
+    //   size: 0x28
+    //   @MGetKV3ClassDefaults
+    class CVMixBaseProcessorDesc {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x8) // CUtlString
+        SCHEMA_FIELD(std::uint32_t                   , m_nDebugId                                      , 0x10) // uint32
+        SCHEMA_FIELD(float                           , m_flxfade                                       , 0x14) // float32
+        SCHEMA_FIELD(std::int32_t                    , m_nChannels                                     , 0x18) // int32
+        SCHEMA_FIELD(bool                            , m_bDebugBypass                                  , 0x1C) // bool
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramEnable                                   , 0x20) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramMix                                      , 0x24) // CVMixParameterFloat
+    };
+
+    // CSosGroupActionSoundeventClusterSchema
+    //   fields: 7
+    //   size: 0x50
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionSoundeventClusterSchema {
+    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nMinNearby                                    , 0x8) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flClusterEpsilon                              , 0xC) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_shouldPlayOpvar                               , 0x10) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_shouldPlayClusterChild                        , 0x18) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_clusterSizeOpvar                              , 0x20) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_groupBoundingBoxMinsOpvar                     , 0x28) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_groupBoundingBoxMaxsOpvar                     , 0x30) // CUtlString [MPropertyFriendlyName]
+    };
+
+    // CVMixGraphInput
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class CVMixGraphInput {
+    public:
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nOffset                                       , 0x10) // CVMixDataOffset
+    };
+
+    // CVMixParameterBool
     //   fields: 1
     //   size: 0x4
     //   @MGetKV3ClassDefaults
-    class CVMixParameterEffectName {
+    class CVMixParameterBool {
     public:
         SCHEMA_FIELD(CVMixDataOffset                 , m_offset                                        , 0x0) // CVMixDataOffset
     };
 
-    // VMixEQ8Desc_t
-    //   fields: 1
-    //   size: 0xA0
+    // CSoundInfoHeader
+    //   fields: 0
+    //   size: 0x1
     //   @MGetKV3ClassDefaults
-    class VMixEQ8Desc_t {
+    class CSoundInfoHeader {
     public:
-        SCHEMA_FIELD(VMixEQFilterDesc_t              , m_stages                                        , 0x0) // VMixEQFilterDesc_t[8]
+    };
+
+    // CSosGroupActionTimeBlockLimitSchema
+    //   fields: 2
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionTimeBlockLimitSchema {
+    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nMaxCount                                     , 0x8) // int32
+        SCHEMA_FIELD(float                           , m_flMaxDuration                                 , 0xC) // float32
+    };
+
+    // CSoundContainerReferenceArray
+    //   fields: 3
+    //   size: 0x38
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CSoundContainerReferenceArray {
+    public:
+        SCHEMA_FIELD(bool                            , m_bUseReference                                 , 0x0) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>>, m_sounds                                        , 0x8) // CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>> [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(CUtlVector<CVoiceContainerBase*>, m_pSounds                                       , 0x20) // CUtlVector<CVoiceContainerBase*> [MPropertySuppressExpr, MPropertyFriendlyName]
+    };
+
+    // SndBeatEventKeyedFloats_t
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class SndBeatEventKeyedFloats_t {
+    public:
+        SCHEMA_FIELD(float                           , m_flFloat                                       , 0x10) // float32 [MPropertyFriendlyName]
     };
 
     // VMixVocoderDesc_t
@@ -1481,101 +1427,167 @@ namespace soundsystem {
         SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x24) // bool
     };
 
-    // ISndSeqInstruments
-    //   fields: 0
-    //   size: 0x8
-    class ISndSeqInstruments {
-    public:
-    };
-
-    // VMixDualCompressorDesc_t
-    //   fields: 5
-    //   size: 0x34
+    // VMixAutoFilterDesc_t
+    //   fields: 8
+    //   size: 0x2C
     //   @MGetKV3ClassDefaults
-    class VMixDualCompressorDesc_t {
+    class VMixAutoFilterDesc_t {
     public:
-        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x8) // float32
-        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0xC) // bool
-        SCHEMA_FIELD(VMixDynamicsBand_t              , m_bandDesc                                      , 0x10) // VMixDynamicsBand_t
+        SCHEMA_FIELD(float                           , m_flEnvelopeAmount                              , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x8) // float32
+        SCHEMA_FIELD(VMixFilterDesc_t                , m_filter                                        , 0xC) // VMixFilterDesc_t
+        SCHEMA_FIELD(float                           , m_flLFOAmount                                   , 0x1C) // float32
+        SCHEMA_FIELD(float                           , m_flLFORate                                     , 0x20) // float32
+        SCHEMA_FIELD(float                           , m_flPhase                                       , 0x24) // float32
+        SCHEMA_FIELD(VMixLFOShape_t                  , m_nLFOShape                                     , 0x28) // VMixLFOShape_t
     };
 
-    // CVoiceContainerRandomSampler
-    //   fields: 6
-    //   size: 0x1A8
+    // SamplerVoice_t
+    //   fields: 1
+    //   size: 0x8
+    class SamplerVoice_t {
+    public:
+        SCHEMA_FIELD(std::uint8_t                    , nNoteNum                                        , 0x0) // uint8
+    };
+
+    // CVoiceContainerSetElement
+    //   fields: 2
+    //   size: 0x28
+    //   @MGetKV3ClassDefaults
+    class CVoiceContainerSetElement {
+    public:
+        SCHEMA_FIELD(CSoundContainerReference        , m_sound                                         , 0x0) // CSoundContainerReference
+        SCHEMA_FIELD(float                           , m_flVolumeDB                                    , 0x20) // float32 [MPropertyFriendlyName]
+    };
+
+    // CVoiceContainerBlender
+    //   fields: 3
+    //   size: 0xC0
     //   @MGetKV3ClassDefaults
     //   @MPropertyFriendlyName
     //   @MPropertyDescription
-    class CVoiceContainerRandomSampler {
+    class CVoiceContainerBlender {
     public:
-        SCHEMA_FIELD(float                           , m_flAmplitude                                   , 0x80) // float32
-        SCHEMA_FIELD(float                           , m_flAmplitudeJitter                             , 0x84) // float32
-        SCHEMA_FIELD(float                           , m_flTimeJitter                                  , 0x88) // float32
-        SCHEMA_FIELD(float                           , m_flMaxLength                                   , 0x8C) // float32
-        SCHEMA_FIELD(std::int32_t                    , m_nNumDelayVariations                           , 0x90) // int32
-        SCHEMA_FIELD(CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>>, m_grainResources                                , 0x98) // CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>>
+        SCHEMA_FIELD(CSoundContainerReference        , m_firstSound                                    , 0x78) // CSoundContainerReference
+        SCHEMA_FIELD(CSoundContainerReference        , m_secondSound                                   , 0x98) // CSoundContainerReference
+        SCHEMA_FIELD(float                           , m_flBlendFactor                                 , 0xB8) // float32
     };
 
-    // CDSPMixgroupModifier
-    //   fields: 6
-    //   size: 0x20
+    // VMixDiffusorDesc_t
+    //   fields: 4
+    //   size: 0x10
     //   @MGetKV3ClassDefaults
-    class CDSPMixgroupModifier {
+    class VMixDiffusorDesc_t {
     public:
-        SCHEMA_FIELD(::CUtlString                    , m_mixgroup                                      , 0x0) // CUtlString [MPropertyDescription, MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flModifier                                    , 0x8) // float32 [MPropertyDescription, MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flModifierMin                                 , 0xC) // float32 [MPropertyDescription, MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flSourceModifier                              , 0x10) // float32 [MPropertyDescription, MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flSourceModifierMin                           , 0x14) // float32 [MPropertyDescription, MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flListenerReverbModifierWhenSourceReverbIsActive, 0x18) // float32 [MPropertyDescription, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flSize                                        , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flComplexity                                  , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flFeedback                                    , 0x8) // float32
+        SCHEMA_FIELD(float                           , m_flOutputGain                                  , 0xC) // float32
     };
 
-    // CSosGroupActionLimitSchema
-    //   fields: 5
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionLimitSchema {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nMaxCount                                     , 0x8) // int32
-        SCHEMA_FIELD(SosActionStopType_t             , m_nStopType                                     , 0xC) // SosActionStopType_t
-        SCHEMA_FIELD(SosActionLimitSortType_t        , m_nSortType                                     , 0x10) // SosActionLimitSortType_t
-        SCHEMA_FIELD(bool                            , m_bStopImmediate                                , 0x14) // bool
-        SCHEMA_FIELD(bool                            , m_bCountStopped                                 , 0x15) // bool [MPropertyFriendlyName]
-    };
-
-    // CSndSeqInstSndEvtSchema
-    //   fields: 0
-    //   size: 0x20
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSndSeqInstSndEvtSchema {
-    public:
-    };
-
-    // SelectedEditItemInfo_t
+    // CVoiceContainerVMixSnd
     //   fields: 1
-    //   size: 0x18
+    //   size: 0x190
     //   @MGetKV3ClassDefaults
-    class SelectedEditItemInfo_t {
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerVMixSnd {
     public:
-        SCHEMA_FIELD(CUtlVector<SosEditItemInfo_t>   , m_EditItems                                     , 0x0) // CUtlVector<SosEditItemInfo_t>
+        SCHEMA_FIELD(::CUtlString                    , m_resourceName                                  , 0x188) // CUtlString
     };
 
-    // CVMixBaseProcessorDesc
-    //   fields: 7
-    //   size: 0x28
+    // CVoiceContainerGranulator
+    //   fields: 8
+    //   size: 0x178
     //   @MGetKV3ClassDefaults
-    class CVMixBaseProcessorDesc {
+    //   @MPropertyFriendlyName
+    class CVoiceContainerGranulator {
     public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x8) // CUtlString
-        SCHEMA_FIELD(std::uint32_t                   , m_nDebugId                                      , 0x10) // uint32
-        SCHEMA_FIELD(float                           , m_flxfade                                       , 0x14) // float32
-        SCHEMA_FIELD(std::int32_t                    , m_nChannels                                     , 0x18) // int32
-        SCHEMA_FIELD(bool                            , m_bDebugBypass                                  , 0x1C) // bool
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramEnable                                   , 0x20) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramMix                                      , 0x24) // CVMixParameterFloat
+        SCHEMA_FIELD(float                           , m_flGrainLength                                 , 0x88) // float32
+        SCHEMA_FIELD(float                           , m_flGrainCrossfadeAmount                        , 0x8C) // float32
+        SCHEMA_FIELD(float                           , m_flStartJitter                                 , 0x90) // float32
+        SCHEMA_FIELD(float                           , m_flPlaybackJitter                              , 0x94) // float32
+        SCHEMA_FIELD(bool                            , m_bShouldWraparound                             , 0x98) // bool
+        SCHEMA_FIELD(CStrongHandle<InfoForResourceTypeCVoiceContainerBase>, m_sourceAudio                                   , 0xA0) // CStrongHandle<InfoForResourceTypeCVoiceContainerBase>
+        SCHEMA_FIELD(bool                            , m_bDoubleBufferSourceAudio                      , 0xA8) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flMaxSourceLength                             , 0xAC) // float32 [MPropertyFriendlyName]
+    };
+
+    // VMixEQ8Desc_t
+    //   fields: 1
+    //   size: 0xA0
+    //   @MGetKV3ClassDefaults
+    class VMixEQ8Desc_t {
+    public:
+        SCHEMA_FIELD(VMixEQFilterDesc_t              , m_stages                                        , 0x0) // VMixEQFilterDesc_t[8]
+    };
+
+    // SndBeatTimeSignature_t
+    //   fields: 2
+    //   size: 0x2
+    //   @MGetKV3ClassDefaults
+    class SndBeatTimeSignature_t {
+    public:
+        SCHEMA_FIELD(std::uint8_t                    , nNumerator                                      , 0x0) // uint8 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::uint8_t                    , nDenominator                                    , 0x1) // uint8 [MPropertyFriendlyName]
+    };
+
+    // VMixDynamics3BandDesc_t
+    //   fields: 10
+    //   size: 0x90
+    //   @MGetKV3ClassDefaults
+    class VMixDynamics3BandDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_fldbGainOutput                                , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x8) // float32
+        SCHEMA_FIELD(float                           , m_flDepth                                       , 0xC) // float32
+        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x10) // float32
+        SCHEMA_FIELD(float                           , m_flTimeScale                                   , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flLowCutoffFreq                               , 0x18) // float32
+        SCHEMA_FIELD(float                           , m_flHighCutoffFreq                              , 0x1C) // float32
+        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x20) // bool
+        SCHEMA_FIELD(VMixDynamicsBand_t              , m_bandDesc                                      , 0x24) // VMixDynamicsBand_t[3]
+    };
+
+    // CVoiceContainerDecayingSineWave
+    //   fields: 2
+    //   size: 0x80
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerDecayingSineWave {
+    public:
+        SCHEMA_FIELD(float                           , m_flFrequency                                   , 0x78) // float32 [MPropertyFriendlyName, MPropertyDescription]
+        SCHEMA_FIELD(float                           , m_flDecayTime                                   , 0x7C) // float32 [MPropertyFriendlyName, MPropertyDescription]
+    };
+
+    // VMixPointerFixupEntry_t
+    //   fields: 2
+    //   size: 0x8
+    //   @MGetKV3ClassDefaults
+    class VMixPointerFixupEntry_t {
+    public:
+        SCHEMA_FIELD(std::uint32_t                   , m_nIndex                                        , 0x0) // uint32
+        SCHEMA_FIELD(CVMixDataOffset                 , m_offset                                        , 0x4) // CVMixDataOffset
+    };
+
+    // CVSound
+    //   fields: 9
+    //   size: 0x40
+    //   @MGetKV3ClassDefaults
+    class CVSound {
+    public:
+        SCHEMA_FIELD(CUtlLeanVector<CAudioSentence>  , m_Sentences                                     , 0x0) // CUtlLeanVector<CAudioSentence>
+        SCHEMA_FIELD(std::int32_t                    , m_nRate                                         , 0x10) // int32
+        SCHEMA_FIELD(CVSoundFormat_t                 , m_nFormat                                       , 0x14) // CVSoundFormat_t
+        SCHEMA_FIELD(std::uint32_t                   , m_nChannels                                     , 0x18) // uint32
+        SCHEMA_FIELD(std::int32_t                    , m_nLoopStart                                    , 0x1C) // int32
+        SCHEMA_FIELD(std::uint32_t                   , m_nSampleCount                                  , 0x20) // uint32
+        SCHEMA_FIELD(float                           , m_flDuration                                    , 0x24) // float32
+        SCHEMA_FIELD(std::uint32_t                   , m_nStreamingSize                                , 0x28) // uint32
+        SCHEMA_FIELD(std::int32_t                    , m_nLoopEnd                                      , 0x2C) // int32
     };
 
     // CVMixModDelayProcessorDesc
@@ -1591,76 +1603,61 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixParameterFloat             , m_paramModDepth                                 , 0x64) // CVMixParameterFloat
     };
 
-    // CVMixControlInput
-    //   fields: 1
-    //   size: 0x18
+    // CSndSeqInstBaseSchema
+    //   fields: 5
+    //   size: 0x20
     //   @MGetKV3ClassDefaults
-    class CVMixControlInput {
+    class CSndSeqInstBaseSchema {
     public:
-        SCHEMA_FIELD(float                           , m_flDefaultValue                                , 0x10) // float32
+        SCHEMA_FIELD(SndSeqInstrumentType_t          , m_nType                                         , 0x8) // SndSeqInstrumentType_t
+        SCHEMA_FIELD(bool                            , m_bStopCurrentEvents                            , 0xE) // bool
+        SCHEMA_FIELD(float                           , m_flBPM                                         , 0x10) // float32
+        SCHEMA_FIELD(float                           , m_flBPMFactor                                   , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flBPMInvFactor                                , 0x18) // float32
     };
 
-    // VMixEnvelopeDesc_t
-    //   fields: 3
-    //   size: 0xC
+    // CVMixSteamAudioPathingProcessorDesc
+    //   fields: 7
+    //   size: 0x48
     //   @MGetKV3ClassDefaults
-    class VMixEnvelopeDesc_t {
+    class CVMixSteamAudioPathingProcessorDesc {
     public:
-        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flHoldTimeMS                                  , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x8) // float32
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionX                                , 0x28) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionY                                , 0x2C) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPositionZ                                , 0x30) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPathingMixLevel                          , 0x34) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramBand                                     , 0x38) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixDataOffset                 , m_paramArrayPathingEQ                           , 0x3C) // CVMixDataOffset
+        SCHEMA_FIELD(CVMixDataOffset                 , m_paramArrayPathingCoefficients                 , 0x40) // CVMixDataOffset
     };
 
-    // VMixOscDesc_t
-    //   fields: 3
-    //   size: 0xC
+    // CVMixPannerProcessorDesc
+    //   fields: 2
+    //   size: 0x38
     //   @MGetKV3ClassDefaults
-    class VMixOscDesc_t {
+    class CVMixPannerProcessorDesc {
     public:
-        SCHEMA_FIELD(VMixLFOShape_t                  , oscType                                         , 0x0) // VMixLFOShape_t [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_freq                                          , 0x4) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_flPhase                                       , 0x8) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(VMixPannerDesc_t                , m_desc                                          , 0x28) // VMixPannerDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPan                                      , 0x30) // CVMixParameterFloat
     };
 
-    // CVoiceContainerShapedNoise
-    //   fields: 9
-    //   size: 0x148
+    // VMixDynamicsCompressorDesc_t
+    //   fields: 11
+    //   size: 0x28
     //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerShapedNoise {
+    class VMixDynamicsCompressorDesc_t {
     public:
-        SCHEMA_FIELD(bool                            , m_bUseCurveForFrequency                         , 0x70) // bool
-        SCHEMA_FIELD(float                           , m_flFrequency                                   , 0x74) // float32 [MPropertySuppressExpr]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_frequencySweep                                , 0x78) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bUseCurveForResonance                         , 0xB8) // bool
-        SCHEMA_FIELD(float                           , m_flResonance                                   , 0xBC) // float32 [MPropertySuppressExpr]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_resonanceSweep                                , 0xC0) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bUseCurveForAmplitude                         , 0x100) // bool
-        SCHEMA_FIELD(float                           , m_flGainInDecibels                              , 0x104) // float32 [MPropertySuppressExpr]
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_gainSweep                                     , 0x108) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
-    };
-
-    // CAudioPhonemeTag
-    //   fields: 3
-    //   size: 0xC
-    //   @MGetKV3ClassDefaults
-    class CAudioPhonemeTag {
-    public:
-        SCHEMA_FIELD(float                           , m_flStartTime                                   , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flEndTime                                     , 0x4) // float32
-        SCHEMA_FIELD(std::int32_t                    , m_nPhonemeCode                                  , 0x8) // int32
-    };
-
-    // CVoiceContainerSet
-    //   fields: 1
-    //   size: 0xA0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerSet {
-    public:
-        SCHEMA_FIELD(CUtlVector<CVoiceContainerSetElement>, m_soundsToPlay                                  , 0x70) // CUtlVector<CVoiceContainerSetElement> [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbOutputGain                                , 0x0) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbCompressionThreshold                      , 0x4) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x8) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flCompressionRatio                            , 0xC) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x10) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x14) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x18) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x1C) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flSCHighPassFreq                              , 0x20) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x24) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bAutoMakeupGain                               , 0x25) // bool [MPropertyFriendlyName]
     };
 
     // CVMixConvolutionProcessorDesc
@@ -1673,26 +1670,177 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixDataOffset                 , m_paramImpulseResponse                          , 0x48) // CVMixDataOffset
     };
 
-    // CVMixAudioMeter
-    //   fields: 3
-    //   size: 0x18
+    // CAudioSentence
+    //   fields: 4
+    //   size: 0xA0
     //   @MGetKV3ClassDefaults
-    class CVMixAudioMeter {
+    class CAudioSentence {
     public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
-        SCHEMA_FIELD(::CUtlString                    , m_displayName                                   , 0x8) // CUtlString
-        SCHEMA_FIELD(std::uint32_t                   , m_nDebugId                                      , 0x10) // uint32
+        SCHEMA_FIELD(bool                            , m_bShouldVoiceDuck                              , 0x0) // bool
+        SCHEMA_FIELD(CUtlVector<CAudioPhonemeTag>    , m_RunTimePhonemes                               , 0x8) // CUtlVector<CAudioPhonemeTag>
+        SCHEMA_FIELD(CUtlVector<CAudioEmphasisSample>, m_EmphasisSamples                               , 0x20) // CUtlVector<CAudioEmphasisSample>
+        SCHEMA_FIELD(CAudioMorphData                 , m_morphData                                     , 0x38) // CAudioMorphData
     };
 
-    // SndBeatEventKeyedMidiNotes_t
-    //   fields: 3
+    // VMixEQFilterDesc_t
+    //   fields: 1
+    //   size: 0x14
+    //   @MGetKV3ClassDefaults
+    class VMixEQFilterDesc_t {
+    public:
+        SCHEMA_FIELD(VMixFilterChannelSet_t          , m_nChannelSet                                   , 0x10) // VMixFilterChannelSet_t
+    };
+
+    // CVMixControlInput
+    //   fields: 1
     //   size: 0x18
     //   @MGetKV3ClassDefaults
-    class SndBeatEventKeyedMidiNotes_t {
+    class CVMixControlInput {
     public:
-        SCHEMA_FIELD(std::uint8_t                    , m_nStatus                                       , 0x10) // uint8 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::uint8_t                    , m_nNote                                         , 0x11) // uint8 [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::uint8_t                    , m_nVelocity                                     , 0x12) // uint8 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flDefaultValue                                , 0x10) // float32
+    };
+
+    // CVoiceContainerMultiBlender
+    //   fields: 3
+    //   size: 0xB8
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerMultiBlender {
+    public:
+        SCHEMA_FIELD(CSoundContainerReferenceArray   , m_soundsToPlay                                  , 0x78) // CSoundContainerReferenceArray [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flBlendFactor                                 , 0xB0) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flCrossover                                   , 0xB4) // float32 [MPropertyFriendlyName]
+    };
+
+    // CVMixBaseGraphDescription
+    //   fields: 15
+    //   size: 0xD0
+    //   @MGetKV3ClassDefaults
+    class CVMixBaseGraphDescription {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString [MKV3TransferName]
+        SCHEMA_FIELD(std::int32_t                    , m_nGraphOutputChannels                          , 0x8) // int32
+        SCHEMA_FIELD(bool                            , m_bIsMainGraph                                  , 0xC) // bool
+        SCHEMA_FIELD(CUtlLeanVector<std::unique_ptr<CVMixBaseProcessorDesc>>, m_processorNodes                                , 0x10) // CUtlLeanVector<std::unique_ptr<CVMixBaseProcessorDesc>> [MKV3TransferName]
+        SCHEMA_FIELD(CUtlLeanVector<CVMixGraphInput> , m_graphInputs                                   , 0x20) // CUtlLeanVector<CVMixGraphInput>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixControlInput>, m_controlTransientInputs                        , 0x30) // CUtlLeanVector<CVMixControlInput>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixControlOutput>, m_controlOutputs                                , 0x40) // CUtlLeanVector<CVMixControlOutput>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixImpulseResponseInput>, m_impulseResponseInputs                         , 0x50) // CUtlLeanVector<CVMixImpulseResponseInput>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixCommand>    , m_mixCommands                                   , 0x60) // CUtlLeanVector<CVMixCommand> [MKV3TransferName]
+        SCHEMA_FIELD(CVMixHeap                       , m_heap                                          , 0x70) // CVMixHeap
+        SCHEMA_FIELD(CUtlLeanVector<CVMixAudioMeter> , m_audioMeters                                   , 0x80) // CUtlLeanVector<CVMixAudioMeter>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixControlMeter>, m_controlMeters                                 , 0x90) // CUtlLeanVector<CVMixControlMeter>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixNameInputMeter>, m_nameInputMeters                               , 0xA0) // CUtlLeanVector<CVMixNameInputMeter>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixAdditionalOutput>, m_additionalOutputs                             , 0xB0) // CUtlLeanVector<CVMixAdditionalOutput>
+        SCHEMA_FIELD(CUtlLeanVector<CVMixAutomaticControlInput>, m_automaticControlInputs                        , 0xC0) // CUtlLeanVector<CVMixAutomaticControlInput>
+    };
+
+    // CVMixHeap
+    //   fields: 1
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    class CVMixHeap {
+    public:
+        SCHEMA_FIELD(CUtlLeanVector<uint32>          , m_storage                                       , 0x0) // CUtlLeanVector<uint32>
+    };
+
+    // CVMixAutoFilterProcessorDesc
+    //   fields: 1
+    //   size: 0x58
+    //   @MGetKV3ClassDefaults
+    class CVMixAutoFilterProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixAutoFilterDesc_t            , m_desc                                          , 0x28) // VMixAutoFilterDesc_t
+    };
+
+    // CSosGroupActionOcclusionSchema
+    //   fields: 6
+    //   size: 0x20
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionOcclusionSchema {
+    public:
+        SCHEMA_FIELD(float                           , m_flCalculationInterval                         , 0x8) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flRadius                                      , 0xC) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flOcclusionScale                              , 0x10) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flOcclusionMin                                , 0x14) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flOcclusionMax                                , 0x18) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flTestDepth                                   , 0x1C) // float32 [MPropertyFriendlyName]
+    };
+
+    // CSosGroupActionSetSoundeventParameterSchema
+    //   fields: 5
+    //   size: 0x28
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionSetSoundeventParameterSchema {
+    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nMaxCount                                     , 0x8) // int32
+        SCHEMA_FIELD(float                           , m_flMinValue                                    , 0xC) // float32
+        SCHEMA_FIELD(float                           , m_flMaxValue                                    , 0x10) // float32
+        SCHEMA_FIELD(::CUtlString                    , m_opvarName                                     , 0x18) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(SosActionSetParamSortType_t     , m_nSortType                                     , 0x20) // SosActionSetParamSortType_t
+    };
+
+    // CSndSeqInstSndEvtSchema
+    //   fields: 0
+    //   size: 0x20
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSndSeqInstSndEvtSchema {
+    public:
+    };
+
+    // CAudioMorphData
+    //   fields: 6
+    //   size: 0x68
+    //   @MGetKV3ClassDefaults
+    class CAudioMorphData {
+    public:
+        SCHEMA_FIELD(CUtlVector<float32>             , m_times                                         , 0x0) // CUtlVector<float32>
+        SCHEMA_FIELD(CUtlVector<uint32>              , m_nameHashCodes                                 , 0x18) // CUtlVector<uint32>
+        SCHEMA_FIELD(CUtlVector<CUtlString>          , m_nameStrings                                   , 0x30) // CUtlVector<CUtlString>
+        SCHEMA_FIELD(CUtlVector<CUtlVector<float32>> , m_samples                                       , 0x48) // CUtlVector<CUtlVector<float32>>
+        SCHEMA_FIELD(float                           , m_flEaseIn                                      , 0x60) // float32
+        SCHEMA_FIELD(float                           , m_flEaseOut                                     , 0x64) // float32
+    };
+
+    // SosEditItemInfo_t
+    //   fields: 5
+    //   size: 0x30
+    //   @MGetKV3ClassDefaults
+    class SosEditItemInfo_t {
+    public:
+        SCHEMA_FIELD(SosEditItemType_t               , itemType                                        , 0x0) // SosEditItemType_t
+        SCHEMA_FIELD(::CUtlString                    , itemName                                        , 0x8) // CUtlString
+        SCHEMA_FIELD(::CUtlString                    , itemTypeName                                    , 0x10) // CUtlString
+        SCHEMA_FIELD(::CUtlString                    , itemKVString                                    , 0x20) // CUtlString
+        SCHEMA_FIELD(::Vector2D                      , itemPos                                         , 0x28) // Vector2D
+    };
+
+    // CVoiceContainerLoopTrigger
+    //   fields: 5
+    //   size: 0xA8
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerLoopTrigger {
+    public:
+        SCHEMA_FIELD(float                           , m_flRetriggerTimeMin                            , 0x78) // float32
+        SCHEMA_FIELD(float                           , m_flRetriggerTimeMax                            , 0x7C) // float32
+        SCHEMA_FIELD(float                           , m_flFadeTime                                    , 0x80) // float32
+        SCHEMA_FIELD(bool                            , m_bCrossFade                                    , 0x84) // bool
+        SCHEMA_FIELD(CSoundContainerReference        , m_sound                                         , 0x88) // CSoundContainerReference [MPropertyFriendlyName]
+    };
+
+    // CVMixNameInputMeter
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class CVMixNameInputMeter {
+    public:
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nValueIndex                                   , 0x10) // CVMixDataOffset
     };
 
     // CVMixDescription
@@ -1707,39 +1855,17 @@ namespace soundsystem {
         SCHEMA_FIELD(std::uint32_t                   , m_nNameHashCode                                 , 0x100) // uint32
     };
 
-    // CVoiceContainerGranulator
-    //   fields: 8
-    //   size: 0x170
+    // VMixShaperDesc_t
+    //   fields: 5
+    //   size: 0x14
     //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CVoiceContainerGranulator {
+    class VMixShaperDesc_t {
     public:
-        SCHEMA_FIELD(float                           , m_flGrainLength                                 , 0x80) // float32
-        SCHEMA_FIELD(float                           , m_flGrainCrossfadeAmount                        , 0x84) // float32
-        SCHEMA_FIELD(float                           , m_flStartJitter                                 , 0x88) // float32
-        SCHEMA_FIELD(float                           , m_flPlaybackJitter                              , 0x8C) // float32
-        SCHEMA_FIELD(bool                            , m_bShouldWraparound                             , 0x90) // bool
-        SCHEMA_FIELD(CStrongHandle<InfoForResourceTypeCVoiceContainerBase>, m_sourceAudio                                   , 0x98) // CStrongHandle<InfoForResourceTypeCVoiceContainerBase>
-        SCHEMA_FIELD(bool                            , m_bDoubleBufferSourceAudio                      , 0xA0) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flMaxSourceLength                             , 0xA4) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVMixPannerProcessorDesc
-    //   fields: 2
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    class CVMixPannerProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixPannerDesc_t                , m_desc                                          , 0x28) // VMixPannerDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPan                                      , 0x30) // CVMixParameterFloat
-    };
-
-    // CVoiceContainerAsyncGenerator
-    //   fields: 0
-    //   size: 0x80
-    //   @MGetKV3ClassDefaults
-    class CVoiceContainerAsyncGenerator {
-    public:
+        SCHEMA_FIELD(std::int32_t                    , m_nShape                                        , 0x0) // int32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_fldbDrive                                     , 0x4) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_fldbOutputGain                                , 0x8) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0xC) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_nOversampleFactor                             , 0x10) // int32 [MPropertyFriendlyName]
     };
 
     // CSndBeatPattern
@@ -1769,57 +1895,19 @@ namespace soundsystem {
         SCHEMA_FIELD(CUtlVector<SndBeatEventKeys_t>  , m_vecSyncPatternKeys                            , 0xA0) // CUtlVector<SndBeatEventKeys_t> [MPropertySuppressExpr]
     };
 
-    // CSosGroupActionOcclusionSchema
-    //   fields: 6
+    // CRandomPannerControls
+    //   fields: 5
     //   size: 0x20
     //   @MGetKV3ClassDefaults
     //   @MPropertyFriendlyName
-    class CSosGroupActionOcclusionSchema {
+    //   @MPropertyDescription
+    class CRandomPannerControls {
     public:
-        SCHEMA_FIELD(float                           , m_flCalculationInterval                         , 0x8) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flRadius                                      , 0xC) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flOcclusionScale                              , 0x10) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flOcclusionMin                                , 0x14) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flOcclusionMax                                , 0x18) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flTestDepth                                   , 0x1C) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVMixEQ8ProcessorDesc
-    //   fields: 2
-    //   size: 0xD0
-    //   @MGetKV3ClassDefaults
-    class CVMixEQ8ProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixEQ8Desc_t                   , m_desc                                          , 0x28) // VMixEQ8Desc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramEQScale                                  , 0xC8) // CVMixParameterFloat
-    };
-
-    // VelocityZone_t
-    //   fields: 4
-    //   size: 0x14
-    class VelocityZone_t {
-    public:
-        SCHEMA_FIELD(std::uint8_t                    , nMaxVel                                         , 0x0) // uint8
-        SCHEMA_FIELD(std::uint8_t                    , nNextSelection                                  , 0x1) // uint8
-        SCHEMA_FIELD(std::uint8_t                    , nNumSamples                                     , 0x2) // uint8
-        SCHEMA_FIELD(std::uint32_t                   , pSamples                                        , 0x4) // uint32[4]
-    };
-
-    // CVMixImpulseResponseInput
-    //   fields: 0
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class CVMixImpulseResponseInput {
-    public:
-    };
-
-    // VMixEQFilterDesc_t
-    //   fields: 1
-    //   size: 0x14
-    //   @MGetKV3ClassDefaults
-    class VMixEQFilterDesc_t {
-    public:
-        SCHEMA_FIELD(VMixFilterChannelSet_t          , m_nChannelSet                                   , 0x10) // VMixFilterChannelSet_t
+        SCHEMA_FIELD(::CUtlString                    , m_panningControlInputName                       , 0x0) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_volumeControlInputName                        , 0x8) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flMinVolume                                   , 0x10) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flMaxVolume                                   , 0x14) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_strVectorStackParam                           , 0x18) // CUtlString [MPropertyFriendlyName]
     };
 
     // CVMixEnvelopeProcessorDesc
@@ -1833,97 +1921,27 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixParameterFloat             , m_outParamdBLevel                               , 0x38) // CVMixParameterFloat
     };
 
-    // CSosGroupActionSoundeventPrioritySchema
-    //   fields: 4
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionSoundeventPrioritySchema {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_priorityValue                                 , 0x8) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_priorityVolumeScalar                          , 0x10) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_priorityContributeButDontRead                 , 0x18) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(::CUtlString                    , m_bPriorityReadButDontContribute                , 0x20) // CUtlString [MPropertyFriendlyName]
-    };
-
-    // CVMixEffectChainProcessorDesc
-    //   fields: 2
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    class CVMixEffectChainProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixEffectChainDesc_t           , m_desc                                          , 0x28) // VMixEffectChainDesc_t
-        SCHEMA_FIELD(CVMixParameterEffectName        , m_paramEffectName                               , 0x30) // CVMixParameterEffectName
-    };
-
-    // CVMixSubmix
-    //   fields: 6
-    //   size: 0x38
-    //   @MGetKV3ClassDefaults
-    class CVMixSubmix {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
-        SCHEMA_FIELD(::CUtlString                    , m_SendNames                                     , 0x8) // CUtlString[4]
-        SCHEMA_FIELD(std::uint32_t                   , m_nSoloNameHash                                 , 0x2C) // uint32
-        SCHEMA_FIELD(std::int32_t                    , m_nChannels                                     , 0x30) // int32
-        SCHEMA_FIELD(VMixSendOperator_t              , m_nSendOperator                                 , 0x34) // VMixSendOperator_t [MPropertyFriendlyName]
-        SCHEMA_FIELD(VMixMixDownRule_t               , m_nMixDownRule                                  , 0x36) // VMixMixDownRule_t
-    };
-
-    // VMixDynamicsDesc_t
-    //   fields: 12
-    //   size: 0x30
-    //   @MGetKV3ClassDefaults
-    class VMixDynamicsDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_fldbGain                                      , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_fldbNoiseGateThreshold                        , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_fldbCompressionThreshold                      , 0x8) // float32
-        SCHEMA_FIELD(float                           , m_fldbLimiterThreshold                          , 0xC) // float32
-        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x10) // float32
-        SCHEMA_FIELD(float                           , m_flRatio                                       , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flLimiterRatio                                , 0x18) // float32
-        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x1C) // float32
-        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x20) // float32
-        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x24) // float32
-        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x28) // float32
-        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x2C) // bool
-    };
-
-    // CSosGroupActionTimeLimitSchema
+    // CVMixControlOutput
     //   fields: 1
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionTimeLimitSchema {
-    public:
-        SCHEMA_FIELD(float                           , m_flMaxDuration                                 , 0x8) // float32
-    };
-
-    // VMixPitchShiftDesc_t
-    //   fields: 4
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class VMixPitchShiftDesc_t {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nGrainSampleCount                             , 0x0) // int32
-        SCHEMA_FIELD(float                           , m_flPitchShift                                  , 0x4) // float32
-        SCHEMA_FIELD(std::int32_t                    , m_nQuality                                      , 0x8) // int32
-        SCHEMA_FIELD(std::int32_t                    , m_nProcType                                     , 0xC) // int32
-    };
-
-    // VMixUtilityDesc_t
-    //   fields: 6
     //   size: 0x18
     //   @MGetKV3ClassDefaults
-    class VMixUtilityDesc_t {
+    class CVMixControlOutput {
     public:
-        SCHEMA_FIELD(VMixChannelOperation_t          , m_nOp                                           , 0x0) // VMixChannelOperation_t [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flInputPan                                    , 0x4) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_flOutputBalance                               , 0x8) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(float                           , m_fldbOutputGain                                , 0xC) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
-        SCHEMA_FIELD(bool                            , m_bBassMono                                     , 0x10) // bool
-        SCHEMA_FIELD(float                           , m_flBassFreq                                    , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flDefaultValue                                , 0x10) // float32
+    };
+
+    // VMixFilterDesc_t
+    //   fields: 6
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    class VMixFilterDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_fldbGain                                      , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flCutoffFreq                                  , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flQ                                           , 0x8) // float32
+        SCHEMA_FIELD(VMixFilterType_t                , m_nFilterType                                   , 0xC) // VMixFilterType_t
+        SCHEMA_FIELD(VMixFilterSlope_t               , m_nFilterSlope                                  , 0xD) // VMixFilterSlope_t
+        SCHEMA_FIELD(bool                            , m_bEnabled                                      , 0xE) // bool
     };
 
     // KeyGroup_t
@@ -1938,236 +1956,32 @@ namespace soundsystem {
         SCHEMA_FIELD(VelocityZone_t*                 , pVelocityZones                                  , 0x8) // VelocityZone_t*
     };
 
-    // CVoiceContainerMultiBlender
-    //   fields: 3
-    //   size: 0xB0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerMultiBlender {
-    public:
-        SCHEMA_FIELD(CSoundContainerReferenceArray   , m_soundsToPlay                                  , 0x70) // CSoundContainerReferenceArray [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flBlendFactor                                 , 0xA8) // float32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flCrossover                                   , 0xAC) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerSelector
-    //   fields: 3
-    //   size: 0xE8
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerSelector {
-    public:
-        SCHEMA_FIELD(PlayBackMode_t                  , m_mode                                          , 0x70) // PlayBackMode_t [MPropertyFriendlyName]
-        SCHEMA_FIELD(CSoundContainerReferenceArray   , m_soundsToPlay                                  , 0x78) // CSoundContainerReferenceArray [MPropertyFriendlyName]
-        SCHEMA_FIELD(CUtlVector<float32>             , m_fProbabilityWeights                           , 0xB0) // CUtlVector<float32> [MPropertyFriendlyName]
-    };
-
-    // CVMixParameterFloat
-    //   fields: 1
-    //   size: 0x4
-    //   @MGetKV3ClassDefaults
-    class CVMixParameterFloat {
-    public:
-        SCHEMA_FIELD(CVMixDataOffset                 , m_offset                                        , 0x0) // CVMixDataOffset
-    };
-
-    // SndBeatEventKeyedSndEvts_t
-    //   fields: 1
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    class SndBeatEventKeyedSndEvts_t {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_strSoundEventName                             , 0x10) // CUtlString [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerLoopTrigger
-    //   fields: 5
-    //   size: 0xA0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerLoopTrigger {
-    public:
-        SCHEMA_FIELD(float                           , m_flRetriggerTimeMin                            , 0x70) // float32
-        SCHEMA_FIELD(float                           , m_flRetriggerTimeMax                            , 0x74) // float32
-        SCHEMA_FIELD(float                           , m_flFadeTime                                    , 0x78) // float32
-        SCHEMA_FIELD(bool                            , m_bCrossFade                                    , 0x7C) // bool
-        SCHEMA_FIELD(CSoundContainerReference        , m_sound                                         , 0x80) // CSoundContainerReference [MPropertyFriendlyName]
-    };
-
-    // CAudioSentence
-    //   fields: 4
-    //   size: 0xA0
-    //   @MGetKV3ClassDefaults
-    class CAudioSentence {
-    public:
-        SCHEMA_FIELD(bool                            , m_bShouldVoiceDuck                              , 0x0) // bool
-        SCHEMA_FIELD(CUtlVector<CAudioPhonemeTag>    , m_RunTimePhonemes                               , 0x8) // CUtlVector<CAudioPhonemeTag>
-        SCHEMA_FIELD(CUtlVector<CAudioEmphasisSample>, m_EmphasisSamples                               , 0x20) // CUtlVector<CAudioEmphasisSample>
-        SCHEMA_FIELD(CAudioMorphData                 , m_morphData                                     , 0x38) // CAudioMorphData
-    };
-
-    // CSosGroupActionSchema
-    //   fields: 0
-    //   size: 0x8
-    //   @MGetKV3ClassDefaults
-    class CSosGroupActionSchema {
-    public:
-    };
-
-    // CSndBeatTrack
-    //   fields: 5
-    //   size: 0x98
-    //   @MPropertyArrayElementNameKey
-    //   @MVDataOutlinerNameExpr
-    //   @MGetKV3ClassDefaults
-    class CSndBeatTrack {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(SndBeatTrackPlaybackType_t      , m_playbackType                                  , 0x20) // SndBeatTrackPlaybackType_t [MPropertyFriendlyName]
-        SCHEMA_FIELD(std::int32_t                    , m_nTranspose                                    , 0x24) // int32 [MPropertyFriendlyName]
-        SCHEMA_FIELD(bool                            , m_bSyncToVoice                                  , 0x28) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(float                           , m_flBPM                                         , 0x2C) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerSetElement
-    //   fields: 2
-    //   size: 0x28
-    //   @MGetKV3ClassDefaults
-    class CVoiceContainerSetElement {
-    public:
-        SCHEMA_FIELD(CSoundContainerReference        , m_sound                                         , 0x0) // CSoundContainerReference
-        SCHEMA_FIELD(float                           , m_flVolumeDB                                    , 0x20) // float32 [MPropertyFriendlyName]
-    };
-
-    // CVoiceContainerVsndRadioButton
-    //   fields: 17
-    //   size: 0x8F8
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerVsndRadioButton {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_namespace                                     , 0x70) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot1                                         , 0x78) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot2                                         , 0x100) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot3                                         , 0x188) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot4                                         , 0x210) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot5                                         , 0x298) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot6                                         , 0x320) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot7                                         , 0x3A8) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot8                                         , 0x430) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot9                                         , 0x4B8) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot10                                        , 0x540) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot11                                        , 0x5C8) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot12                                        , 0x650) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot13                                        , 0x6D8) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot14                                        , 0x760) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot15                                        , 0x7E8) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-        SCHEMA_FIELD(CVsndRadioButtonSlot            , m_slot16                                        , 0x870) // CVsndRadioButtonSlot [MPropertyFriendlyName]
-    };
-
-    // CVMixSteamAudioHybridReverbProcessorDesc
-    //   fields: 5
-    //   size: 0x40
-    //   @MGetKV3ClassDefaults
-    class CVMixSteamAudioHybridReverbProcessorDesc {
-    public:
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramReverbTimeLow                            , 0x28) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramReverbTimeMid                            , 0x2C) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramReverbTimeHigh                           , 0x30) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramBand                                     , 0x34) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixDataOffset                 , m_paramReverbTime                               , 0x38) // CVMixDataOffset
-    };
-
-    // CVMixControlOutput
-    //   fields: 1
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    class CVMixControlOutput {
-    public:
-        SCHEMA_FIELD(float                           , m_flDefaultValue                                , 0x10) // float32
-    };
-
-    // CVMixBaseGraphDescription
-    //   fields: 15
-    //   size: 0xD0
-    //   @MGetKV3ClassDefaults
-    class CVMixBaseGraphDescription {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString [MKV3TransferName]
-        SCHEMA_FIELD(std::int32_t                    , m_nGraphOutputChannels                          , 0x8) // int32
-        SCHEMA_FIELD(bool                            , m_bIsMainGraph                                  , 0xC) // bool
-        SCHEMA_FIELD(CUtlLeanVector<std::unique_ptr<CVMixBaseProcessorDesc>>, m_processorNodes                                , 0x10) // CUtlLeanVector<std::unique_ptr<CVMixBaseProcessorDesc>> [MKV3TransferName]
-        SCHEMA_FIELD(CUtlLeanVector<CVMixGraphInput> , m_graphInputs                                   , 0x20) // CUtlLeanVector<CVMixGraphInput>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixControlInput>, m_controlTransientInputs                        , 0x30) // CUtlLeanVector<CVMixControlInput>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixControlOutput>, m_controlOutputs                                , 0x40) // CUtlLeanVector<CVMixControlOutput>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixImpulseResponseInput>, m_impulseResponseInputs                         , 0x50) // CUtlLeanVector<CVMixImpulseResponseInput>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixCommand>    , m_mixCommands                                   , 0x60) // CUtlLeanVector<CVMixCommand> [MKV3TransferName]
-        SCHEMA_FIELD(CVMixHeap                       , m_heap                                          , 0x70) // CVMixHeap
-        SCHEMA_FIELD(CUtlLeanVector<CVMixAudioMeter> , m_audioMeters                                   , 0x80) // CUtlLeanVector<CVMixAudioMeter>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixControlMeter>, m_controlMeters                                 , 0x90) // CUtlLeanVector<CVMixControlMeter>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixNameInputMeter>, m_nameInputMeters                               , 0xA0) // CUtlLeanVector<CVMixNameInputMeter>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixAdditionalOutput>, m_additionalOutputs                             , 0xB0) // CUtlLeanVector<CVMixAdditionalOutput>
-        SCHEMA_FIELD(CUtlLeanVector<CVMixAutomaticControlInput>, m_automaticControlInputs                        , 0xC0) // CUtlLeanVector<CVMixAutomaticControlInput>
-    };
-
-    // CVMixGraphInput
-    //   fields: 1
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    class CVMixGraphInput {
-    public:
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nOffset                                       , 0x10) // CVMixDataOffset
-    };
-
-    // CVoiceContainerAnalysisBase
-    //   fields: 1
-    //   size: 0x48
-    //   @MGetKV3ClassDefaults
-    //   @MVDataNodeType
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerAnalysisBase {
-    public:
-        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve                                         , 0x8) // CPiecewiseCurve [MPropertyFriendlyName]
-    };
-
-    // VMixModDelayDesc_t
-    //   fields: 9
-    //   size: 0x30
-    //   @MGetKV3ClassDefaults
-    class VMixModDelayDesc_t {
-    public:
-        SCHEMA_FIELD(VMixFilterDesc_t                , m_feedbackFilter                                , 0x0) // VMixFilterDesc_t
-        SCHEMA_FIELD(bool                            , m_bPhaseInvert                                  , 0x10) // bool
-        SCHEMA_FIELD(float                           , m_flGlideTime                                   , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flDelay                                       , 0x18) // float32
-        SCHEMA_FIELD(float                           , m_flOutputGain                                  , 0x1C) // float32
-        SCHEMA_FIELD(float                           , m_flFeedbackGain                                , 0x20) // float32
-        SCHEMA_FIELD(float                           , m_flModRate                                     , 0x24) // float32
-        SCHEMA_FIELD(float                           , m_flModDepth                                    , 0x28) // float32
-        SCHEMA_FIELD(bool                            , m_bApplyAntialiasing                            , 0x2C) // bool
-    };
-
-    // CVMixShaperProcessorDesc
+    // CVMixPresetDSPProcessorDesc
     //   fields: 2
     //   size: 0x40
     //   @MGetKV3ClassDefaults
-    class CVMixShaperProcessorDesc {
+    class CVMixPresetDSPProcessorDesc {
     public:
-        SCHEMA_FIELD(VMixShaperDesc_t                , m_desc                                          , 0x28) // VMixShaperDesc_t
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDrive                                    , 0x3C) // CVMixParameterFloat
+        SCHEMA_FIELD(VMixPresetDSPDesc_t             , m_desc                                          , 0x28) // VMixPresetDSPDesc_t
+        SCHEMA_FIELD(CVMixParameterEffectName        , m_paramEffectName                               , 0x38) // CVMixParameterEffectName
     };
 
-    // CSoundInfoHeader
-    //   fields: 0
-    //   size: 0x1
+    // CVoiceContainerParameterBlender
+    //   fields: 8
+    //   size: 0x1C8
     //   @MGetKV3ClassDefaults
-    class CSoundInfoHeader {
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerParameterBlender {
     public:
+        SCHEMA_FIELD(CSoundContainerReference        , m_firstSound                                    , 0x78) // CSoundContainerReference [MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_secondSound                                   , 0x98) // CSoundContainerReference [MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnableOcclusionBlend                         , 0xB8) // bool [MPropertyStartGroup, MPropertyFriendlyName]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve1                                        , 0xC0) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve2                                        , 0x100) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnableDistanceBlend                          , 0x140) // bool [MPropertyStartGroup, MPropertyFriendlyName]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve3                                        , 0x148) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve4                                        , 0x188) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
     };
 
     // CSosSoundEventGroupSchema
@@ -2194,6 +2008,80 @@ namespace soundsystem {
         SCHEMA_FIELD(CUtlVector<CSosGroupActionSchema*>, m_vActions                                      , 0x58) // CUtlVector<CSosGroupActionSchema*> [MPropertyStartGroup, MPropertyAutoExpandSelf]
     };
 
+    // VMixDynamicsDesc_t
+    //   fields: 12
+    //   size: 0x30
+    //   @MGetKV3ClassDefaults
+    class VMixDynamicsDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_fldbGain                                      , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_fldbNoiseGateThreshold                        , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_fldbCompressionThreshold                      , 0x8) // float32
+        SCHEMA_FIELD(float                           , m_fldbLimiterThreshold                          , 0xC) // float32
+        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x10) // float32
+        SCHEMA_FIELD(float                           , m_flRatio                                       , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flLimiterRatio                                , 0x18) // float32
+        SCHEMA_FIELD(float                           , m_flAttackTimeMS                                , 0x1C) // float32
+        SCHEMA_FIELD(float                           , m_flReleaseTimeMS                               , 0x20) // float32
+        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x24) // float32
+        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x28) // float32
+        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0x2C) // bool
+    };
+
+    // CVsndRadioButtonSlot
+    //   fields: 10
+    //   size: 0x88
+    //   @MGetKV3ClassDefaults
+    class CVsndRadioButtonSlot {
+    public:
+        SCHEMA_FIELD(bool                            , m_bEnableVsnd                                   , 0x0) // bool [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_vsnd                                          , 0x8) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnableEndcap                                 , 0x28) // bool [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_endcapVsnd                                    , 0x30) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnableLoopcap                                , 0x50) // bool [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_loopcapVsnd                                   , 0x58) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(std::int32_t                    , m_group                                         , 0x78) // int32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_volume                                        , 0x7C) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fadeOut                                       , 0x80) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(EVsndPlaybackMode               , m_mode                                          , 0x84) // EVsndPlaybackMode [MPropertyFriendlyName]
+    };
+
+    // VMixPlateverbDesc_t
+    //   fields: 7
+    //   size: 0x1C
+    //   @MGetKV3ClassDefaults
+    class VMixPlateverbDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_flPrefilter                                   , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flInputDiffusion1                             , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flInputDiffusion2                             , 0x8) // float32
+        SCHEMA_FIELD(float                           , m_flDecay                                       , 0xC) // float32
+        SCHEMA_FIELD(float                           , m_flDamp                                        , 0x10) // float32
+        SCHEMA_FIELD(float                           , m_flFeedbackDiffusion1                          , 0x14) // float32
+        SCHEMA_FIELD(float                           , m_flFeedbackDiffusion2                          , 0x18) // float32
+    };
+
+    // CVMixDynamicsProcessorDesc
+    //   fields: 3
+    //   size: 0x60
+    //   @MGetKV3ClassDefaults
+    class CVMixDynamicsProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixDynamicsDesc_t              , m_desc                                          , 0x28) // VMixDynamicsDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamLevel                                 , 0x58) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_outParamdBLevel                               , 0x5C) // CVMixParameterFloat
+    };
+
+    // CAudioEmphasisSample
+    //   fields: 2
+    //   size: 0x8
+    //   @MGetKV3ClassDefaults
+    class CAudioEmphasisSample {
+    public:
+        SCHEMA_FIELD(float                           , m_flTime                                        , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flValue                                       , 0x4) // float32
+    };
+
     // CVMixDualCompressorProcessorDesc
     //   fields: 4
     //   size: 0x68
@@ -2206,13 +2094,68 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixParameterFloat             , m_outParamReduction                             , 0x64) // CVMixParameterFloat
     };
 
-    // CVMixDynamics3BandProcessorDesc
-    //   fields: 1
-    //   size: 0xB8
+    // CVoiceContainerGenerator
+    //   fields: 0
+    //   size: 0x78
     //   @MGetKV3ClassDefaults
-    class CVMixDynamics3BandProcessorDesc {
+    class CVoiceContainerGenerator {
     public:
-        SCHEMA_FIELD(VMixDynamics3BandDesc_t         , m_desc                                          , 0x28) // VMixDynamics3BandDesc_t
+    };
+
+    // ISndSeqInstruments
+    //   fields: 0
+    //   size: 0x8
+    class ISndSeqInstruments {
+    public:
+    };
+
+    // CVoiceContainerAnalysisBase
+    //   fields: 1
+    //   size: 0x48
+    //   @MGetKV3ClassDefaults
+    //   @MVDataNodeType
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerAnalysisBase {
+    public:
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_curve                                         , 0x8) // CPiecewiseCurve [MPropertyFriendlyName]
+    };
+
+    // CSosGroupActionSoundeventCountSchema
+    //   fields: 2
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    class CSosGroupActionSoundeventCountSchema {
+    public:
+        SCHEMA_FIELD(bool                            , m_bExcludeStoppedSounds                         , 0x8) // bool [MPropertyFriendlyName]
+        SCHEMA_FIELD(::CUtlString                    , m_strCountKeyName                               , 0x10) // CUtlString [MPropertyFriendlyName]
+    };
+
+    // CVoiceContainerNull
+    //   fields: 0
+    //   size: 0x78
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerNull {
+    public:
+    };
+
+    // VMixConvolutionDesc_t
+    //   fields: 8
+    //   size: 0x20
+    //   @MGetKV3ClassDefaults
+    class VMixConvolutionDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_fldbGain                                      , 0x0) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_flPreDelayMS                                  , 0x4) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x8) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fldbLow                                       , 0xC) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_fldbMid                                       , 0x10) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_fldbHigh                                      , 0x14) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_flLowCutoffFreq                               , 0x18) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flHighCutoffFreq                              , 0x1C) // float32 [MPropertyFriendlyName]
     };
 
     // CVMixVocoderProcessorDesc
@@ -2225,226 +2168,24 @@ namespace soundsystem {
         SCHEMA_FIELD(CVMixParameterFloat             , m_paramBandwidth                                , 0x50) // CVMixParameterFloat
     };
 
-    // CVMixRuntimeGraph
-    //   fields: 5
-    //   size: 0x128
-    //   @MGetKV3ClassDefaults
-    class CVMixRuntimeGraph {
-    public:
-        SCHEMA_FIELD(CUtlLeanVector<CVMixSubmix>     , m_submixes                                      , 0xD0) // CUtlLeanVector<CVMixSubmix> [MKV3TransferName]
-        SCHEMA_FIELD(CUtlLeanVector<uint64>          , m_impulseResponseValues                         , 0xE0) // CUtlLeanVector<uint64>
-        SCHEMA_FIELD(KeyValues3                      , m_inputDefaultValues                            , 0xF0) // KeyValues3
-        SCHEMA_FIELD(KeyValues3                      , m_sources                                       , 0x100) // KeyValues3
-        SCHEMA_FIELD(CUtlVector<VMixPointerFixupEntry_t>, m_fixups                                        , 0x110) // CUtlVector<VMixPointerFixupEntry_t>
-    };
-
-    // CVMixPlateReverbProcessorDesc
-    //   fields: 1
-    //   size: 0x48
-    //   @MGetKV3ClassDefaults
-    class CVMixPlateReverbProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixPlateverbDesc_t             , m_desc                                          , 0x28) // VMixPlateverbDesc_t
-    };
-
-    // VMixFilterDesc_t
-    //   fields: 6
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class VMixFilterDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_fldbGain                                      , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flCutoffFreq                                  , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flQ                                           , 0x8) // float32
-        SCHEMA_FIELD(VMixFilterType_t                , m_nFilterType                                   , 0xC) // VMixFilterType_t
-        SCHEMA_FIELD(VMixFilterSlope_t               , m_nFilterSlope                                  , 0xD) // VMixFilterSlope_t
-        SCHEMA_FIELD(bool                            , m_bEnabled                                      , 0xE) // bool
-    };
-
-    // CVMixAutomaticControlInput
-    //   fields: 3
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    class CVMixAutomaticControlInput {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
-        SCHEMA_FIELD(std::int32_t                    , m_nGraphInputIndex                              , 0xC) // int32
-        SCHEMA_FIELD(VMixAutoControlType_t           , m_nControlType                                  , 0x10) // VMixAutoControlType_t
-    };
-
-    // CVoiceContainerNull
-    //   fields: 0
-    //   size: 0x70
+    // CSndSeqInstMidiSampler
+    //   fields: 11
+    //   size: 0xE0
     //   @MGetKV3ClassDefaults
     //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerNull {
+    class CSndSeqInstMidiSampler {
     public:
-    };
-
-    // CVMixNameInputMeter
-    //   fields: 1
-    //   size: 0x18
-    //   @MGetKV3ClassDefaults
-    class CVMixNameInputMeter {
-    public:
-        SCHEMA_FIELD(CVMixDataOffset                 , m_nValueIndex                                   , 0x10) // CVMixDataOffset
-    };
-
-    // VMixDiffusorDesc_t
-    //   fields: 4
-    //   size: 0x10
-    //   @MGetKV3ClassDefaults
-    class VMixDiffusorDesc_t {
-    public:
-        SCHEMA_FIELD(float                           , m_flSize                                        , 0x0) // float32
-        SCHEMA_FIELD(float                           , m_flComplexity                                  , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flFeedback                                    , 0x8) // float32
-        SCHEMA_FIELD(float                           , m_flOutputGain                                  , 0xC) // float32
-    };
-
-    // CVMixSubgraphSwitchProcessorDesc
-    //   fields: 3
-    //   size: 0x68
-    //   @MGetKV3ClassDefaults
-    class CVMixSubgraphSwitchProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixSubgraphSwitchDesc_t        , m_desc                                          , 0x28) // VMixSubgraphSwitchDesc_t
-        SCHEMA_FIELD(CVMixParameterEffectName        , m_paramEffectName                               , 0x60) // CVMixParameterEffectName
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramSelectionIndex                           , 0x64) // CVMixParameterFloat
-    };
-
-    // CSubmix
-    //   fields: 0
-    //   size: 0x50
-    //   @MGetKV3ClassDefaults
-    class CSubmix {
-    public:
-    };
-
-    // SosEditItemInfo_t
-    //   fields: 5
-    //   size: 0x30
-    //   @MGetKV3ClassDefaults
-    class SosEditItemInfo_t {
-    public:
-        SCHEMA_FIELD(SosEditItemType_t               , itemType                                        , 0x0) // SosEditItemType_t
-        SCHEMA_FIELD(::CUtlString                    , itemName                                        , 0x8) // CUtlString
-        SCHEMA_FIELD(::CUtlString                    , itemTypeName                                    , 0x10) // CUtlString
-        SCHEMA_FIELD(::CUtlString                    , itemKVString                                    , 0x20) // CUtlString
-        SCHEMA_FIELD(::Vector2D                      , itemPos                                         , 0x28) // Vector2D
-    };
-
-    // CVoiceContainerRealtimeFMSineWave
-    //   fields: 3
-    //   size: 0x80
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerRealtimeFMSineWave {
-    public:
-        SCHEMA_FIELD(float                           , m_flCarrierFrequency                            , 0x70) // float32 [MPropertyFriendlyName, MPropertyDescription]
-        SCHEMA_FIELD(float                           , m_flModulatorFrequency                          , 0x74) // float32 [MPropertyFriendlyName, MPropertyDescription]
-        SCHEMA_FIELD(float                           , m_flModulatorAmount                             , 0x78) // float32 [MPropertyFriendlyName, MPropertyDescription]
-    };
-
-    // CVMixStereoDelayProcessorDesc
-    //   fields: 2
-    //   size: 0x30
-    //   @MGetKV3ClassDefaults
-    class CVMixStereoDelayProcessorDesc {
-    public:
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayLeft                                , 0x28) // CVMixParameterFloat
-        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelayRight                               , 0x2C) // CVMixParameterFloat
-    };
-
-    // CVMixBoxverbProcessorDesc
-    //   fields: 1
-    //   size: 0x78
-    //   @MGetKV3ClassDefaults
-    class CVMixBoxverbProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixBoxverbDesc_t               , m_desc                                          , 0x28) // VMixBoxverbDesc_t
-    };
-
-    // CVoiceContainerStaticAdditiveSynth
-    //   fields: 1
-    //   size: 0xB0
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerStaticAdditiveSynth {
-    public:
-        SCHEMA_FIELD(CUtlVector<CVoiceContainerStaticAdditiveSynth_CTone>, m_tones                                         , 0x80) // CUtlVector<CVoiceContainerStaticAdditiveSynth::CTone>
-    };
-
-    // CSoundContainerReference
-    //   fields: 4
-    //   size: 0x20
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CSoundContainerReference {
-    public:
-        SCHEMA_FIELD(::CUtlString                    , m_namespace                                     , 0x0) // CUtlString
-        SCHEMA_FIELD(bool                            , m_bUseReference                                 , 0x8) // bool [MPropertyFriendlyName]
-        SCHEMA_FIELD(CStrongHandle<InfoForResourceTypeCVoiceContainerBase>, m_sound                                         , 0x10) // CStrongHandle<InfoForResourceTypeCVoiceContainerBase> [MPropertySuppressExpr, MPropertyFriendlyName]
-        SCHEMA_FIELD(CVoiceContainerBase*            , m_pSound                                        , 0x18) // CVoiceContainerBase* [MPropertySuppressExpr, MPropertyFriendlyName]
-    };
-
-    // VMixPointerFixupEntry_t
-    //   fields: 2
-    //   size: 0x8
-    //   @MGetKV3ClassDefaults
-    class VMixPointerFixupEntry_t {
-    public:
-        SCHEMA_FIELD(std::uint32_t                   , m_nIndex                                        , 0x0) // uint32
-        SCHEMA_FIELD(CVMixDataOffset                 , m_offset                                        , 0x4) // CVMixDataOffset
-    };
-
-    // CVMixUtilityProcessorDesc
-    //   fields: 1
-    //   size: 0x40
-    //   @MGetKV3ClassDefaults
-    class CVMixUtilityProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixUtilityDesc_t               , m_desc                                          , 0x28) // VMixUtilityDesc_t
-    };
-
-    // CVoiceContainerDecayingSineWave
-    //   fields: 2
-    //   size: 0x78
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    //   @MPropertyDescription
-    class CVoiceContainerDecayingSineWave {
-    public:
-        SCHEMA_FIELD(float                           , m_flFrequency                                   , 0x70) // float32 [MPropertyFriendlyName, MPropertyDescription]
-        SCHEMA_FIELD(float                           , m_flDecayTime                                   , 0x74) // float32 [MPropertyFriendlyName, MPropertyDescription]
-    };
-
-    // CSosGroupActionSetSoundeventParameterSchema
-    //   fields: 5
-    //   size: 0x28
-    //   @MGetKV3ClassDefaults
-    //   @MPropertyFriendlyName
-    class CSosGroupActionSetSoundeventParameterSchema {
-    public:
-        SCHEMA_FIELD(std::int32_t                    , m_nMaxCount                                     , 0x8) // int32
-        SCHEMA_FIELD(float                           , m_flMinValue                                    , 0xC) // float32
-        SCHEMA_FIELD(float                           , m_flMaxValue                                    , 0x10) // float32
-        SCHEMA_FIELD(::CUtlString                    , m_opvarName                                     , 0x18) // CUtlString [MPropertyFriendlyName]
-        SCHEMA_FIELD(SosActionSetParamSortType_t     , m_nSortType                                     , 0x20) // SosActionSetParamSortType_t
-    };
-
-    // CVMixPresetDSPProcessorDesc
-    //   fields: 2
-    //   size: 0x40
-    //   @MGetKV3ClassDefaults
-    class CVMixPresetDSPProcessorDesc {
-    public:
-        SCHEMA_FIELD(VMixPresetDSPDesc_t             , m_desc                                          , 0x28) // VMixPresetDSPDesc_t
-        SCHEMA_FIELD(CVMixParameterEffectName        , m_paramEffectName                               , 0x38) // CVMixParameterEffectName
+        SCHEMA_FIELD(bool                            , m_bIsSoundEvent                                 , 0x20) // bool
+        SCHEMA_FIELD(bool                            , m_bStopPrevious                                 , 0x21) // bool
+        SCHEMA_FIELD(std::uint8_t                    , m_nMinNote                                      , 0x22) // uint8
+        SCHEMA_FIELD(std::uint8_t                    , m_nMaxNote                                      , 0x23) // uint8
+        SCHEMA_FIELD(float                           , m_flMinVelocityAtten                            , 0x24) // float32
+        SCHEMA_FIELD(float                           , m_flMaxVelocityAtten                            , 0x28) // float32
+        SCHEMA_FIELD(float                           , m_flAttack                                      , 0x2C) // float32
+        SCHEMA_FIELD(float                           , m_flRelease                                     , 0x30) // float32
+        SCHEMA_FIELD(bool                            , m_bBeatEnvelopes                                , 0x34) // bool
+        SCHEMA_FIELD(std::uint8_t                    , m_nNextVoiceSlot                                , 0xD4) // uint8
+        SCHEMA_FIELD(std::uint32_t                   , m_hSoundEventHash                               , 0xD8) // uint32
     };
 
     // CSosGroupActionSoundeventMinMaxValuesSchema
@@ -2466,43 +2207,311 @@ namespace soundsystem {
         SCHEMA_FIELD(::CUtlString                    , m_strMaxValueName                               , 0x30) // CUtlString [MPropertyFriendlyName]
     };
 
+    // CVMixCommand
+    //   fields: 8
+    //   size: 0x20
+    //   @MGetKV3ClassDefaults
+    class CVMixCommand {
+    public:
+        SCHEMA_FIELD(VMixGraphCommandID_t            , m_nCommand                                      , 0x0) // VMixGraphCommandID_t [MKV3TransferName]
+        SCHEMA_FIELD(std::uint32_t                   , m_nParameterNameHash                            , 0x4) // uint32 [MKV3TransferName]
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nOutputSubmix                                 , 0x8) // CVMixDataOffset [MKV3TransferName]
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputSubmix0                                 , 0xC) // CVMixDataOffset [MKV3TransferName]
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputSubmix1                                 , 0x10) // CVMixDataOffset [MKV3TransferName]
+        SCHEMA_FIELD(std::int32_t                    , m_nProcessor                                    , 0x14) // int32 [MKV3TransferName]
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputValue0                                  , 0x18) // CVMixDataOffset
+        SCHEMA_FIELD(CVMixDataOffset                 , m_nInputValue1                                  , 0x1C) // CVMixDataOffset
+    };
+
+    // VMixUtilityDesc_t
+    //   fields: 6
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class VMixUtilityDesc_t {
+    public:
+        SCHEMA_FIELD(VMixChannelOperation_t          , m_nOp                                           , 0x0) // VMixChannelOperation_t [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_flInputPan                                    , 0x4) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_flOutputBalance                               , 0x8) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(float                           , m_fldbOutputGain                                , 0xC) // float32 [MPropertyFriendlyName, MPropertyAttributeRange]
+        SCHEMA_FIELD(bool                            , m_bBassMono                                     , 0x10) // bool
+        SCHEMA_FIELD(float                           , m_flBassFreq                                    , 0x14) // float32
+    };
+
+    // SndBeatEventKeys_t
+    //   fields: 1
+    //   size: 0x10
+    //   @MGetKV3ClassDefaults
+    //   @MVDataNodeType
+    class SndBeatEventKeys_t {
+    public:
+        SCHEMA_FIELD(float                           , m_flKey                                         , 0x8) // float32 [MPropertyFriendlyName]
+    };
+
+    // CVMixSubgraphSwitchProcessorDesc
+    //   fields: 3
+    //   size: 0x68
+    //   @MGetKV3ClassDefaults
+    class CVMixSubgraphSwitchProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixSubgraphSwitchDesc_t        , m_desc                                          , 0x28) // VMixSubgraphSwitchDesc_t
+        SCHEMA_FIELD(CVMixParameterEffectName        , m_paramEffectName                               , 0x60) // CVMixParameterEffectName
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramSelectionIndex                           , 0x64) // CVMixParameterFloat
+    };
+
+    // CVsndTriggerSlot
+    //   fields: 9
+    //   size: 0x88
+    //   @MGetKV3ClassDefaults
+    class CVsndTriggerSlot {
+    public:
+        SCHEMA_FIELD(bool                            , m_bEnableVsnd                                   , 0x0) // bool [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_vsnd                                          , 0x8) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnableEndcap                                 , 0x28) // bool [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_endcapVsnd                                    , 0x30) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bEnableLoopcap                                , 0x50) // bool [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(CSoundContainerReference        , m_loopcapVsnd                                   , 0x58) // CSoundContainerReference [MPropertyGroupName, MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_volume                                        , 0x78) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(float                           , m_fadeOut                                       , 0x7C) // float32 [MPropertyFriendlyName]
+        SCHEMA_FIELD(EVsndTriggerMode                , m_mode                                          , 0x80) // EVsndTriggerMode [MPropertyFriendlyName]
+    };
+
+    // CVoiceContainerRandomSampler
+    //   fields: 6
+    //   size: 0x1B0
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerRandomSampler {
+    public:
+        SCHEMA_FIELD(float                           , m_flAmplitude                                   , 0x88) // float32
+        SCHEMA_FIELD(float                           , m_flAmplitudeJitter                             , 0x8C) // float32
+        SCHEMA_FIELD(float                           , m_flTimeJitter                                  , 0x90) // float32
+        SCHEMA_FIELD(float                           , m_flMaxLength                                   , 0x94) // float32
+        SCHEMA_FIELD(std::int32_t                    , m_nNumDelayVariations                           , 0x98) // int32
+        SCHEMA_FIELD(CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>>, m_grainResources                                , 0xA0) // CUtlVector<CStrongHandle<InfoForResourceTypeCVoiceContainerBase>>
+    };
+
+    // CVoiceContainerBase
+    //   fields: 4
+    //   size: 0x78
+    //   @MGetKV3ClassDefaults
+    //   @MVDataNodeType
+    //   @MVDataFileExtension
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerBase {
+    public:
+        SCHEMA_FIELD(bool                            , m_bRegisteredVMix                               , 0x10) // bool
+        SCHEMA_FIELD(CUtlStringToken                 , m_nResourceName                                 , 0x14) // CUtlStringToken
+        SCHEMA_FIELD(CVSound                         , m_vSound                                        , 0x30) // CVSound [MPropertySuppressField]
+        SCHEMA_FIELD(CVoiceContainerAnalysisBase*    , m_pEnvelopeAnalyzer                             , 0x70) // CVoiceContainerAnalysisBase* [MPropertySuppressExpr]
+    };
+
     // CVoiceContainerTapePlayer
     //   fields: 4
-    //   size: 0xD0
+    //   size: 0xD8
     //   @MGetKV3ClassDefaults
     //   @MPropertyFriendlyName
     class CVoiceContainerTapePlayer {
     public:
-        SCHEMA_FIELD(bool                            , m_bShouldWraparound                             , 0x80) // bool
-        SCHEMA_FIELD(CStrongHandle<InfoForResourceTypeCVoiceContainerBase>, m_sourceAudio                                   , 0x88) // CStrongHandle<InfoForResourceTypeCVoiceContainerBase>
-        SCHEMA_FIELD(float                           , m_flTapeSpeedAttackTime                         , 0x90) // float32
-        SCHEMA_FIELD(float                           , m_flTapeSpeedReleaseTime                        , 0x94) // float32
+        SCHEMA_FIELD(bool                            , m_bShouldWraparound                             , 0x88) // bool
+        SCHEMA_FIELD(CStrongHandle<InfoForResourceTypeCVoiceContainerBase>, m_sourceAudio                                   , 0x90) // CStrongHandle<InfoForResourceTypeCVoiceContainerBase>
+        SCHEMA_FIELD(float                           , m_flTapeSpeedAttackTime                         , 0x98) // float32
+        SCHEMA_FIELD(float                           , m_flTapeSpeedReleaseTime                        , 0x9C) // float32
     };
 
-    // CVMixDiffusorProcessorDesc
-    //   fields: 1
+    // VMixSubgraphSwitchDesc_t
+    //   fields: 6
     //   size: 0x38
     //   @MGetKV3ClassDefaults
-    class CVMixDiffusorProcessorDesc {
+    class VMixSubgraphSwitchDesc_t {
     public:
-        SCHEMA_FIELD(VMixDiffusorDesc_t              , m_desc                                          , 0x28) // VMixDiffusorDesc_t
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
+        SCHEMA_FIELD(::CUtlString                    , m_effectName                                    , 0x8) // CUtlString
+        SCHEMA_FIELD(CUtlVector<CUtlString>          , m_subgraphs                                     , 0x10) // CUtlVector<CUtlString>
+        SCHEMA_FIELD(VMixSubgraphSwitchInterpolationType_t, m_interpolationMode                             , 0x28) // VMixSubgraphSwitchInterpolationType_t
+        SCHEMA_FIELD(bool                            , m_bOnlyTailsOnFadeOut                           , 0x2C) // bool
+        SCHEMA_FIELD(float                           , m_flInterpolationTime                           , 0x30) // float32
     };
 
-    // VMixFlangerDesc_t
-    //   fields: 9
-    //   size: 0x24
+    // CVMixAudioMeter
+    //   fields: 3
+    //   size: 0x18
     //   @MGetKV3ClassDefaults
-    class VMixFlangerDesc_t {
+    class CVMixAudioMeter {
     public:
-        SCHEMA_FIELD(bool                            , m_bPhaseInvert                                  , 0x0) // bool
-        SCHEMA_FIELD(float                           , m_flGlideTime                                   , 0x4) // float32
-        SCHEMA_FIELD(float                           , m_flDelay                                       , 0x8) // float32
-        SCHEMA_FIELD(float                           , m_flOutputGain                                  , 0xC) // float32
-        SCHEMA_FIELD(float                           , m_flFeedbackGain                                , 0x10) // float32
-        SCHEMA_FIELD(float                           , m_flFeedforwardGain                             , 0x14) // float32
-        SCHEMA_FIELD(float                           , m_flModRate                                     , 0x18) // float32
-        SCHEMA_FIELD(float                           , m_flModDepth                                    , 0x1C) // float32
-        SCHEMA_FIELD(bool                            , m_bApplyAntialiasing                            , 0x20) // bool
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
+        SCHEMA_FIELD(::CUtlString                    , m_displayName                                   , 0x8) // CUtlString
+        SCHEMA_FIELD(std::uint32_t                   , m_nDebugId                                      , 0x10) // uint32
+    };
+
+    // SndBeatEventKeyedMidiNotes_t
+    //   fields: 3
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class SndBeatEventKeyedMidiNotes_t {
+    public:
+        SCHEMA_FIELD(std::uint8_t                    , m_nStatus                                       , 0x10) // uint8 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::uint8_t                    , m_nNote                                         , 0x11) // uint8 [MPropertyFriendlyName]
+        SCHEMA_FIELD(std::uint8_t                    , m_nVelocity                                     , 0x12) // uint8 [MPropertyFriendlyName]
+    };
+
+    // SndBeatEventKeyedSndEvts_t
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class SndBeatEventKeyedSndEvts_t {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_strSoundEventName                             , 0x10) // CUtlString [MPropertyFriendlyName]
+    };
+
+    // CVoiceContainerShapedNoise
+    //   fields: 9
+    //   size: 0x150
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerShapedNoise {
+    public:
+        SCHEMA_FIELD(bool                            , m_bUseCurveForFrequency                         , 0x78) // bool
+        SCHEMA_FIELD(float                           , m_flFrequency                                   , 0x7C) // float32 [MPropertySuppressExpr]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_frequencySweep                                , 0x80) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bUseCurveForResonance                         , 0xC0) // bool
+        SCHEMA_FIELD(float                           , m_flResonance                                   , 0xC4) // float32 [MPropertySuppressExpr]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_resonanceSweep                                , 0xC8) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
+        SCHEMA_FIELD(bool                            , m_bUseCurveForAmplitude                         , 0x108) // bool
+        SCHEMA_FIELD(float                           , m_flGainInDecibels                              , 0x10C) // float32 [MPropertySuppressExpr]
+        SCHEMA_FIELD(CPiecewiseCurve                 , m_gainSweep                                     , 0x110) // CPiecewiseCurve [MPropertySuppressExpr, MPropertyFriendlyName]
+    };
+
+    // VMixDualCompressorDesc_t
+    //   fields: 5
+    //   size: 0x34
+    //   @MGetKV3ClassDefaults
+    class VMixDualCompressorDesc_t {
+    public:
+        SCHEMA_FIELD(float                           , m_flRMSTimeMS                                   , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_fldbKneeWidth                                 , 0x4) // float32
+        SCHEMA_FIELD(float                           , m_flWetMix                                      , 0x8) // float32
+        SCHEMA_FIELD(bool                            , m_bPeakMode                                     , 0xC) // bool
+        SCHEMA_FIELD(VMixDynamicsBand_t              , m_bandDesc                                      , 0x10) // VMixDynamicsBand_t
+    };
+
+    // CAudioPhonemeTag
+    //   fields: 3
+    //   size: 0xC
+    //   @MGetKV3ClassDefaults
+    class CAudioPhonemeTag {
+    public:
+        SCHEMA_FIELD(float                           , m_flStartTime                                   , 0x0) // float32
+        SCHEMA_FIELD(float                           , m_flEndTime                                     , 0x4) // float32
+        SCHEMA_FIELD(std::int32_t                    , m_nPhonemeCode                                  , 0x8) // int32
+    };
+
+    // CVoiceContainerVsndTrigger
+    //   fields: 17
+    //   size: 0x900
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerVsndTrigger {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_namespace                                     , 0x78) // CUtlString [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot1                                         , 0x80) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot2                                         , 0x108) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot3                                         , 0x190) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot4                                         , 0x218) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot5                                         , 0x2A0) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot6                                         , 0x328) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot7                                         , 0x3B0) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot8                                         , 0x438) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot9                                         , 0x4C0) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot10                                        , 0x548) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot11                                        , 0x5D0) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot12                                        , 0x658) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot13                                        , 0x6E0) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot14                                        , 0x768) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot15                                        , 0x7F0) // CVsndTriggerSlot [MPropertyFriendlyName]
+        SCHEMA_FIELD(CVsndTriggerSlot                , m_slot16                                        , 0x878) // CVsndTriggerSlot [MPropertyFriendlyName]
+    };
+
+    // CVMixVsndInput
+    //   fields: 1
+    //   size: 0x18
+    //   @MGetKV3ClassDefaults
+    class CVMixVsndInput {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_defaultValue                                  , 0x0) // CUtlString
+    };
+
+    // CVMixDelayProcessorDesc
+    //   fields: 3
+    //   size: 0x58
+    //   @MGetKV3ClassDefaults
+    class CVMixDelayProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixDelayDesc_t                 , m_desc                                          , 0x28) // VMixDelayDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramCutoffFrequency                          , 0x50) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramDelay                                    , 0x54) // CVMixParameterFloat
+    };
+
+    // CVMixBoxverbProcessorDesc
+    //   fields: 1
+    //   size: 0x78
+    //   @MGetKV3ClassDefaults
+    class CVMixBoxverbProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixBoxverbDesc_t               , m_desc                                          , 0x28) // VMixBoxverbDesc_t
+    };
+
+    // CVoiceContainerStaticAdditiveSynth
+    //   fields: 1
+    //   size: 0xB8
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerStaticAdditiveSynth {
+    public:
+        SCHEMA_FIELD(CUtlVector<CVoiceContainerStaticAdditiveSynth_CTone>, m_tones                                         , 0x88) // CUtlVector<CVoiceContainerStaticAdditiveSynth::CTone>
+    };
+
+    // CVoiceContainerRealtimeFMSineWave
+    //   fields: 3
+    //   size: 0x88
+    //   @MGetKV3ClassDefaults
+    //   @MPropertyFriendlyName
+    //   @MPropertyDescription
+    class CVoiceContainerRealtimeFMSineWave {
+    public:
+        SCHEMA_FIELD(float                           , m_flCarrierFrequency                            , 0x78) // float32 [MPropertyFriendlyName, MPropertyDescription]
+        SCHEMA_FIELD(float                           , m_flModulatorFrequency                          , 0x7C) // float32 [MPropertyFriendlyName, MPropertyDescription]
+        SCHEMA_FIELD(float                           , m_flModulatorAmount                             , 0x80) // float32 [MPropertyFriendlyName, MPropertyDescription]
+    };
+
+    // CVMixSubmix
+    //   fields: 7
+    //   size: 0x38
+    //   @MGetKV3ClassDefaults
+    class CVMixSubmix {
+    public:
+        SCHEMA_FIELD(::CUtlString                    , m_name                                          , 0x0) // CUtlString
+        SCHEMA_FIELD(::CUtlString                    , m_SendNames                                     , 0x8) // CUtlString[4]
+        SCHEMA_FIELD(std::uint32_t                   , m_nSoloNameHash                                 , 0x2C) // uint32
+        SCHEMA_FIELD(std::int32_t                    , m_nChannels                                     , 0x30) // int32
+        SCHEMA_FIELD(VMixSendOperator_t              , m_nSendOperator                                 , 0x34) // VMixSendOperator_t [MPropertyFriendlyName]
+        SCHEMA_FIELD(VMixMixDownRule_t               , m_nMixDownRule                                  , 0x36) // VMixMixDownRule_t
+        SCHEMA_FIELD(VMixUpMixRule_t                 , m_nUpMixRule                                    , 0x37) // VMixUpMixRule_t
+    };
+
+    // CVMixOscProcessorDesc
+    //   fields: 3
+    //   size: 0x40
+    //   @MGetKV3ClassDefaults
+    class CVMixOscProcessorDesc {
+    public:
+        SCHEMA_FIELD(VMixOscDesc_t                   , m_desc                                          , 0x28) // VMixOscDesc_t
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramFrequency                                , 0x34) // CVMixParameterFloat
+        SCHEMA_FIELD(CVMixParameterFloat             , m_paramPhase                                    , 0x38) // CVMixParameterFloat
     };
 
 } // namespace soundsystem

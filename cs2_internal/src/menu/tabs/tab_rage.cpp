@@ -382,7 +382,15 @@ namespace menu::group
 				e_unshadow = e;
 			}
 
-			ADD_INLINE("Autostop", MAKE_RUNTIME(id + XOR("autostop"), checkbox, cfg.weapon_config.autostop[(int)grp]), e_unshadow);
+			// [mdbg] 创建探针：记录每个组/武器页 autostop 复选框的真实控件 id
+				{
+					char b[256];
+					sprintf_s(b, sizeof(b), "Fatality: [auto-new] grp=%u id=%016llX\n",
+						grp, static_cast<unsigned long long>(hash(id + XOR("autostop"))));
+					OutputDebugStringA(b);
+				}
+
+				ADD_INLINE("Autostop", MAKE_RUNTIME(id + XOR("autostop"), checkbox, cfg.weapon_config.autostop[(int)grp]), e_unshadow);
 		}
 
 		const auto should_add_autoscope = util::in_array(grp, {
@@ -449,10 +457,10 @@ namespace menu::group
 
 		ADD_RUNTIME("Ignore limbs on moving", id + XOR("ignore limbs on moving"), checkbox, cfg.weapon_config.ignore_limbs[(int)grp]);
 
-		/*if (util::in_array(grp, {general_id, group_id + 7, WEAPON_SSG08}))
+		if (util::in_array(grp, {general_id, group_id + 7, WEAPON_SSG08}))
 			ADD_RUNTIME("Jumpscout", id + XOR("jumpscout"), checkbox, cfg.weapon_config.scout_jumpshot[(int)grp]);
 		if (util::in_array(grp, {general_id, group_id + 2, WEAPON_REVOLVER}))
-			ADD_RUNTIME("Autorevolver", id + XOR("autorevolver"), checkbox, cfg.weapon_config.autorevolver[(int)grp]);*/
+			ADD_RUNTIME("Autorevolver", id + XOR("autorevolver"), checkbox, cfg.weapon_config.autorevolver[(int)grp]);
 
 		//VIRTUALIZER_TIGER_WHITE_END;
 	}

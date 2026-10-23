@@ -156,6 +156,7 @@
     <ClInclude Include="src\sdk\panorama.h" />
     <ClInclude Include="src\sdk\schema.h" />
     <ClInclude Include="src\sdk\sdk.h" />
+    <ClInclude Include="src\sdk\trace.h" />
     <ClInclude Include="src\sdk\utl.h" />
     <ClInclude Include="src\sdk\utl\utl_linked_list.h" />
     <ClInclude Include="src\sdk\utl\utl_memory.h" />

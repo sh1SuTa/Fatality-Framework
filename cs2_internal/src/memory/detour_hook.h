@@ -22,7 +22,7 @@ public:
 		{
 			// log instead of breaking: a failed hook must not kill the process in debug builds
 			char szBuffer[160];
-			wsprintfA(szBuffer, "Fatality: MH_CreateHook(%p) failed: %s\n", pBaseFn, MH_StatusToString(status));
+			wsprintfA(szBuffer, "[Fatality]: MH_CreateHook(%p) failed: %s\n", pBaseFn, MH_StatusToString(status));
 			OutputDebugStringA(szBuffer);
 			pBaseFn = nullptr;
 			return false;

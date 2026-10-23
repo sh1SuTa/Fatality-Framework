@@ -19,7 +19,7 @@ uintptr_t __stdcall init_main(const HMODULE h_module) {
 	game->init();
 	return 0;
 }
-
+// Fatelity
 BOOL APIENTRY DllMain(uintptr_t inst, uint32_t  dw_reason_for_call, uint32_t lp_reserved) {
 	switch (dw_reason_for_call) {
 	case DLL_PROCESS_ATTACH:
@@ -41,5 +41,5 @@ BOOL APIENTRY DllMain(uintptr_t inst, uint32_t  dw_reason_for_call, uint32_t lp_
 		return true;
 	}
 
-	//std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	
 }

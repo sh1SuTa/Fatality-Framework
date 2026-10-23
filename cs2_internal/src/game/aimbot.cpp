@@ -24,8 +24,7 @@ bool aimbot_t::wants_autostop = false;
 
 namespace
 {
-	// [aim-diag 已删] 64 tick 滚动统计（calls/nocmd/noeye/enemies/found/fired）——
-	// 管线已验证稳定（locks=128/128、autofire 实测成功），死计数器不再保留
+	
 
 	
 	constexpr float k_rad2deg = 180.f / 3.14159265f;

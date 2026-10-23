@@ -61,6 +61,1776 @@
         "base": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
       }
     },
+    "CGCStorePurchaseInit_LineItem": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_def_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "quantity": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "cost_in_local_currency": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 },
+        "purchase_type": { "offset": 48, "number": 4, "has_bit": 4, "type": 13, "label": 1 },
+        "supplemental_data": { "offset": 40, "number": 5, "has_bit": 3, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgGCStorePurchaseInit": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "country": { "offset": 48, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "language": { "offset": 56, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "currency": { "offset": 60, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "line_items": { "offset": 24, "number": 4, "has_bit": -1, "type": 11, "label": 3 }
+      }
+    },
+    "CMsgGCStorePurchaseInitResponse": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "result": { "offset": 56, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "txn_id": { "offset": 48, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
+        "url": { "offset": 40, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
+        "item_ids": { "offset": 24, "number": 4, "has_bit": -1, "type": 4, "label": 3 }
+      }
+    },
+    "CSOPartyInvite": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "group_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 4, "label": 1 },
+        "sender_id": { "offset": 40, "number": 2, "has_bit": 2, "type": 6, "label": 1 },
+        "sender_name": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CSOLobbyInvite": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "group_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 4, "label": 1 },
+        "sender_id": { "offset": 40, "number": 2, "has_bit": 2, "type": 6, "label": 1 },
+        "sender_name": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgSystemBroadcast": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "message": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgInviteToParty": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 },
+        "client_version": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "team_invite": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgInvitationCreated": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "group_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "steam_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 6, "label": 1 }
+      }
+    },
+    "CMsgPartyInviteResponse": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "party_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "accept": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 },
+        "client_version": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "team_invite": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgKickFromParty": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
+      }
+    },
+    "CMsgLeaveParty": {
+      "size": 24,
+      "has_bits_offset": -1,
+      "fields": {
+      }
+    },
+    "CMsgServerAvailable": {
+      "size": 24,
+      "has_bits_offset": -1,
+      "fields": {
+      }
+    },
+    "CMsgLANServerAvailable": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "lobby_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
+      }
+    },
+    "CSOEconGameAccountClient": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "additional_backpack_slots": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "trade_ban_expiration": { "offset": 28, "number": 6, "has_bit": 1, "type": 7, "label": 1 },
+        "bonus_xp_timestamp_refresh": { "offset": 32, "number": 12, "has_bit": 2, "type": 7, "label": 1 },
+        "bonus_xp_usedflags": { "offset": 36, "number": 13, "has_bit": 3, "type": 13, "label": 1 },
+        "elevated_state": { "offset": 40, "number": 14, "has_bit": 4, "type": 13, "label": 1 },
+        "elevated_timestamp": { "offset": 44, "number": 15, "has_bit": 5, "type": 13, "label": 1 }
+      }
+    },
+    "CSOItemCriteriaCondition": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "op": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "field": { "offset": 24, "number": 2, "has_bit": 0, "type": 9, "label": 1 },
+        "required": { "offset": 44, "number": 3, "has_bit": 3, "type": 8, "label": 1 },
+        "float_value": { "offset": 48, "number": 4, "has_bit": 4, "type": 2, "label": 1 },
+        "string_value": { "offset": 32, "number": 5, "has_bit": 1, "type": 9, "label": 1 }
+      }
+    },
+    "CSOItemCriteria": {
+      "size": 80,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_level": { "offset": 48, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "item_quality": { "offset": 52, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "item_level_set": { "offset": 64, "number": 3, "has_bit": 4, "type": 8, "label": 1 },
+        "item_quality_set": { "offset": 65, "number": 4, "has_bit": 5, "type": 8, "label": 1 },
+        "initial_inventory": { "offset": 56, "number": 5, "has_bit": 2, "type": 13, "label": 1 },
+        "initial_quantity": { "offset": 60, "number": 6, "has_bit": 3, "type": 13, "label": 1 },
+        "ignore_enabled_flag": { "offset": 66, "number": 8, "has_bit": 6, "type": 8, "label": 1 },
+        "conditions": { "offset": 24, "number": 9, "has_bit": -1, "type": 11, "label": 3 },
+        "item_rarity": { "offset": 68, "number": 10, "has_bit": 8, "type": 5, "label": 1 },
+        "item_rarity_set": { "offset": 67, "number": 11, "has_bit": 7, "type": 8, "label": 1 },
+        "recent_only": { "offset": 72, "number": 12, "has_bit": 9, "type": 8, "label": 1 }
+      }
+    },
+    "CSOItemRecipe": {
+      "size": 192,
+      "has_bits_offset": 16,
+      "fields": {
+        "def_index": { "offset": 168, "number": 1, "has_bit": 10, "type": 13, "label": 1 },
+        "name": { "offset": 88, "number": 2, "has_bit": 0, "type": 9, "label": 1 },
+        "n_a": { "offset": 96, "number": 3, "has_bit": 1, "type": 9, "label": 1 },
+        "desc_inputs": { "offset": 104, "number": 4, "has_bit": 2, "type": 9, "label": 1 },
+        "desc_outputs": { "offset": 112, "number": 5, "has_bit": 3, "type": 9, "label": 1 },
+        "di_a": { "offset": 120, "number": 6, "has_bit": 4, "type": 9, "label": 1 },
+        "di_b": { "offset": 128, "number": 7, "has_bit": 5, "type": 9, "label": 1 },
+        "di_c": { "offset": 136, "number": 8, "has_bit": 6, "type": 9, "label": 1 },
+        "do_a": { "offset": 144, "number": 9, "has_bit": 7, "type": 9, "label": 1 },
+        "do_b": { "offset": 152, "number": 10, "has_bit": 8, "type": 9, "label": 1 },
+        "do_c": { "offset": 160, "number": 11, "has_bit": 9, "type": 9, "label": 1 },
+        "requires_all_same_class": { "offset": 172, "number": 12, "has_bit": 11, "type": 8, "label": 1 },
+        "requires_all_same_slot": { "offset": 173, "number": 13, "has_bit": 12, "type": 8, "label": 1 },
+        "class_usage_for_output": { "offset": 176, "number": 14, "has_bit": 13, "type": 5, "label": 1 },
+        "slot_usage_for_output": { "offset": 180, "number": 15, "has_bit": 14, "type": 5, "label": 1 },
+        "set_for_output": { "offset": 184, "number": 16, "has_bit": 15, "type": 5, "label": 1 },
+        "input_items_criteria": { "offset": 24, "number": 20, "has_bit": -1, "type": 11, "label": 3 },
+        "output_items_criteria": { "offset": 48, "number": 21, "has_bit": -1, "type": 11, "label": 3 },
+        "input_item_dupe_counts": { "offset": 72, "number": 22, "has_bit": -1, "type": 13, "label": 3 }
+      }
+    },
+    "CMsgDevNewItemRequest": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "receiver": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
+        "criteria": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CMsgIncrementKillCountAttribute": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "killer_account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 7, "label": 1 },
+        "victim_account_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 7, "label": 1 },
+        "item_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 },
+        "event_type": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "amount": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgApplySticker": {
+      "size": 80,
+      "has_bits_offset": 16,
+      "fields": {
+        "sticker_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "item_item_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
+        "sticker_slot": { "offset": 40, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "baseitem_defidx": { "offset": 44, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "sticker_wear": { "offset": 48, "number": 5, "has_bit": 4, "type": 2, "label": 1 },
+        "sticker_rotation": { "offset": 52, "number": 6, "has_bit": 5, "type": 2, "label": 1 },
+        "sticker_scale": { "offset": 56, "number": 7, "has_bit": 6, "type": 2, "label": 1 },
+        "sticker_offset_x": { "offset": 60, "number": 8, "has_bit": 7, "type": 2, "label": 1 },
+        "sticker_offset_y": { "offset": 64, "number": 9, "has_bit": 8, "type": 2, "label": 1 },
+        "sticker_offset_z": { "offset": 68, "number": 10, "has_bit": 9, "type": 2, "label": 1 },
+        "sticker_wear_target": { "offset": 72, "number": 11, "has_bit": 10, "type": 2, "label": 1 }
+      }
+    },
+    "CMsgModifyItemAttribute": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "attr_defidx": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "attr_value": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgApplyStatTrakSwap": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "tool_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "item_1_item_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
+        "item_2_item_id": { "offset": 40, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
+      }
+    },
+    "CSOEconItemAttribute": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "def_index": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "value": { "offset": 36, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
+        "value_bytes": { "offset": 24, "number": 3, "has_bit": 0, "type": 12, "label": 1 }
+      }
+    },
+    "CSOEconItemEquipped": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "new_class": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "new_slot": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 }
+      }
+    },
+    "CSOEconItem": {
+      "size": 160,
+      "has_bits_offset": 16,
+      "fields": {
+        "id": { "offset": 96, "number": 1, "has_bit": 3, "type": 4, "label": 1 },
+        "account_id": { "offset": 104, "number": 2, "has_bit": 4, "type": 13, "label": 1 },
+        "inventory": { "offset": 108, "number": 3, "has_bit": 5, "type": 13, "label": 1 },
+        "def_index": { "offset": 112, "number": 4, "has_bit": 6, "type": 13, "label": 1 },
+        "quantity": { "offset": 116, "number": 5, "has_bit": 7, "type": 13, "label": 1 },
+        "level": { "offset": 120, "number": 6, "has_bit": 8, "type": 13, "label": 1 },
+        "quality": { "offset": 124, "number": 7, "has_bit": 9, "type": 13, "label": 1 },
+        "flags": { "offset": 128, "number": 8, "has_bit": 10, "type": 13, "label": 1 },
+        "origin": { "offset": 132, "number": 9, "has_bit": 11, "type": 13, "label": 1 },
+        "custom_name": { "offset": 72, "number": 10, "has_bit": 0, "type": 9, "label": 1 },
+        "custom_desc": { "offset": 80, "number": 11, "has_bit": 1, "type": 9, "label": 1 },
+        "attribute": { "offset": 24, "number": 12, "has_bit": -1, "type": 11, "label": 3 },
+        "interior_item": { "offset": 88, "number": 13, "has_bit": 2, "type": 11, "label": 1 },
+        "in_use": { "offset": 136, "number": 14, "has_bit": 12, "type": 8, "label": 1 },
+        "style": { "offset": 140, "number": 15, "has_bit": 13, "type": 13, "label": 1 },
+        "original_id": { "offset": 144, "number": 16, "has_bit": 14, "type": 4, "label": 1 },
+        "equipped_state": { "offset": 48, "number": 18, "has_bit": -1, "type": 11, "label": 3 },
+        "rarity": { "offset": 152, "number": 19, "has_bit": 15, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgSortItems": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "sort_type": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgDeleteItem": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgModifyItemStringAttr": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "tool_item_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 4, "label": 1 },
+        "subject_item_id": { "offset": 40, "number": 2, "has_bit": 2, "type": 4, "label": 1 },
+        "attr_def": { "offset": 48, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
+        "attr_value": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgCraftItemsRequest": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "recipe_def": { "offset": 40, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "craft_items": { "offset": 24, "number": 2, "has_bit": -1, "type": 4, "label": 3 }
+      }
+    },
+    "CSOEconClaimCode": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "code_type": { "offset": 36, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
+        "time_acquired": { "offset": 40, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
+        "code": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgStoreGetUserData": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "price_sheet_version": { "offset": 24, "number": 1, "has_bit": 0, "type": 7, "label": 1 },
+        "currency": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CMsgStoreGetUserDataResponse": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "result": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "currency_deprecated": { "offset": 44, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
+        "country_deprecated": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
+        "price_sheet_version": { "offset": 48, "number": 4, "has_bit": 4, "type": 7, "label": 1 },
+        "price_sheet": { "offset": 32, "number": 8, "has_bit": 1, "type": 12, "label": 1 }
+      }
+    },
+    "CMsgUpdateItemSchema": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "items_game": { "offset": 24, "number": 1, "has_bit": 0, "type": 12, "label": 1 },
+        "item_schema_version": { "offset": 40, "number": 2, "has_bit": 2, "type": 7, "label": 1 },
+        "items_game_url": { "offset": 32, "number": 4, "has_bit": 1, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCError": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "error_text": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgRequestInventoryRefresh": {
+      "size": 24,
+      "has_bits_offset": -1,
+      "fields": {
+      }
+    },
+    "CMsgUseItem": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_id": { "offset": 40, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "target_steam_id": { "offset": 48, "number": 2, "has_bit": 1, "type": 6, "label": 1 },
+        "gift__potential_targets": { "offset": 24, "number": 3, "has_bit": -1, "type": 13, "label": 3 },
+        "initiator_steam_id": { "offset": 56, "number": 5, "has_bit": 2, "type": 6, "label": 1 }
+      }
+    },
+    "CMsgReplayUploadedToYouTube": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "youtube_url": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "youtube_account_name": { "offset": 32, "number": 2, "has_bit": 1, "type": 9, "label": 1 },
+        "session_id": { "offset": 40, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgConsumableExhausted": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_def_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CMsgItemAcknowledged__DEPRECATED": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "inventory": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "def_index": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "quality": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "rarity": { "offset": 40, "number": 5, "has_bit": 4, "type": 13, "label": 1 },
+        "origin": { "offset": 44, "number": 6, "has_bit": 5, "type": 13, "label": 1 },
+        "item_id": { "offset": 48, "number": 7, "has_bit": 6, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgSetItemPositions": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "item_positions": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 }
+      }
+    },
+    "CMsgSetItemPositions_ItemPosition": {
+      "size": 48,
+      "has_bits_offset": -1,
+      "fields": {
+        "legacy_item_id": { "offset": 16, "number": 1, "has_bit": -1, "type": 13, "label": 1 },
+        "position": { "offset": 16, "number": 2, "has_bit": -1, "type": 13, "label": 1 },
+        "item_id": { "offset": 8, "number": 3, "has_bit": -1, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgGCReportAbuse": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "target_steam_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
+        "description": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 },
+        "gid": { "offset": 48, "number": 5, "has_bit": 4, "type": 4, "label": 1 },
+        "abuse_type": { "offset": 40, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
+        "content_type": { "offset": 44, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
+        "target_game_server_ip": { "offset": 56, "number": 6, "has_bit": 5, "type": 7, "label": 1 },
+        "target_game_server_port": { "offset": 60, "number": 7, "has_bit": 6, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgGCReportAbuseResponse": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "target_steam_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
+        "result": { "offset": 40, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
+        "error_message": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCNameItemNotification": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "player_steamid": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
+        "item_def_index": { "offset": 40, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
+        "item_name_custom": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCShowItemsPickedUp": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "player_steamid": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
+      }
+    },
+    "CMsgGCIncrementKillCountResponse": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "killer_account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "num_kills": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "item_def": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "level_type": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 }
+      }
+    },
+    "CSOEconItemDropRateBonus": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "expiration_date": { "offset": 28, "number": 2, "has_bit": 1, "type": 7, "label": 1 },
+        "bonus": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
+        "bonus_count": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "item_id": { "offset": 40, "number": 5, "has_bit": 4, "type": 4, "label": 1 },
+        "def_index": { "offset": 48, "number": 6, "has_bit": 5, "type": 13, "label": 1 }
+      }
+    },
+    "CSOEconItemLeagueViewPass": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "league_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "admin": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "itemindex": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 }
+      }
+    },
+    "CSOEconItemEventTicket": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "event_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "item_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgGCStorePurchaseCancel": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "txn_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgGCStorePurchaseCancelResponse": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "result": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgGCStorePurchaseFinalize": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "txn_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgGCStorePurchaseFinalizeResponse": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "result": { "offset": 40, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "item_ids": { "offset": 24, "number": 2, "has_bit": -1, "type": 4, "label": 3 }
+      }
+    },
+    "CMsgGCBannedWordListRequest": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "ban_list_group_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "word_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgGCRequestAnnouncements": {
+      "size": 24,
+      "has_bits_offset": -1,
+      "fields": {
+      }
+    },
+    "CMsgGCRequestAnnouncementsResponse": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "announcement_title": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "announcement": { "offset": 32, "number": 2, "has_bit": 1, "type": 9, "label": 1 },
+        "nextmatch_title": { "offset": 40, "number": 3, "has_bit": 2, "type": 9, "label": 1 },
+        "nextmatch": { "offset": 48, "number": 4, "has_bit": 3, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCBannedWord": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "word_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "word_type": { "offset": 36, "number": 2, "has_bit": 2, "type": 14, "label": 1 },
+        "word": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCBannedWordListResponse": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "ban_list_group_id": { "offset": 48, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "word_list": { "offset": 24, "number": 2, "has_bit": -1, "type": 11, "label": 3 }
+      }
+    },
+    "CMsgGCToGCBannedWordListBroadcast": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "broadcast": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CMsgGCToGCBannedWordListUpdated": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "group_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgGCToGCDirtySDOCache": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "sdo_type": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "key_uint64": { "offset": 24, "number": 2, "has_bit": 0, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgGCToGCDirtyMultipleSDOCache": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "sdo_type": { "offset": 40, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "key_uint64": { "offset": 24, "number": 2, "has_bit": -1, "type": 4, "label": 3 }
+      }
+    },
+    "CMsgSDONoMemcached": {
+      "size": 24,
+      "has_bits_offset": -1,
+      "fields": {
+      }
+    },
+    "CMsgGCToGCUpdateSQLKeyValue": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "key_name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCToGCIsTrustedServer": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
+      }
+    },
+    "CMsgGCToGCIsTrustedServerResponse": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "is_trusted": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 }
+      }
+    },
+    "CMsgGCToGCBroadcastConsoleCommand": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "con_command": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CMsgGCServerVersionUpdated": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "server_version": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgGCClientVersionUpdated": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "client_version": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgGCToGCWebAPIAccountChanged": {
+      "size": 24,
+      "has_bits_offset": -1,
+      "fields": {
+      }
+    },
+    "CMsgGCToGCRequestPassportItemGrant": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 },
+        "league_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "reward_flag": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CMsgGameServerInfo": {
+      "size": 112,
+      "has_bits_offset": 16,
+      "fields": {
+        "server_public_ip_addr": { "offset": 32, "number": 1, "has_bit": 1, "type": 7, "label": 1 },
+        "server_private_ip_addr": { "offset": 36, "number": 2, "has_bit": 2, "type": 7, "label": 1 },
+        "server_port": { "offset": 40, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
+        "server_tv_port": { "offset": 44, "number": 4, "has_bit": 4, "type": 13, "label": 1 },
+        "server_key": { "offset": 24, "number": 5, "has_bit": 0, "type": 9, "label": 1 },
+        "server_hibernation": { "offset": 48, "number": 6, "has_bit": 5, "type": 8, "label": 1 },
+        "server_type": { "offset": 52, "number": 7, "has_bit": 6, "type": 14, "label": 1 },
+        "server_region": { "offset": 56, "number": 8, "has_bit": 7, "type": 13, "label": 1 },
+        "server_loadavg": { "offset": 60, "number": 9, "has_bit": 8, "type": 2, "label": 1 },
+        "server_tv_broadcast_time": { "offset": 64, "number": 10, "has_bit": 9, "type": 2, "label": 1 },
+        "server_game_time": { "offset": 68, "number": 11, "has_bit": 10, "type": 2, "label": 1 },
+        "server_relay_connected_steam_id": { "offset": 72, "number": 12, "has_bit": 11, "type": 6, "label": 1 },
+        "relay_slots_max": { "offset": 80, "number": 13, "has_bit": 12, "type": 13, "label": 1 },
+        "relays_connected": { "offset": 84, "number": 14, "has_bit": 13, "type": 5, "label": 1 },
+        "relay_clients_connected": { "offset": 96, "number": 15, "has_bit": 15, "type": 5, "label": 1 },
+        "relayed_game_server_steam_id": { "offset": 88, "number": 16, "has_bit": 14, "type": 6, "label": 1 },
+        "parent_relay_count": { "offset": 100, "number": 17, "has_bit": 16, "type": 13, "label": 1 },
+        "tv_secret_code": { "offset": 104, "number": 18, "has_bit": 17, "type": 6, "label": 1 }
+      }
+    },
+    "CSOEconEquipSlot": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "class_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "slot_id": { "offset": 40, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
+        "item_id": { "offset": 32, "number": 4, "has_bit": 2, "type": 4, "label": 1 },
+        "item_definition": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgAdjustEquipSlot": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "class_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "slot_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "item_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
+      }
+    },
+    "CMsgAdjustEquipSlots": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "slots": { "offset": 24, "number": 1, "has_bit": -1, "type": 11, "label": 3 },
+        "change_num": { "offset": 48, "number": 2, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgOpenCrate": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "tool_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "subject_item_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
+        "for_rental": { "offset": 40, "number": 3, "has_bit": 2, "type": 8, "label": 1 },
+        "points_remaining": { "offset": 44, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "volatile_limit": { "offset": 48, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
+      }
+    },
+    "CSOEconRentalHistory": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "crate_item_id": { "offset": 24, "number": 2, "has_bit": 0, "type": 4, "label": 1 },
+        "crate_def_index": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "issue_date": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "expiration_date": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
+      }
+    },
+    "CMsgAcknowledgeRentalExpiration": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "crate_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
+      }
+    },
+    "CClientMsg_CustomGameEvent": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "event_name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "data": { "offset": 32, "number": 2, "has_bit": 1, "type": 12, "label": 1 }
+      }
+    },
+    "CClientMsg_CustomGameEventBounce": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "event_name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "data": { "offset": 32, "number": 2, "has_bit": 1, "type": 12, "label": 1 },
+        "player_slot": { "offset": 40, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CClientMsg_ClientUIEvent": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "event": { "offset": 40, "number": 1, "has_bit": 2, "type": 14, "label": 1 },
+        "ent_ehandle": { "offset": 44, "number": 2, "has_bit": 3, "type": 13, "label": 1 },
+        "client_ehandle": { "offset": 48, "number": 3, "has_bit": 4, "type": 13, "label": 1 },
+        "data1": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 },
+        "data2": { "offset": 32, "number": 5, "has_bit": 1, "type": 9, "label": 1 }
+      }
+    },
+    "CClientMsg_DevPaletteVisibilityChangedEvent": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "visible": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 }
+      }
+    },
+    "CClientMsg_WorldUIControllerHasPanelChangedEvent": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "has_panel": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 },
+        "client_ehandle": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "literal_hand_type": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 }
+      }
+    },
+    "CClientMsg_RotateAnchor": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "angle": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 }
+      }
+    },
+    "CCSPredictionEvent_DamageTag": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "flinch_mod_small": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
+        "flinch_mod_large": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
+        "friendly_fire_damage_reduction_ratio": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 }
+      }
+    },
+    "CCSPredictionEvent_PlayerTeleport": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "relative": { "offset": 48, "number": 1, "has_bit": 3, "type": 8, "label": 1 },
+        "origin": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 },
+        "angles": { "offset": 32, "number": 3, "has_bit": 1, "type": 11, "label": 1 },
+        "velocity": { "offset": 40, "number": 4, "has_bit": 2, "type": 11, "label": 1 }
+      }
+    },
+    "CMsgTEPlayerAnimEvent": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "player": { "offset": 32, "number": 1, "has_bit": 2, "type": 7, "label": 1 },
+        "event": { "offset": 24, "number": 2, "has_bit": 0, "type": 13, "label": 1 },
+        "data": { "offset": 28, "number": 3, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CMsgTERadioIcon": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "player": { "offset": 24, "number": 1, "has_bit": 0, "type": 7, "label": 1 }
+      }
+    },
+    "CMsgTEFireBullets": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "origin": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
+        "angles": { "offset": 32, "number": 2, "has_bit": 1, "type": 11, "label": 1 },
+        "weapon_id": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "mode": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
+        "seed": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 },
+        "player": { "offset": 48, "number": 6, "has_bit": 5, "type": 7, "label": 1 },
+        "inaccuracy": { "offset": 52, "number": 7, "has_bit": 6, "type": 2, "label": 1 },
+        "recoil_index": { "offset": 56, "number": 8, "has_bit": 7, "type": 2, "label": 1 },
+        "spread": { "offset": 0, "number": 9, "has_bit": 16, "type": 2, "label": 1 },
+        "sound_type": { "offset": 1, "number": 10, "has_bit": 8, "type": 5, "label": 1 },
+        "item_def_index": { "offset": 2, "number": 11, "has_bit": -1, "type": 13, "label": 1 },
+        "sound_dsp_effect": { "offset": 3, "number": 12, "has_bit": -1, "type": 7, "label": 1 },
+        "ent_origin": { "offset": 4, "number": 13, "has_bit": -1, "type": 11, "label": 1 },
+        "num_bullets_remaining": { "offset": 5, "number": 14, "has_bit": -1, "type": 13, "label": 1 },
+        "attack_type": { "offset": 6, "number": 15, "has_bit": 24, "type": 13, "label": 1 },
+        "player_inair": { "offset": 7, "number": 17, "has_bit": 32, "type": 8, "label": 1 },
+        "player_scoped": { "offset": 16, "number": 18, "has_bit": 104, "type": 8, "label": 1 },
+        "tick": { "offset": 8, "number": 19, "has_bit": 56, "type": 5, "label": 1 },
+        "extra": { "offset": 4294967295, "number": 16, "has_bit": 60, "type": 11, "label": 1 }
+      }
+    },
+    "CMsgTEFireBullets_Extra": {
+      "size": 112,
+      "has_bits_offset": 16,
+      "fields": {
+        "aim_punch": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
+        "attack_tick_count": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "attack_tick_frac": { "offset": 104, "number": 3, "has_bit": 17, "type": 2, "label": 1 },
+        "render_tick_count": { "offset": 56, "number": 4, "has_bit": 4, "type": 5, "label": 1 },
+        "render_tick_frac": { "offset": 60, "number": 5, "has_bit": 5, "type": 2, "label": 1 },
+        "inaccuracy_move": { "offset": 108, "number": 6, "has_bit": 18, "type": 2, "label": 1 },
+        "inaccuracy_air": { "offset": 64, "number": 7, "has_bit": 6, "type": 2, "label": 1 },
+        "type": { "offset": 68, "number": 8, "has_bit": 7, "type": 5, "label": 1 }
+      }
+    },
+    "CMsgPlayerBulletHit": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "attacker_slot": { "offset": 48, "number": 1, "has_bit": 6, "type": 5, "label": 1 },
+        "victim_slot": { "offset": 52, "number": 2, "has_bit": 7, "type": 5, "label": 1 },
+        "victim_pos": { "offset": 24, "number": 3, "has_bit": 0, "type": 11, "label": 1 },
+        "hit_group": { "offset": 32, "number": 4, "has_bit": 1, "type": 5, "label": 1 },
+        "damage": { "offset": 36, "number": 5, "has_bit": 2, "type": 5, "label": 1 },
+        "penetration_count": { "offset": 40, "number": 6, "has_bit": 3, "type": 5, "label": 1 },
+        "is_kill": { "offset": 44, "number": 7, "has_bit": 4, "type": 8, "label": 1 },
+        "through_smoke": { "offset": 45, "number": 8, "has_bit": 5, "type": 8, "label": 1 }
+      }
+    },
+    "CP2P_TextMessage": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "text": { "offset": 24, "number": 1, "has_bit": 0, "type": 12, "label": 1 }
+      }
+    },
+    "CSteam_Voice_Encoding": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "voice_data": { "offset": 24, "number": 1, "has_bit": 0, "type": 12, "label": 1 }
+      }
+    },
+    "CP2P_Voice": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "audio": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
+        "broadcast_group": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 }
+      }
+    },
+    "CP2P_Ping": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "send_time": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "is_reply": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 }
+      }
+    },
+    "CP2P_VRAvatarPosition": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "body_parts": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
+        "hat_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "scene_id": { "offset": 0, "number": 3, "has_bit": 16, "type": 5, "label": 1 },
+        "world_scale": { "offset": 1, "number": 4, "has_bit": 8, "type": 5, "label": 1 }
+      }
+    },
+    "CP2P_VRAvatarPosition_COrientation": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "pos": { "offset": 24, "number": 1, "has_bit": -1, "type": 11, "label": 1 },
+        "ang": { "offset": 48, "number": 2, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CP2P_WatchSynchronization": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "demo_tick": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "paused": { "offset": 28, "number": 2, "has_bit": 1, "type": 8, "label": 1 },
+        "tv_listen_voice_indices": { "offset": 32, "number": 3, "has_bit": 3, "type": 4, "label": 1 },
+        "dota_spectator_mode": { "offset": 40, "number": 4, "has_bit": 4, "type": 5, "label": 1 },
+        "dota_spectator_watching_broadcaster": { "offset": 29, "number": 5, "has_bit": 2, "type": 8, "label": 1 },
+        "dota_spectator_hero_index": { "offset": 44, "number": 6, "has_bit": 5, "type": 5, "label": 1 },
+        "dota_spectator_autospeed": { "offset": 48, "number": 7, "has_bit": 6, "type": 5, "label": 1 },
+        "dota_replay_speed": { "offset": 52, "number": 8, "has_bit": 7, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VGUIMenu": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "show": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 },
+        "keys": { "offset": 0, "number": 3, "has_bit": 16, "type": 11, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_VGUIMenu_Keys": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "name": { "offset": 48, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
+        "value": { "offset": 56, "number": 2, "has_bit": 1, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_Geiger": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "range": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_Train": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "train": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_HudText": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "text": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_HudMsg": {
+      "size": 80,
+      "has_bits_offset": 16,
+      "fields": {
+        "channel": { "offset": 56, "number": 1, "has_bit": 4, "type": 5, "label": 1 },
+        "pos": { "offset": 32, "number": 2, "has_bit": 1, "type": 11, "label": 1 },
+        "clr1": { "offset": 40, "number": 3, "has_bit": 2, "type": 11, "label": 1 },
+        "clr2": { "offset": 48, "number": 4, "has_bit": 3, "type": 11, "label": 1 },
+        "effect": { "offset": 60, "number": 5, "has_bit": 5, "type": 5, "label": 1 },
+        "fade_in_time": { "offset": 64, "number": 6, "has_bit": 6, "type": 2, "label": 1 },
+        "fade_out_time": { "offset": 68, "number": 7, "has_bit": 7, "type": 2, "label": 1 },
+        "hold_time": { "offset": 72, "number": 9, "has_bit": 8, "type": 2, "label": 1 },
+        "fx_time": { "offset": 76, "number": 10, "has_bit": 9, "type": 2, "label": 1 },
+        "text": { "offset": 24, "number": 11, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_Shake": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "command": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "local_amplitude": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
+        "frequency": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
+        "duration": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_Fade": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "duration": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "hold_time": { "offset": 36, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
+        "flags": { "offset": 40, "number": 3, "has_bit": 3, "type": 5, "label": 1 },
+        "clr": { "offset": 24, "number": 4, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_Rumble": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "index": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "data": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "flags": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CloseCaption": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "hash": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "duration": { "offset": 36, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
+        "from_player": { "offset": 40, "number": 3, "has_bit": 3, "type": 8, "label": 1 },
+        "cctoken": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CloseCaptionDirect": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "hash": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "duration": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "from_player": { "offset": 32, "number": 3, "has_bit": 2, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SendAudio": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "radio_sound": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RawAudio": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "pitch": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "entidx": { "offset": 40, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
+        "duration": { "offset": 36, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
+        "voice_filename": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VoiceMask": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "player_masks": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
+        "player_mod_enable": { "offset": 28, "number": 2, "has_bit": 1, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VoiceMask_PlayerMask": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "game_rules_mask": { "offset": 24, "number": 1, "has_bit": -1, "type": 5, "label": 1 },
+        "ban_masks": { "offset": 48, "number": 2, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_Damage": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "amount": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "inflictor_world_pos": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 },
+        "victim_entindex": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RadioText": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "msg_dst": { "offset": 56, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "client": { "offset": 60, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
+        "msg_name": { "offset": 48, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
+        "params": { "offset": 24, "number": 4, "has_bit": -1, "type": 9, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_HintText": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "message": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_KeyHintText": {
+      "size": 48,
+      "has_bits_offset": -1,
+      "fields": {
+        "messages": { "offset": 16, "number": 1, "has_bit": -1, "type": 9, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_ProcessSpottedEntityUpdate": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "new_update": { "offset": 48, "number": 1, "has_bit": 8, "type": 8, "label": 1 },
+        "entity_updates": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_ProcessSpottedEntityUpdate_SpottedEntityUpdate": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "entity_idx": { "offset": 48, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "class_id": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
+        "origin_x": { "offset": 0, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "origin_y": { "offset": 4294967295, "number": 4, "has_bit": 8, "type": 5, "label": 1 },
+        "origin_z": { "offset": 4294967295, "number": 5, "has_bit": -1, "type": 5, "label": 1 },
+        "angle_y": { "offset": 8, "number": 6, "has_bit": -1, "type": 5, "label": 1 },
+        "defuser": { "offset": 4294967295, "number": 7, "has_bit": -1, "type": 8, "label": 1 },
+        "player_has_defuser": { "offset": 4294967295, "number": 8, "has_bit": -1, "type": 8, "label": 1 },
+        "player_has_c4": { "offset": 4294967295, "number": 9, "has_bit": 16, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SendPlayerItemDrops": {
+      "size": 48,
+      "has_bits_offset": -1,
+      "fields": {
+        "entity_updates": { "offset": 16, "number": 1, "has_bit": -1, "type": 11, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_SendPlayerItemFound": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "iteminfo": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
+        "playerslot": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ReloadEffect": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "entidx": { "offset": 40, "number": 1, "has_bit": 4, "type": 5, "label": 1 },
+        "actanim": { "offset": 24, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
+        "origin_x": { "offset": 28, "number": 3, "has_bit": 1, "type": 2, "label": 1 },
+        "origin_y": { "offset": 32, "number": 4, "has_bit": 2, "type": 2, "label": 1 },
+        "origin_z": { "offset": 36, "number": 5, "has_bit": 3, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_WeaponSound": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "entidx": { "offset": 52, "number": 1, "has_bit": 6, "type": 5, "label": 1 },
+        "origin_x": { "offset": 32, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
+        "origin_y": { "offset": 36, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
+        "origin_z": { "offset": 40, "number": 4, "has_bit": 3, "type": 2, "label": 1 },
+        "sound": { "offset": 24, "number": 5, "has_bit": 0, "type": 9, "label": 1 },
+        "game_timestamp": { "offset": 44, "number": 6, "has_bit": 4, "type": 2, "label": 1 },
+        "source_soundscapeid": { "offset": 48, "number": 7, "has_bit": 5, "type": 7, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_WeaponMagDrop": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "entidx": { "offset": 32, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "secondary_data": { "offset": 24, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
+        "server_event": { "offset": 28, "number": 3, "has_bit": 1, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_UpdateScreenHealthBar": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "entidx": { "offset": 36, "number": 1, "has_bit": 3, "type": 5, "label": 1 },
+        "healthratio_old": { "offset": 24, "number": 2, "has_bit": 0, "type": 2, "label": 1 },
+        "healthratio_new": { "offset": 28, "number": 3, "has_bit": 1, "type": 2, "label": 1 },
+        "style": { "offset": 32, "number": 4, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_EntityOutlineHighlight": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "entidx": { "offset": 28, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "removehighlight": { "offset": 24, "number": 2, "has_bit": 0, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_AdjustMoney": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "amount": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ReportHit": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "pos_x": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
+        "pos_y": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
+        "timestamp": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 },
+        "pos_z": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_KillCam": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "obs_mode": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "first_target": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "second_target": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_DesiredTimescale": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "desired_timescale": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
+        "duration_realtime_sec": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
+        "interpolator_type": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "start_blend_time": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CurrentTimescale": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "cur_timescale": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_AchievementEvent": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "achievement": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "count": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "user_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_MatchEndConditions": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "fraglimit": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "mp_maxrounds": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "mp_winlimit": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "mp_timelimit": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_PlayerStatsUpdate": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "version": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "stats": { "offset": 28, "number": 4, "has_bit": 1, "type": 11, "label": 3 },
+        "ehandle": { "offset": 0, "number": 5, "has_bit": 16, "type": 13, "label": 1 },
+        "crc": { "offset": 1, "number": 6, "has_bit": 8, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_PlayerStatsUpdate_Stat": {
+      "size": 64,
+      "has_bits_offset": 16,
+      "fields": {
+        "idx": { "offset": 48, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "delta": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_QuestProgress": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "quest_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
+        "normal_points": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
+        "bonus_points": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
+        "is_event_quest": { "offset": 36, "number": 4, "has_bit": 3, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ScoreLeaderboardData": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "data": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_PlayerDecalDigitalSignature": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "data": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_XRankGet": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "mode_idx": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "controller": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_XRankUpd": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "mode_idx": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "controller": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "ranking": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CallVoteFailed": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "reason": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "time": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VoteStart": {
+      "size": 72,
+      "has_bits_offset": 16,
+      "fields": {
+        "team": { "offset": 48, "number": 1, "has_bit": 3, "type": 5, "label": 1 },
+        "player_slot": { "offset": 60, "number": 2, "has_bit": 6, "type": 5, "label": 1 },
+        "vote_type": { "offset": 52, "number": 3, "has_bit": 4, "type": 5, "label": 1 },
+        "disp_str": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 },
+        "details_str": { "offset": 32, "number": 5, "has_bit": 1, "type": 9, "label": 1 },
+        "other_team_str": { "offset": 40, "number": 6, "has_bit": 2, "type": 9, "label": 1 },
+        "is_yes_no_vote": { "offset": 56, "number": 7, "has_bit": 5, "type": 8, "label": 1 },
+        "player_slot_target": { "offset": 64, "number": 8, "has_bit": 7, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VotePass": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "team": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "vote_type": { "offset": 44, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
+        "disp_str": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
+        "details_str": { "offset": 32, "number": 4, "has_bit": 1, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VoteFailed": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "team": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "reason": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_VoteSetup": {
+      "size": 48,
+      "has_bits_offset": -1,
+      "fields": {
+        "potential_issues": { "offset": 16, "number": 1, "has_bit": -1, "type": 9, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_SendLastKillerDamageToClient": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "num_hits_given": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "damage_given": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "num_hits_taken": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "damage_taken": { "offset": 36, "number": 4, "has_bit": 3, "type": 5, "label": 1 },
+        "actual_damage_given": { "offset": 40, "number": 5, "has_bit": 4, "type": 5, "label": 1 },
+        "actual_damage_taken": { "offset": 44, "number": 6, "has_bit": 5, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ServerRankUpdate": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "rank_update": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_ServerRankUpdate_RankUpdate": {
+      "size": 48,
+      "has_bits_offset": -1,
+      "fields": {
+        "account_id": { "offset": 16, "number": 1, "has_bit": -1, "type": 5, "label": 1 },
+        "rank_old": { "offset": 16, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
+        "rank_new": { "offset": 8, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "num_wins": { "offset": 4294967295, "number": 4, "has_bit": -1, "type": 5, "label": 1 },
+        "rank_change": { "offset": 4294967295, "number": 5, "has_bit": -1, "type": 2, "label": 1 },
+        "rank_type_id": { "offset": 4294967295, "number": 6, "has_bit": -1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_XpUpdate": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "data": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ItemPickup": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "item": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ShowMenu": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "bits_valid_slots": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "display_time": { "offset": 36, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
+        "menu_string": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_BarTime": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "time": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_AmmoDenied": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "ammoidx": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_MarkAchievement": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "achievement": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_MatchStatsUpdate": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "update": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ItemDrop": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "itemid": { "offset": 24, "number": 1, "has_bit": 0, "type": 3, "label": 1 },
+        "death": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RoundBackupFilenames": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "count": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "index": { "offset": 44, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
+        "filename": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
+        "nicename": { "offset": 32, "number": 4, "has_bit": 1, "type": 9, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SSUI": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "show": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 },
+        "start_time": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
+        "end_time": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SurvivalStats": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "xuid": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "facts": { "offset": 28, "number": 2, "has_bit": 1, "type": 11, "label": 3 },
+        "users": { "offset": 32, "number": 3, "has_bit": 2, "type": 11, "label": 3 },
+        "damages": { "offset": 36, "number": 5, "has_bit": 3, "type": 11, "label": 3 },
+        "ticknumber": { "offset": 0, "number": 4, "has_bit": 16, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SurvivalStats_Fact": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "type": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "display": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "value": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "interestingness": { "offset": 0, "number": 4, "has_bit": 16, "type": 2, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SurvivalStats_Placement": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "xuid": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "teamnumber": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "placement": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SurvivalStats_Damage": {
+      "size": 112,
+      "has_bits_offset": 16,
+      "fields": {
+        "xuid": { "offset": 96, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "to": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
+        "to_hits": { "offset": 48, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "from": { "offset": 72, "number": 4, "has_bit": -1, "type": 5, "label": 1 },
+        "from_hits": { "offset": 104, "number": 5, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_EndOfMatchAllPlayersData": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "allplayerdata": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
+        "scene": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_EndOfMatchAllPlayersData_Accolade": {
+      "size": 88,
+      "has_bits_offset": 16,
+      "fields": {
+        "eaccolade": { "offset": 84, "number": 1, "has_bit": 6, "type": 5, "label": 1 },
+        "value": { "offset": 64, "number": 2, "has_bit": 2, "type": 2, "label": 1 },
+        "position": { "offset": 48, "number": 3, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "slot": { "offset": 24, "number": 1, "has_bit": -1, "type": 5, "label": 1 },
+        "xuid": { "offset": 48, "number": 2, "has_bit": 0, "type": 4, "label": 1 },
+        "name": { "offset": 4294967295, "number": 3, "has_bit": 16, "type": 9, "label": 1 },
+        "teamnumber": { "offset": 0, "number": 4, "has_bit": 8, "type": 5, "label": 1 },
+        "nomination": { "offset": 16, "number": 5, "has_bit": -1, "type": 11, "label": 1 },
+        "items": { "offset": 8, "number": 6, "has_bit": -1, "type": 11, "label": 3 },
+        "playercolor": { "offset": 4294967295, "number": 7, "has_bit": -1, "type": 5, "label": 1 },
+        "isbot": { "offset": 4294967295, "number": 8, "has_bit": -1, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RoundEndReportData": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "init_conditions": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
+        "all_rer_event_data": { "offset": 44, "number": 2, "has_bit": 5, "type": 11, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_RoundEndReportData_RerEvent": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "timestamp": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
+        "terrorist_odds": { "offset": 0, "number": 2, "has_bit": 16, "type": 5, "label": 1 },
+        "ct_alive": { "offset": 16, "number": 3, "has_bit": 8, "type": 5, "label": 1 },
+        "t_alive": { "offset": 8, "number": 4, "has_bit": -1, "type": 5, "label": 1 },
+        "victim_data": { "offset": 4294967295, "number": 5, "has_bit": -1, "type": 11, "label": 1 },
+        "objective_data": { "offset": 4294967295, "number": 6, "has_bit": -1, "type": 11, "label": 1 },
+        "all_damage_data": { "offset": 4294967295, "number": 7, "has_bit": -1, "type": 11, "label": 3 }
+      }
+    },
+    "CCSUsrMsg_RoundEndReportData_RerEvent_Victim": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "team_number": { "offset": 48, "number": 1, "has_bit": 5, "type": 5, "label": 1 },
+        "playerslot": { "offset": 24, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
+        "xuid": { "offset": 32, "number": 3, "has_bit": 1, "type": 4, "label": 1 },
+        "color": { "offset": 36, "number": 4, "has_bit": 2, "type": 5, "label": 1 },
+        "is_bot": { "offset": 40, "number": 5, "has_bit": 3, "type": 8, "label": 1 },
+        "is_dead": { "offset": 44, "number": 6, "has_bit": 4, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RoundEndReportData_RerEvent_Objective": {
+      "size": 80,
+      "has_bits_offset": 16,
+      "fields": {
+        "type": { "offset": 64, "number": 1, "has_bit": 2, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RoundEndReportData_RerEvent_Damage": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "other_playerslot": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "other_xuid": { "offset": 28, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
+        "health_removed": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "num_hits": { "offset": 0, "number": 4, "has_bit": 16, "type": 5, "label": 1 },
+        "return_health_removed": { "offset": 1, "number": 5, "has_bit": 8, "type": 5, "label": 1 },
+        "return_num_hits": { "offset": 2, "number": 6, "has_bit": -1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RoundEndReportData_InitialConditions": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "ct_equip_value": { "offset": 48, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "t_equip_value": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
+        "terrorist_odds": { "offset": 0, "number": 3, "has_bit": 16, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_PostRoundDamageReport": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "other_xuid": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
+        "given_kill_type": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
+        "given_health_removed": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
+        "given_num_hits": { "offset": 40, "number": 4, "has_bit": 3, "type": 5, "label": 1 },
+        "taken_kill_type": { "offset": 44, "number": 5, "has_bit": 4, "type": 5, "label": 1 },
+        "taken_health_removed": { "offset": 48, "number": 6, "has_bit": 5, "type": 5, "label": 1 },
+        "taken_num_hits": { "offset": 52, "number": 7, "has_bit": 6, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CurrentRoundOdds": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "odds": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_DeepStats": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "stats": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ShootInfo": {
+      "size": 72,
+      "has_bits_offset": 16,
+      "fields": {
+        "frame_number": { "offset": 64, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
+        "hitbox_transforms": { "offset": 24, "number": 2, "has_bit": -1, "type": 11, "label": 3 },
+        "shoot_pos": { "offset": 48, "number": 3, "has_bit": 0, "type": 11, "label": 1 },
+        "shoot_dir": { "offset": 56, "number": 4, "has_bit": 1, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ResetHud": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "reset": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_GameTitle": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RequestState": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_StopSpectatorMode": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_DisconnectToLobby": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ClientInfo": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_ServerRankRevealAll": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "seconds_till_shutdown": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
+        "reservation": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsgPreMatchSayText": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "account_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "text": { "offset": 24, "number": 2, "has_bit": 0, "type": 9, "label": 1 },
+        "all_chat": { "offset": 36, "number": 3, "has_bit": 2, "type": 8, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CounterStrafe": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "press_to_release_ns": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
+        "total_keys_down": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_DamagePrediction": {
+      "size": 72,
+      "has_bits_offset": 16,
+      "fields": {
+        "command_num": { "offset": 48, "number": 1, "has_bit": 3, "type": 5, "label": 1 },
+        "pellet_idx": { "offset": 52, "number": 2, "has_bit": 4, "type": 5, "label": 1 },
+        "victim_slot": { "offset": 56, "number": 3, "has_bit": 5, "type": 5, "label": 1 },
+        "victim_starting_health": { "offset": 60, "number": 4, "has_bit": 6, "type": 5, "label": 1 },
+        "victim_damage": { "offset": 64, "number": 5, "has_bit": 7, "type": 5, "label": 1 },
+        "shoot_pos": { "offset": 24, "number": 6, "has_bit": 0, "type": 11, "label": 1 },
+        "shoot_dir": { "offset": 32, "number": 7, "has_bit": 1, "type": 11, "label": 1 },
+        "aim_punch": { "offset": 40, "number": 8, "has_bit": 2, "type": 11, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_RecurringMissionSchema": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "period": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "mission_schema": { "offset": 24, "number": 2, "has_bit": 0, "type": 12, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SendPlayerLoadout": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "loadout": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
+        "playerslot": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_SendPlayerLoadout_LoadoutItem": {
+      "size": 56,
+      "has_bits_offset": 16,
+      "fields": {
+        "econ_item": { "offset": 24, "number": 1, "has_bit": -1, "type": 11, "label": 1 },
+        "team": { "offset": 48, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
+        "slot": { "offset": 4294967295, "number": 3, "has_bit": 16, "type": 5, "label": 1 }
+      }
+    },
+    "CCSUsrMsg_CustomHudClicked": {
+      "size": 40,
+      "has_bits_offset": 16,
+      "fields": {
+        "custom_hud_layout": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
+        "button_id": { "offset": 24, "number": 2, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CVacNet_GetReviewerInfo_Request": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "appid": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
+      }
+    },
+    "CVacnetReviewerInfo": {
+      "size": 48,
+      "has_bits_offset": -1,
+      "fields": {
+        "permissions": { "offset": 16, "number": 1, "has_bit": -1, "type": 9, "label": 3 }
+      }
+    },
+    "CVacNet_GetReviewerInfo_Response": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "reviewer_info": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
+      }
+    },
     "GameServerPing": {
       "size": 40,
       "has_bits_offset": 16,
@@ -1963,1776 +3733,6 @@
       "fields": {
         "period": { "offset": 16, "number": 1, "has_bit": -1, "type": 13, "label": 1 },
         "mission_templates": { "offset": 0, "number": 2, "has_bit": -1, "type": 12, "label": 3 }
-      }
-    },
-    "CGCStorePurchaseInit_LineItem": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_def_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "quantity": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "cost_in_local_currency": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 },
-        "purchase_type": { "offset": 48, "number": 4, "has_bit": 4, "type": 13, "label": 1 },
-        "supplemental_data": { "offset": 40, "number": 5, "has_bit": 3, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgGCStorePurchaseInit": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "country": { "offset": 48, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "language": { "offset": 56, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "currency": { "offset": 60, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "line_items": { "offset": 24, "number": 4, "has_bit": -1, "type": 11, "label": 3 }
-      }
-    },
-    "CMsgGCStorePurchaseInitResponse": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "result": { "offset": 56, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "txn_id": { "offset": 48, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
-        "url": { "offset": 40, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
-        "item_ids": { "offset": 24, "number": 4, "has_bit": -1, "type": 4, "label": 3 }
-      }
-    },
-    "CSOPartyInvite": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "group_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 4, "label": 1 },
-        "sender_id": { "offset": 40, "number": 2, "has_bit": 2, "type": 6, "label": 1 },
-        "sender_name": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CSOLobbyInvite": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "group_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 4, "label": 1 },
-        "sender_id": { "offset": 40, "number": 2, "has_bit": 2, "type": 6, "label": 1 },
-        "sender_name": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgSystemBroadcast": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "message": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgInviteToParty": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 },
-        "client_version": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "team_invite": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgInvitationCreated": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "group_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "steam_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 6, "label": 1 }
-      }
-    },
-    "CMsgPartyInviteResponse": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "party_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "accept": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 },
-        "client_version": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "team_invite": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgKickFromParty": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
-      }
-    },
-    "CMsgLeaveParty": {
-      "size": 24,
-      "has_bits_offset": -1,
-      "fields": {
-      }
-    },
-    "CMsgServerAvailable": {
-      "size": 24,
-      "has_bits_offset": -1,
-      "fields": {
-      }
-    },
-    "CMsgLANServerAvailable": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "lobby_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
-      }
-    },
-    "CSOEconGameAccountClient": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "additional_backpack_slots": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "trade_ban_expiration": { "offset": 28, "number": 6, "has_bit": 1, "type": 7, "label": 1 },
-        "bonus_xp_timestamp_refresh": { "offset": 32, "number": 12, "has_bit": 2, "type": 7, "label": 1 },
-        "bonus_xp_usedflags": { "offset": 36, "number": 13, "has_bit": 3, "type": 13, "label": 1 },
-        "elevated_state": { "offset": 40, "number": 14, "has_bit": 4, "type": 13, "label": 1 },
-        "elevated_timestamp": { "offset": 44, "number": 15, "has_bit": 5, "type": 13, "label": 1 }
-      }
-    },
-    "CSOItemCriteriaCondition": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "op": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "field": { "offset": 24, "number": 2, "has_bit": 0, "type": 9, "label": 1 },
-        "required": { "offset": 44, "number": 3, "has_bit": 3, "type": 8, "label": 1 },
-        "float_value": { "offset": 48, "number": 4, "has_bit": 4, "type": 2, "label": 1 },
-        "string_value": { "offset": 32, "number": 5, "has_bit": 1, "type": 9, "label": 1 }
-      }
-    },
-    "CSOItemCriteria": {
-      "size": 80,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_level": { "offset": 48, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "item_quality": { "offset": 52, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "item_level_set": { "offset": 64, "number": 3, "has_bit": 4, "type": 8, "label": 1 },
-        "item_quality_set": { "offset": 65, "number": 4, "has_bit": 5, "type": 8, "label": 1 },
-        "initial_inventory": { "offset": 56, "number": 5, "has_bit": 2, "type": 13, "label": 1 },
-        "initial_quantity": { "offset": 60, "number": 6, "has_bit": 3, "type": 13, "label": 1 },
-        "ignore_enabled_flag": { "offset": 66, "number": 8, "has_bit": 6, "type": 8, "label": 1 },
-        "conditions": { "offset": 24, "number": 9, "has_bit": -1, "type": 11, "label": 3 },
-        "item_rarity": { "offset": 68, "number": 10, "has_bit": 8, "type": 5, "label": 1 },
-        "item_rarity_set": { "offset": 67, "number": 11, "has_bit": 7, "type": 8, "label": 1 },
-        "recent_only": { "offset": 72, "number": 12, "has_bit": 9, "type": 8, "label": 1 }
-      }
-    },
-    "CSOItemRecipe": {
-      "size": 192,
-      "has_bits_offset": 16,
-      "fields": {
-        "def_index": { "offset": 168, "number": 1, "has_bit": 10, "type": 13, "label": 1 },
-        "name": { "offset": 88, "number": 2, "has_bit": 0, "type": 9, "label": 1 },
-        "n_a": { "offset": 96, "number": 3, "has_bit": 1, "type": 9, "label": 1 },
-        "desc_inputs": { "offset": 104, "number": 4, "has_bit": 2, "type": 9, "label": 1 },
-        "desc_outputs": { "offset": 112, "number": 5, "has_bit": 3, "type": 9, "label": 1 },
-        "di_a": { "offset": 120, "number": 6, "has_bit": 4, "type": 9, "label": 1 },
-        "di_b": { "offset": 128, "number": 7, "has_bit": 5, "type": 9, "label": 1 },
-        "di_c": { "offset": 136, "number": 8, "has_bit": 6, "type": 9, "label": 1 },
-        "do_a": { "offset": 144, "number": 9, "has_bit": 7, "type": 9, "label": 1 },
-        "do_b": { "offset": 152, "number": 10, "has_bit": 8, "type": 9, "label": 1 },
-        "do_c": { "offset": 160, "number": 11, "has_bit": 9, "type": 9, "label": 1 },
-        "requires_all_same_class": { "offset": 172, "number": 12, "has_bit": 11, "type": 8, "label": 1 },
-        "requires_all_same_slot": { "offset": 173, "number": 13, "has_bit": 12, "type": 8, "label": 1 },
-        "class_usage_for_output": { "offset": 176, "number": 14, "has_bit": 13, "type": 5, "label": 1 },
-        "slot_usage_for_output": { "offset": 180, "number": 15, "has_bit": 14, "type": 5, "label": 1 },
-        "set_for_output": { "offset": 184, "number": 16, "has_bit": 15, "type": 5, "label": 1 },
-        "input_items_criteria": { "offset": 24, "number": 20, "has_bit": -1, "type": 11, "label": 3 },
-        "output_items_criteria": { "offset": 48, "number": 21, "has_bit": -1, "type": 11, "label": 3 },
-        "input_item_dupe_counts": { "offset": 72, "number": 22, "has_bit": -1, "type": 13, "label": 3 }
-      }
-    },
-    "CMsgDevNewItemRequest": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "receiver": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
-        "criteria": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CMsgIncrementKillCountAttribute": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "killer_account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 7, "label": 1 },
-        "victim_account_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 7, "label": 1 },
-        "item_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 },
-        "event_type": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "amount": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgApplySticker": {
-      "size": 80,
-      "has_bits_offset": 16,
-      "fields": {
-        "sticker_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "item_item_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
-        "sticker_slot": { "offset": 40, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "baseitem_defidx": { "offset": 44, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "sticker_wear": { "offset": 48, "number": 5, "has_bit": 4, "type": 2, "label": 1 },
-        "sticker_rotation": { "offset": 52, "number": 6, "has_bit": 5, "type": 2, "label": 1 },
-        "sticker_scale": { "offset": 56, "number": 7, "has_bit": 6, "type": 2, "label": 1 },
-        "sticker_offset_x": { "offset": 60, "number": 8, "has_bit": 7, "type": 2, "label": 1 },
-        "sticker_offset_y": { "offset": 64, "number": 9, "has_bit": 8, "type": 2, "label": 1 },
-        "sticker_offset_z": { "offset": 68, "number": 10, "has_bit": 9, "type": 2, "label": 1 },
-        "sticker_wear_target": { "offset": 72, "number": 11, "has_bit": 10, "type": 2, "label": 1 }
-      }
-    },
-    "CMsgModifyItemAttribute": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "attr_defidx": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "attr_value": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgApplyStatTrakSwap": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "tool_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "item_1_item_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
-        "item_2_item_id": { "offset": 40, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
-      }
-    },
-    "CSOEconItemAttribute": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "def_index": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "value": { "offset": 36, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
-        "value_bytes": { "offset": 24, "number": 3, "has_bit": 0, "type": 12, "label": 1 }
-      }
-    },
-    "CSOEconItemEquipped": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "new_class": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "new_slot": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 }
-      }
-    },
-    "CSOEconItem": {
-      "size": 160,
-      "has_bits_offset": 16,
-      "fields": {
-        "id": { "offset": 96, "number": 1, "has_bit": 3, "type": 4, "label": 1 },
-        "account_id": { "offset": 104, "number": 2, "has_bit": 4, "type": 13, "label": 1 },
-        "inventory": { "offset": 108, "number": 3, "has_bit": 5, "type": 13, "label": 1 },
-        "def_index": { "offset": 112, "number": 4, "has_bit": 6, "type": 13, "label": 1 },
-        "quantity": { "offset": 116, "number": 5, "has_bit": 7, "type": 13, "label": 1 },
-        "level": { "offset": 120, "number": 6, "has_bit": 8, "type": 13, "label": 1 },
-        "quality": { "offset": 124, "number": 7, "has_bit": 9, "type": 13, "label": 1 },
-        "flags": { "offset": 128, "number": 8, "has_bit": 10, "type": 13, "label": 1 },
-        "origin": { "offset": 132, "number": 9, "has_bit": 11, "type": 13, "label": 1 },
-        "custom_name": { "offset": 72, "number": 10, "has_bit": 0, "type": 9, "label": 1 },
-        "custom_desc": { "offset": 80, "number": 11, "has_bit": 1, "type": 9, "label": 1 },
-        "attribute": { "offset": 24, "number": 12, "has_bit": -1, "type": 11, "label": 3 },
-        "interior_item": { "offset": 88, "number": 13, "has_bit": 2, "type": 11, "label": 1 },
-        "in_use": { "offset": 136, "number": 14, "has_bit": 12, "type": 8, "label": 1 },
-        "style": { "offset": 140, "number": 15, "has_bit": 13, "type": 13, "label": 1 },
-        "original_id": { "offset": 144, "number": 16, "has_bit": 14, "type": 4, "label": 1 },
-        "equipped_state": { "offset": 48, "number": 18, "has_bit": -1, "type": 11, "label": 3 },
-        "rarity": { "offset": 152, "number": 19, "has_bit": 15, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgSortItems": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "sort_type": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgDeleteItem": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgModifyItemStringAttr": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "tool_item_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 4, "label": 1 },
-        "subject_item_id": { "offset": 40, "number": 2, "has_bit": 2, "type": 4, "label": 1 },
-        "attr_def": { "offset": 48, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
-        "attr_value": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgCraftItemsRequest": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "recipe_def": { "offset": 40, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "craft_items": { "offset": 24, "number": 2, "has_bit": -1, "type": 4, "label": 3 }
-      }
-    },
-    "CSOEconClaimCode": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "code_type": { "offset": 36, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
-        "time_acquired": { "offset": 40, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
-        "code": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgStoreGetUserData": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "price_sheet_version": { "offset": 24, "number": 1, "has_bit": 0, "type": 7, "label": 1 },
-        "currency": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CMsgStoreGetUserDataResponse": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "result": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "currency_deprecated": { "offset": 44, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
-        "country_deprecated": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
-        "price_sheet_version": { "offset": 48, "number": 4, "has_bit": 4, "type": 7, "label": 1 },
-        "price_sheet": { "offset": 32, "number": 8, "has_bit": 1, "type": 12, "label": 1 }
-      }
-    },
-    "CMsgUpdateItemSchema": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "items_game": { "offset": 24, "number": 1, "has_bit": 0, "type": 12, "label": 1 },
-        "item_schema_version": { "offset": 40, "number": 2, "has_bit": 2, "type": 7, "label": 1 },
-        "items_game_url": { "offset": 32, "number": 4, "has_bit": 1, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCError": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "error_text": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgRequestInventoryRefresh": {
-      "size": 24,
-      "has_bits_offset": -1,
-      "fields": {
-      }
-    },
-    "CMsgUseItem": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_id": { "offset": 40, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "target_steam_id": { "offset": 48, "number": 2, "has_bit": 1, "type": 6, "label": 1 },
-        "gift__potential_targets": { "offset": 24, "number": 3, "has_bit": -1, "type": 13, "label": 3 },
-        "initiator_steam_id": { "offset": 56, "number": 5, "has_bit": 2, "type": 6, "label": 1 }
-      }
-    },
-    "CMsgReplayUploadedToYouTube": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "youtube_url": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "youtube_account_name": { "offset": 32, "number": 2, "has_bit": 1, "type": 9, "label": 1 },
-        "session_id": { "offset": 40, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgConsumableExhausted": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_def_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CMsgItemAcknowledged__DEPRECATED": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "inventory": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "def_index": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "quality": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "rarity": { "offset": 40, "number": 5, "has_bit": 4, "type": 13, "label": 1 },
-        "origin": { "offset": 44, "number": 6, "has_bit": 5, "type": 13, "label": 1 },
-        "item_id": { "offset": 48, "number": 7, "has_bit": 6, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgSetItemPositions": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "item_positions": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 }
-      }
-    },
-    "CMsgSetItemPositions_ItemPosition": {
-      "size": 48,
-      "has_bits_offset": -1,
-      "fields": {
-        "legacy_item_id": { "offset": 16, "number": 1, "has_bit": -1, "type": 13, "label": 1 },
-        "position": { "offset": 16, "number": 2, "has_bit": -1, "type": 13, "label": 1 },
-        "item_id": { "offset": 8, "number": 3, "has_bit": -1, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgGCReportAbuse": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "target_steam_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
-        "description": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 },
-        "gid": { "offset": 48, "number": 5, "has_bit": 4, "type": 4, "label": 1 },
-        "abuse_type": { "offset": 40, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
-        "content_type": { "offset": 44, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
-        "target_game_server_ip": { "offset": 56, "number": 6, "has_bit": 5, "type": 7, "label": 1 },
-        "target_game_server_port": { "offset": 60, "number": 7, "has_bit": 6, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgGCReportAbuseResponse": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "target_steam_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
-        "result": { "offset": 40, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
-        "error_message": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCNameItemNotification": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "player_steamid": { "offset": 32, "number": 1, "has_bit": 1, "type": 6, "label": 1 },
-        "item_def_index": { "offset": 40, "number": 2, "has_bit": 2, "type": 13, "label": 1 },
-        "item_name_custom": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCShowItemsPickedUp": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "player_steamid": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
-      }
-    },
-    "CMsgGCIncrementKillCountResponse": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "killer_account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "num_kills": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "item_def": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "level_type": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 }
-      }
-    },
-    "CSOEconItemDropRateBonus": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "expiration_date": { "offset": 28, "number": 2, "has_bit": 1, "type": 7, "label": 1 },
-        "bonus": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
-        "bonus_count": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "item_id": { "offset": 40, "number": 5, "has_bit": 4, "type": 4, "label": 1 },
-        "def_index": { "offset": 48, "number": 6, "has_bit": 5, "type": 13, "label": 1 }
-      }
-    },
-    "CSOEconItemLeagueViewPass": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "league_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "admin": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "itemindex": { "offset": 36, "number": 4, "has_bit": 3, "type": 13, "label": 1 }
-      }
-    },
-    "CSOEconItemEventTicket": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "event_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "item_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgGCStorePurchaseCancel": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "txn_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgGCStorePurchaseCancelResponse": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "result": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgGCStorePurchaseFinalize": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "txn_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgGCStorePurchaseFinalizeResponse": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "result": { "offset": 40, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "item_ids": { "offset": 24, "number": 2, "has_bit": -1, "type": 4, "label": 3 }
-      }
-    },
-    "CMsgGCBannedWordListRequest": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "ban_list_group_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "word_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgGCRequestAnnouncements": {
-      "size": 24,
-      "has_bits_offset": -1,
-      "fields": {
-      }
-    },
-    "CMsgGCRequestAnnouncementsResponse": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "announcement_title": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "announcement": { "offset": 32, "number": 2, "has_bit": 1, "type": 9, "label": 1 },
-        "nextmatch_title": { "offset": 40, "number": 3, "has_bit": 2, "type": 9, "label": 1 },
-        "nextmatch": { "offset": 48, "number": 4, "has_bit": 3, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCBannedWord": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "word_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "word_type": { "offset": 36, "number": 2, "has_bit": 2, "type": 14, "label": 1 },
-        "word": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCBannedWordListResponse": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "ban_list_group_id": { "offset": 48, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "word_list": { "offset": 24, "number": 2, "has_bit": -1, "type": 11, "label": 3 }
-      }
-    },
-    "CMsgGCToGCBannedWordListBroadcast": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "broadcast": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CMsgGCToGCBannedWordListUpdated": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "group_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgGCToGCDirtySDOCache": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "sdo_type": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "key_uint64": { "offset": 24, "number": 2, "has_bit": 0, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgGCToGCDirtyMultipleSDOCache": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "sdo_type": { "offset": 40, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "key_uint64": { "offset": 24, "number": 2, "has_bit": -1, "type": 4, "label": 3 }
-      }
-    },
-    "CMsgSDONoMemcached": {
-      "size": 24,
-      "has_bits_offset": -1,
-      "fields": {
-      }
-    },
-    "CMsgGCToGCUpdateSQLKeyValue": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "key_name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCToGCIsTrustedServer": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 }
-      }
-    },
-    "CMsgGCToGCIsTrustedServerResponse": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "is_trusted": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 }
-      }
-    },
-    "CMsgGCToGCBroadcastConsoleCommand": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "con_command": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CMsgGCServerVersionUpdated": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "server_version": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgGCClientVersionUpdated": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "client_version": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgGCToGCWebAPIAccountChanged": {
-      "size": 24,
-      "has_bits_offset": -1,
-      "fields": {
-      }
-    },
-    "CMsgGCToGCRequestPassportItemGrant": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "steam_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 6, "label": 1 },
-        "league_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "reward_flag": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CMsgGameServerInfo": {
-      "size": 112,
-      "has_bits_offset": 16,
-      "fields": {
-        "server_public_ip_addr": { "offset": 32, "number": 1, "has_bit": 1, "type": 7, "label": 1 },
-        "server_private_ip_addr": { "offset": 36, "number": 2, "has_bit": 2, "type": 7, "label": 1 },
-        "server_port": { "offset": 40, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
-        "server_tv_port": { "offset": 44, "number": 4, "has_bit": 4, "type": 13, "label": 1 },
-        "server_key": { "offset": 24, "number": 5, "has_bit": 0, "type": 9, "label": 1 },
-        "server_hibernation": { "offset": 48, "number": 6, "has_bit": 5, "type": 8, "label": 1 },
-        "server_type": { "offset": 52, "number": 7, "has_bit": 6, "type": 14, "label": 1 },
-        "server_region": { "offset": 56, "number": 8, "has_bit": 7, "type": 13, "label": 1 },
-        "server_loadavg": { "offset": 60, "number": 9, "has_bit": 8, "type": 2, "label": 1 },
-        "server_tv_broadcast_time": { "offset": 64, "number": 10, "has_bit": 9, "type": 2, "label": 1 },
-        "server_game_time": { "offset": 68, "number": 11, "has_bit": 10, "type": 2, "label": 1 },
-        "server_relay_connected_steam_id": { "offset": 72, "number": 12, "has_bit": 11, "type": 6, "label": 1 },
-        "relay_slots_max": { "offset": 80, "number": 13, "has_bit": 12, "type": 13, "label": 1 },
-        "relays_connected": { "offset": 84, "number": 14, "has_bit": 13, "type": 5, "label": 1 },
-        "relay_clients_connected": { "offset": 96, "number": 15, "has_bit": 15, "type": 5, "label": 1 },
-        "relayed_game_server_steam_id": { "offset": 88, "number": 16, "has_bit": 14, "type": 6, "label": 1 },
-        "parent_relay_count": { "offset": 100, "number": 17, "has_bit": 16, "type": 13, "label": 1 },
-        "tv_secret_code": { "offset": 104, "number": 18, "has_bit": 17, "type": 6, "label": 1 }
-      }
-    },
-    "CSOEconEquipSlot": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "class_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "slot_id": { "offset": 40, "number": 3, "has_bit": 3, "type": 13, "label": 1 },
-        "item_id": { "offset": 32, "number": 4, "has_bit": 2, "type": 4, "label": 1 },
-        "item_definition": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgAdjustEquipSlot": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "class_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "slot_id": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "item_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 4, "label": 1 }
-      }
-    },
-    "CMsgAdjustEquipSlots": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "slots": { "offset": 24, "number": 1, "has_bit": -1, "type": 11, "label": 3 },
-        "change_num": { "offset": 48, "number": 2, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgOpenCrate": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "tool_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "subject_item_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
-        "for_rental": { "offset": 40, "number": 3, "has_bit": 2, "type": 8, "label": 1 },
-        "points_remaining": { "offset": 44, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "volatile_limit": { "offset": 48, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
-      }
-    },
-    "CSOEconRentalHistory": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "crate_item_id": { "offset": 24, "number": 2, "has_bit": 0, "type": 4, "label": 1 },
-        "crate_def_index": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "issue_date": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "expiration_date": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 }
-      }
-    },
-    "CMsgAcknowledgeRentalExpiration": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "crate_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
-      }
-    },
-    "CClientMsg_CustomGameEvent": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "event_name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "data": { "offset": 32, "number": 2, "has_bit": 1, "type": 12, "label": 1 }
-      }
-    },
-    "CClientMsg_CustomGameEventBounce": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "event_name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "data": { "offset": 32, "number": 2, "has_bit": 1, "type": 12, "label": 1 },
-        "player_slot": { "offset": 40, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CClientMsg_ClientUIEvent": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "event": { "offset": 40, "number": 1, "has_bit": 2, "type": 14, "label": 1 },
-        "ent_ehandle": { "offset": 44, "number": 2, "has_bit": 3, "type": 13, "label": 1 },
-        "client_ehandle": { "offset": 48, "number": 3, "has_bit": 4, "type": 13, "label": 1 },
-        "data1": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 },
-        "data2": { "offset": 32, "number": 5, "has_bit": 1, "type": 9, "label": 1 }
-      }
-    },
-    "CClientMsg_DevPaletteVisibilityChangedEvent": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "visible": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 }
-      }
-    },
-    "CClientMsg_WorldUIControllerHasPanelChangedEvent": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "has_panel": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 },
-        "client_ehandle": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "literal_hand_type": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 }
-      }
-    },
-    "CClientMsg_RotateAnchor": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "angle": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 }
-      }
-    },
-    "CCSPredictionEvent_DamageTag": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "flinch_mod_small": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
-        "flinch_mod_large": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
-        "friendly_fire_damage_reduction_ratio": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 }
-      }
-    },
-    "CCSPredictionEvent_PlayerTeleport": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "relative": { "offset": 48, "number": 1, "has_bit": 3, "type": 8, "label": 1 },
-        "origin": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 },
-        "angles": { "offset": 32, "number": 3, "has_bit": 1, "type": 11, "label": 1 },
-        "velocity": { "offset": 40, "number": 4, "has_bit": 2, "type": 11, "label": 1 }
-      }
-    },
-    "CMsgTEPlayerAnimEvent": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "player": { "offset": 32, "number": 1, "has_bit": 2, "type": 7, "label": 1 },
-        "event": { "offset": 24, "number": 2, "has_bit": 0, "type": 13, "label": 1 },
-        "data": { "offset": 28, "number": 3, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CMsgTERadioIcon": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "player": { "offset": 24, "number": 1, "has_bit": 0, "type": 7, "label": 1 }
-      }
-    },
-    "CMsgTEFireBullets": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "origin": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
-        "angles": { "offset": 32, "number": 2, "has_bit": 1, "type": 11, "label": 1 },
-        "weapon_id": { "offset": 36, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "mode": { "offset": 40, "number": 4, "has_bit": 3, "type": 13, "label": 1 },
-        "seed": { "offset": 44, "number": 5, "has_bit": 4, "type": 13, "label": 1 },
-        "player": { "offset": 48, "number": 6, "has_bit": 5, "type": 7, "label": 1 },
-        "inaccuracy": { "offset": 52, "number": 7, "has_bit": 6, "type": 2, "label": 1 },
-        "recoil_index": { "offset": 56, "number": 8, "has_bit": 7, "type": 2, "label": 1 },
-        "spread": { "offset": 0, "number": 9, "has_bit": 16, "type": 2, "label": 1 },
-        "sound_type": { "offset": 1, "number": 10, "has_bit": 8, "type": 5, "label": 1 },
-        "item_def_index": { "offset": 2, "number": 11, "has_bit": -1, "type": 13, "label": 1 },
-        "sound_dsp_effect": { "offset": 3, "number": 12, "has_bit": -1, "type": 7, "label": 1 },
-        "ent_origin": { "offset": 4, "number": 13, "has_bit": -1, "type": 11, "label": 1 },
-        "num_bullets_remaining": { "offset": 5, "number": 14, "has_bit": -1, "type": 13, "label": 1 },
-        "attack_type": { "offset": 6, "number": 15, "has_bit": 24, "type": 13, "label": 1 },
-        "player_inair": { "offset": 7, "number": 17, "has_bit": 32, "type": 8, "label": 1 },
-        "player_scoped": { "offset": 16, "number": 18, "has_bit": 104, "type": 8, "label": 1 },
-        "tick": { "offset": 8, "number": 19, "has_bit": 56, "type": 5, "label": 1 },
-        "extra": { "offset": 4294967295, "number": 16, "has_bit": 60, "type": 11, "label": 1 }
-      }
-    },
-    "CMsgTEFireBullets_Extra": {
-      "size": 112,
-      "has_bits_offset": 16,
-      "fields": {
-        "aim_punch": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
-        "attack_tick_count": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "attack_tick_frac": { "offset": 104, "number": 3, "has_bit": 17, "type": 2, "label": 1 },
-        "render_tick_count": { "offset": 56, "number": 4, "has_bit": 4, "type": 5, "label": 1 },
-        "render_tick_frac": { "offset": 60, "number": 5, "has_bit": 5, "type": 2, "label": 1 },
-        "inaccuracy_move": { "offset": 108, "number": 6, "has_bit": 18, "type": 2, "label": 1 },
-        "inaccuracy_air": { "offset": 64, "number": 7, "has_bit": 6, "type": 2, "label": 1 },
-        "type": { "offset": 68, "number": 8, "has_bit": 7, "type": 5, "label": 1 }
-      }
-    },
-    "CMsgPlayerBulletHit": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "attacker_slot": { "offset": 48, "number": 1, "has_bit": 6, "type": 5, "label": 1 },
-        "victim_slot": { "offset": 52, "number": 2, "has_bit": 7, "type": 5, "label": 1 },
-        "victim_pos": { "offset": 24, "number": 3, "has_bit": 0, "type": 11, "label": 1 },
-        "hit_group": { "offset": 32, "number": 4, "has_bit": 1, "type": 5, "label": 1 },
-        "damage": { "offset": 36, "number": 5, "has_bit": 2, "type": 5, "label": 1 },
-        "penetration_count": { "offset": 40, "number": 6, "has_bit": 3, "type": 5, "label": 1 },
-        "is_kill": { "offset": 44, "number": 7, "has_bit": 4, "type": 8, "label": 1 },
-        "through_smoke": { "offset": 45, "number": 8, "has_bit": 5, "type": 8, "label": 1 }
-      }
-    },
-    "CP2P_TextMessage": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "text": { "offset": 24, "number": 1, "has_bit": 0, "type": 12, "label": 1 }
-      }
-    },
-    "CSteam_Voice_Encoding": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "voice_data": { "offset": 24, "number": 1, "has_bit": 0, "type": 12, "label": 1 }
-      }
-    },
-    "CP2P_Voice": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "audio": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
-        "broadcast_group": { "offset": 32, "number": 2, "has_bit": 1, "type": 13, "label": 1 }
-      }
-    },
-    "CP2P_Ping": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "send_time": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "is_reply": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 }
-      }
-    },
-    "CP2P_VRAvatarPosition": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "body_parts": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
-        "hat_id": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "scene_id": { "offset": 0, "number": 3, "has_bit": 16, "type": 5, "label": 1 },
-        "world_scale": { "offset": 1, "number": 4, "has_bit": 8, "type": 5, "label": 1 }
-      }
-    },
-    "CP2P_VRAvatarPosition_COrientation": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "pos": { "offset": 24, "number": 1, "has_bit": -1, "type": 11, "label": 1 },
-        "ang": { "offset": 48, "number": 2, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CP2P_WatchSynchronization": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "demo_tick": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "paused": { "offset": 28, "number": 2, "has_bit": 1, "type": 8, "label": 1 },
-        "tv_listen_voice_indices": { "offset": 32, "number": 3, "has_bit": 3, "type": 4, "label": 1 },
-        "dota_spectator_mode": { "offset": 40, "number": 4, "has_bit": 4, "type": 5, "label": 1 },
-        "dota_spectator_watching_broadcaster": { "offset": 29, "number": 5, "has_bit": 2, "type": 8, "label": 1 },
-        "dota_spectator_hero_index": { "offset": 44, "number": 6, "has_bit": 5, "type": 5, "label": 1 },
-        "dota_spectator_autospeed": { "offset": 48, "number": 7, "has_bit": 6, "type": 5, "label": 1 },
-        "dota_replay_speed": { "offset": 52, "number": 8, "has_bit": 7, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VGUIMenu": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "name": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "show": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 },
-        "keys": { "offset": 0, "number": 3, "has_bit": 16, "type": 11, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_VGUIMenu_Keys": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "name": { "offset": 48, "number": 1, "has_bit": 0, "type": 9, "label": 1 },
-        "value": { "offset": 56, "number": 2, "has_bit": 1, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_Geiger": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "range": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_Train": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "train": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_HudText": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "text": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_HudMsg": {
-      "size": 80,
-      "has_bits_offset": 16,
-      "fields": {
-        "channel": { "offset": 56, "number": 1, "has_bit": 4, "type": 5, "label": 1 },
-        "pos": { "offset": 32, "number": 2, "has_bit": 1, "type": 11, "label": 1 },
-        "clr1": { "offset": 40, "number": 3, "has_bit": 2, "type": 11, "label": 1 },
-        "clr2": { "offset": 48, "number": 4, "has_bit": 3, "type": 11, "label": 1 },
-        "effect": { "offset": 60, "number": 5, "has_bit": 5, "type": 5, "label": 1 },
-        "fade_in_time": { "offset": 64, "number": 6, "has_bit": 6, "type": 2, "label": 1 },
-        "fade_out_time": { "offset": 68, "number": 7, "has_bit": 7, "type": 2, "label": 1 },
-        "hold_time": { "offset": 72, "number": 9, "has_bit": 8, "type": 2, "label": 1 },
-        "fx_time": { "offset": 76, "number": 10, "has_bit": 9, "type": 2, "label": 1 },
-        "text": { "offset": 24, "number": 11, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_Shake": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "command": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "local_amplitude": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
-        "frequency": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
-        "duration": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_Fade": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "duration": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "hold_time": { "offset": 36, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
-        "flags": { "offset": 40, "number": 3, "has_bit": 3, "type": 5, "label": 1 },
-        "clr": { "offset": 24, "number": 4, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_Rumble": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "index": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "data": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "flags": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CloseCaption": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "hash": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "duration": { "offset": 36, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
-        "from_player": { "offset": 40, "number": 3, "has_bit": 3, "type": 8, "label": 1 },
-        "cctoken": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CloseCaptionDirect": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "hash": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "duration": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "from_player": { "offset": 32, "number": 3, "has_bit": 2, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SendAudio": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "radio_sound": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RawAudio": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "pitch": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "entidx": { "offset": 40, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
-        "duration": { "offset": 36, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
-        "voice_filename": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VoiceMask": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "player_masks": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
-        "player_mod_enable": { "offset": 28, "number": 2, "has_bit": 1, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VoiceMask_PlayerMask": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "game_rules_mask": { "offset": 24, "number": 1, "has_bit": -1, "type": 5, "label": 1 },
-        "ban_masks": { "offset": 48, "number": 2, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_Damage": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "amount": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "inflictor_world_pos": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 },
-        "victim_entindex": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RadioText": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "msg_dst": { "offset": 56, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "client": { "offset": 60, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
-        "msg_name": { "offset": 48, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
-        "params": { "offset": 24, "number": 4, "has_bit": -1, "type": 9, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_HintText": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "message": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_KeyHintText": {
-      "size": 48,
-      "has_bits_offset": -1,
-      "fields": {
-        "messages": { "offset": 16, "number": 1, "has_bit": -1, "type": 9, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_ProcessSpottedEntityUpdate": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "new_update": { "offset": 48, "number": 1, "has_bit": 8, "type": 8, "label": 1 },
-        "entity_updates": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_ProcessSpottedEntityUpdate_SpottedEntityUpdate": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "entity_idx": { "offset": 48, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "class_id": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
-        "origin_x": { "offset": 0, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
-        "origin_y": { "offset": 4294967295, "number": 4, "has_bit": 8, "type": 5, "label": 1 },
-        "origin_z": { "offset": 4294967295, "number": 5, "has_bit": -1, "type": 5, "label": 1 },
-        "angle_y": { "offset": 8, "number": 6, "has_bit": -1, "type": 5, "label": 1 },
-        "defuser": { "offset": 4294967295, "number": 7, "has_bit": -1, "type": 8, "label": 1 },
-        "player_has_defuser": { "offset": 4294967295, "number": 8, "has_bit": -1, "type": 8, "label": 1 },
-        "player_has_c4": { "offset": 4294967295, "number": 9, "has_bit": 16, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SendPlayerItemDrops": {
-      "size": 48,
-      "has_bits_offset": -1,
-      "fields": {
-        "entity_updates": { "offset": 16, "number": 1, "has_bit": -1, "type": 11, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_SendPlayerItemFound": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "iteminfo": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
-        "playerslot": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ReloadEffect": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "entidx": { "offset": 40, "number": 1, "has_bit": 4, "type": 5, "label": 1 },
-        "actanim": { "offset": 24, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
-        "origin_x": { "offset": 28, "number": 3, "has_bit": 1, "type": 2, "label": 1 },
-        "origin_y": { "offset": 32, "number": 4, "has_bit": 2, "type": 2, "label": 1 },
-        "origin_z": { "offset": 36, "number": 5, "has_bit": 3, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_WeaponSound": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "entidx": { "offset": 52, "number": 1, "has_bit": 6, "type": 5, "label": 1 },
-        "origin_x": { "offset": 32, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
-        "origin_y": { "offset": 36, "number": 3, "has_bit": 2, "type": 2, "label": 1 },
-        "origin_z": { "offset": 40, "number": 4, "has_bit": 3, "type": 2, "label": 1 },
-        "sound": { "offset": 24, "number": 5, "has_bit": 0, "type": 9, "label": 1 },
-        "game_timestamp": { "offset": 44, "number": 6, "has_bit": 4, "type": 2, "label": 1 },
-        "source_soundscapeid": { "offset": 48, "number": 7, "has_bit": 5, "type": 7, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_WeaponMagDrop": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "entidx": { "offset": 32, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "secondary_data": { "offset": 24, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
-        "server_event": { "offset": 28, "number": 3, "has_bit": 1, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_UpdateScreenHealthBar": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "entidx": { "offset": 36, "number": 1, "has_bit": 3, "type": 5, "label": 1 },
-        "healthratio_old": { "offset": 24, "number": 2, "has_bit": 0, "type": 2, "label": 1 },
-        "healthratio_new": { "offset": 28, "number": 3, "has_bit": 1, "type": 2, "label": 1 },
-        "style": { "offset": 32, "number": 4, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_EntityOutlineHighlight": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "entidx": { "offset": 28, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "removehighlight": { "offset": 24, "number": 2, "has_bit": 0, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_AdjustMoney": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "amount": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ReportHit": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "pos_x": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
-        "pos_y": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
-        "timestamp": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 },
-        "pos_z": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_KillCam": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "obs_mode": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "first_target": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "second_target": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_DesiredTimescale": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "desired_timescale": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
-        "duration_realtime_sec": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
-        "interpolator_type": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "start_blend_time": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CurrentTimescale": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "cur_timescale": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_AchievementEvent": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "achievement": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "count": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "user_id": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_MatchEndConditions": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "fraglimit": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "mp_maxrounds": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "mp_winlimit": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "mp_timelimit": { "offset": 36, "number": 4, "has_bit": 3, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_PlayerStatsUpdate": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "version": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "stats": { "offset": 28, "number": 4, "has_bit": 1, "type": 11, "label": 3 },
-        "ehandle": { "offset": 0, "number": 5, "has_bit": 16, "type": 13, "label": 1 },
-        "crc": { "offset": 1, "number": 6, "has_bit": 8, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_PlayerStatsUpdate_Stat": {
-      "size": 64,
-      "has_bits_offset": 16,
-      "fields": {
-        "idx": { "offset": 48, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "delta": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_QuestProgress": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "quest_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 },
-        "normal_points": { "offset": 28, "number": 2, "has_bit": 1, "type": 13, "label": 1 },
-        "bonus_points": { "offset": 32, "number": 3, "has_bit": 2, "type": 13, "label": 1 },
-        "is_event_quest": { "offset": 36, "number": 4, "has_bit": 3, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ScoreLeaderboardData": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "data": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_PlayerDecalDigitalSignature": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "data": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_XRankGet": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "mode_idx": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "controller": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_XRankUpd": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "mode_idx": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "controller": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "ranking": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CallVoteFailed": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "reason": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "time": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VoteStart": {
-      "size": 72,
-      "has_bits_offset": 16,
-      "fields": {
-        "team": { "offset": 48, "number": 1, "has_bit": 3, "type": 5, "label": 1 },
-        "player_slot": { "offset": 60, "number": 2, "has_bit": 6, "type": 5, "label": 1 },
-        "vote_type": { "offset": 52, "number": 3, "has_bit": 4, "type": 5, "label": 1 },
-        "disp_str": { "offset": 24, "number": 4, "has_bit": 0, "type": 9, "label": 1 },
-        "details_str": { "offset": 32, "number": 5, "has_bit": 1, "type": 9, "label": 1 },
-        "other_team_str": { "offset": 40, "number": 6, "has_bit": 2, "type": 9, "label": 1 },
-        "is_yes_no_vote": { "offset": 56, "number": 7, "has_bit": 5, "type": 8, "label": 1 },
-        "player_slot_target": { "offset": 64, "number": 8, "has_bit": 7, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VotePass": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "team": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "vote_type": { "offset": 44, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
-        "disp_str": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
-        "details_str": { "offset": 32, "number": 4, "has_bit": 1, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VoteFailed": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "team": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "reason": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_VoteSetup": {
-      "size": 48,
-      "has_bits_offset": -1,
-      "fields": {
-        "potential_issues": { "offset": 16, "number": 1, "has_bit": -1, "type": 9, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_SendLastKillerDamageToClient": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "num_hits_given": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "damage_given": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "num_hits_taken": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "damage_taken": { "offset": 36, "number": 4, "has_bit": 3, "type": 5, "label": 1 },
-        "actual_damage_given": { "offset": 40, "number": 5, "has_bit": 4, "type": 5, "label": 1 },
-        "actual_damage_taken": { "offset": 44, "number": 6, "has_bit": 5, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ServerRankUpdate": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "rank_update": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_ServerRankUpdate_RankUpdate": {
-      "size": 48,
-      "has_bits_offset": -1,
-      "fields": {
-        "account_id": { "offset": 16, "number": 1, "has_bit": -1, "type": 5, "label": 1 },
-        "rank_old": { "offset": 16, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
-        "rank_new": { "offset": 8, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
-        "num_wins": { "offset": 4294967295, "number": 4, "has_bit": -1, "type": 5, "label": 1 },
-        "rank_change": { "offset": 4294967295, "number": 5, "has_bit": -1, "type": 2, "label": 1 },
-        "rank_type_id": { "offset": 4294967295, "number": 6, "has_bit": -1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_XpUpdate": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "data": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ItemPickup": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "item": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ShowMenu": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "bits_valid_slots": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "display_time": { "offset": 36, "number": 2, "has_bit": 2, "type": 5, "label": 1 },
-        "menu_string": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_BarTime": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "time": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_AmmoDenied": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "ammoidx": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_MarkAchievement": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "achievement": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_MatchStatsUpdate": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "update": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ItemDrop": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "itemid": { "offset": 24, "number": 1, "has_bit": 0, "type": 3, "label": 1 },
-        "death": { "offset": 32, "number": 2, "has_bit": 1, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RoundBackupFilenames": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "count": { "offset": 40, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "index": { "offset": 44, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
-        "filename": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 },
-        "nicename": { "offset": 32, "number": 4, "has_bit": 1, "type": 9, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SSUI": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "show": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 },
-        "start_time": { "offset": 28, "number": 2, "has_bit": 1, "type": 2, "label": 1 },
-        "end_time": { "offset": 32, "number": 3, "has_bit": 2, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SurvivalStats": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "xuid": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "facts": { "offset": 28, "number": 2, "has_bit": 1, "type": 11, "label": 3 },
-        "users": { "offset": 32, "number": 3, "has_bit": 2, "type": 11, "label": 3 },
-        "damages": { "offset": 36, "number": 5, "has_bit": 3, "type": 11, "label": 3 },
-        "ticknumber": { "offset": 0, "number": 4, "has_bit": 16, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SurvivalStats_Fact": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "type": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "display": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "value": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "interestingness": { "offset": 0, "number": 4, "has_bit": 16, "type": 2, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SurvivalStats_Placement": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "xuid": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "teamnumber": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "placement": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SurvivalStats_Damage": {
-      "size": 112,
-      "has_bits_offset": 16,
-      "fields": {
-        "xuid": { "offset": 96, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "to": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
-        "to_hits": { "offset": 48, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
-        "from": { "offset": 72, "number": 4, "has_bit": -1, "type": 5, "label": 1 },
-        "from_hits": { "offset": 104, "number": 5, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_EndOfMatchAllPlayersData": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "allplayerdata": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
-        "scene": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_EndOfMatchAllPlayersData_Accolade": {
-      "size": 88,
-      "has_bits_offset": 16,
-      "fields": {
-        "eaccolade": { "offset": 84, "number": 1, "has_bit": 6, "type": 5, "label": 1 },
-        "value": { "offset": 64, "number": 2, "has_bit": 2, "type": 2, "label": 1 },
-        "position": { "offset": 48, "number": 3, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_EndOfMatchAllPlayersData_PlayerData": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "slot": { "offset": 24, "number": 1, "has_bit": -1, "type": 5, "label": 1 },
-        "xuid": { "offset": 48, "number": 2, "has_bit": 0, "type": 4, "label": 1 },
-        "name": { "offset": 4294967295, "number": 3, "has_bit": 16, "type": 9, "label": 1 },
-        "teamnumber": { "offset": 0, "number": 4, "has_bit": 8, "type": 5, "label": 1 },
-        "nomination": { "offset": 16, "number": 5, "has_bit": -1, "type": 11, "label": 1 },
-        "items": { "offset": 8, "number": 6, "has_bit": -1, "type": 11, "label": 3 },
-        "playercolor": { "offset": 4294967295, "number": 7, "has_bit": -1, "type": 5, "label": 1 },
-        "isbot": { "offset": 4294967295, "number": 8, "has_bit": -1, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RoundEndReportData": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "init_conditions": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 },
-        "all_rer_event_data": { "offset": 44, "number": 2, "has_bit": 5, "type": 11, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_RoundEndReportData_RerEvent": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "timestamp": { "offset": 24, "number": 1, "has_bit": 0, "type": 2, "label": 1 },
-        "terrorist_odds": { "offset": 0, "number": 2, "has_bit": 16, "type": 5, "label": 1 },
-        "ct_alive": { "offset": 16, "number": 3, "has_bit": 8, "type": 5, "label": 1 },
-        "t_alive": { "offset": 8, "number": 4, "has_bit": -1, "type": 5, "label": 1 },
-        "victim_data": { "offset": 4294967295, "number": 5, "has_bit": -1, "type": 11, "label": 1 },
-        "objective_data": { "offset": 4294967295, "number": 6, "has_bit": -1, "type": 11, "label": 1 },
-        "all_damage_data": { "offset": 4294967295, "number": 7, "has_bit": -1, "type": 11, "label": 3 }
-      }
-    },
-    "CCSUsrMsg_RoundEndReportData_RerEvent_Victim": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "team_number": { "offset": 48, "number": 1, "has_bit": 5, "type": 5, "label": 1 },
-        "playerslot": { "offset": 24, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
-        "xuid": { "offset": 32, "number": 3, "has_bit": 1, "type": 4, "label": 1 },
-        "color": { "offset": 36, "number": 4, "has_bit": 2, "type": 5, "label": 1 },
-        "is_bot": { "offset": 40, "number": 5, "has_bit": 3, "type": 8, "label": 1 },
-        "is_dead": { "offset": 44, "number": 6, "has_bit": 4, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RoundEndReportData_RerEvent_Objective": {
-      "size": 80,
-      "has_bits_offset": 16,
-      "fields": {
-        "type": { "offset": 64, "number": 1, "has_bit": 2, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RoundEndReportData_RerEvent_Damage": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "other_playerslot": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "other_xuid": { "offset": 28, "number": 2, "has_bit": 1, "type": 4, "label": 1 },
-        "health_removed": { "offset": 32, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "num_hits": { "offset": 0, "number": 4, "has_bit": 16, "type": 5, "label": 1 },
-        "return_health_removed": { "offset": 1, "number": 5, "has_bit": 8, "type": 5, "label": 1 },
-        "return_num_hits": { "offset": 2, "number": 6, "has_bit": -1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RoundEndReportData_InitialConditions": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "ct_equip_value": { "offset": 48, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "t_equip_value": { "offset": 24, "number": 2, "has_bit": -1, "type": 5, "label": 1 },
-        "terrorist_odds": { "offset": 0, "number": 3, "has_bit": 16, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_PostRoundDamageReport": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "other_xuid": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 },
-        "given_kill_type": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 },
-        "given_health_removed": { "offset": 36, "number": 3, "has_bit": 2, "type": 5, "label": 1 },
-        "given_num_hits": { "offset": 40, "number": 4, "has_bit": 3, "type": 5, "label": 1 },
-        "taken_kill_type": { "offset": 44, "number": 5, "has_bit": 4, "type": 5, "label": 1 },
-        "taken_health_removed": { "offset": 48, "number": 6, "has_bit": 5, "type": 5, "label": 1 },
-        "taken_num_hits": { "offset": 52, "number": 7, "has_bit": 6, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CurrentRoundOdds": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "odds": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_DeepStats": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "stats": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ShootInfo": {
-      "size": 72,
-      "has_bits_offset": 16,
-      "fields": {
-        "frame_number": { "offset": 64, "number": 1, "has_bit": 2, "type": 5, "label": 1 },
-        "hitbox_transforms": { "offset": 24, "number": 2, "has_bit": -1, "type": 11, "label": 3 },
-        "shoot_pos": { "offset": 48, "number": 3, "has_bit": 0, "type": 11, "label": 1 },
-        "shoot_dir": { "offset": 56, "number": 4, "has_bit": 1, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ResetHud": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "reset": { "offset": 24, "number": 1, "has_bit": 0, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_GameTitle": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RequestState": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_StopSpectatorMode": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_DisconnectToLobby": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ClientInfo": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "dummy": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_ServerRankRevealAll": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "seconds_till_shutdown": { "offset": 32, "number": 1, "has_bit": 1, "type": 5, "label": 1 },
-        "reservation": { "offset": 24, "number": 2, "has_bit": 0, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsgPreMatchSayText": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "account_id": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "text": { "offset": 24, "number": 2, "has_bit": 0, "type": 9, "label": 1 },
-        "all_chat": { "offset": 36, "number": 3, "has_bit": 2, "type": 8, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CounterStrafe": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "press_to_release_ns": { "offset": 24, "number": 1, "has_bit": 0, "type": 5, "label": 1 },
-        "total_keys_down": { "offset": 28, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_DamagePrediction": {
-      "size": 72,
-      "has_bits_offset": 16,
-      "fields": {
-        "command_num": { "offset": 48, "number": 1, "has_bit": 3, "type": 5, "label": 1 },
-        "pellet_idx": { "offset": 52, "number": 2, "has_bit": 4, "type": 5, "label": 1 },
-        "victim_slot": { "offset": 56, "number": 3, "has_bit": 5, "type": 5, "label": 1 },
-        "victim_starting_health": { "offset": 60, "number": 4, "has_bit": 6, "type": 5, "label": 1 },
-        "victim_damage": { "offset": 64, "number": 5, "has_bit": 7, "type": 5, "label": 1 },
-        "shoot_pos": { "offset": 24, "number": 6, "has_bit": 0, "type": 11, "label": 1 },
-        "shoot_dir": { "offset": 32, "number": 7, "has_bit": 1, "type": 11, "label": 1 },
-        "aim_punch": { "offset": 40, "number": 8, "has_bit": 2, "type": 11, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_RecurringMissionSchema": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "period": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "mission_schema": { "offset": 24, "number": 2, "has_bit": 0, "type": 12, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SendPlayerLoadout": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "loadout": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 3 },
-        "playerslot": { "offset": 32, "number": 2, "has_bit": 1, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_SendPlayerLoadout_LoadoutItem": {
-      "size": 56,
-      "has_bits_offset": 16,
-      "fields": {
-        "econ_item": { "offset": 24, "number": 1, "has_bit": -1, "type": 11, "label": 1 },
-        "team": { "offset": 48, "number": 2, "has_bit": 0, "type": 5, "label": 1 },
-        "slot": { "offset": 4294967295, "number": 3, "has_bit": 16, "type": 5, "label": 1 }
-      }
-    },
-    "CCSUsrMsg_CustomHudClicked": {
-      "size": 40,
-      "has_bits_offset": 16,
-      "fields": {
-        "custom_hud_layout": { "offset": 32, "number": 1, "has_bit": 1, "type": 13, "label": 1 },
-        "button_id": { "offset": 24, "number": 2, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CVacNet_GetReviewerInfo_Request": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "appid": { "offset": 24, "number": 1, "has_bit": 0, "type": 13, "label": 1 }
-      }
-    },
-    "CVacnetReviewerInfo": {
-      "size": 48,
-      "has_bits_offset": -1,
-      "fields": {
-        "permissions": { "offset": 16, "number": 1, "has_bit": -1, "type": 9, "label": 3 }
-      }
-    },
-    "CVacNet_GetReviewerInfo_Response": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "reviewer_info": { "offset": 24, "number": 1, "has_bit": 0, "type": 11, "label": 1 }
       }
     },
     "CMsgSOIDOwner": {
@@ -5998,13 +5998,6 @@
         "strings": { "offset": 136, "number": 8, "has_bit": -1, "type": 9, "label": 3 }
       }
     },
-    "CMsgAckPetEvent": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "pet_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
-      }
-    },
     "CMsgSource2SystemSpecs": {
       "size": 96,
       "has_bits_offset": 16,
@@ -6262,6 +6255,13 @@
         "osversion": { "offset": 60, "number": 5, "has_bit": 5, "type": 5, "label": 1 },
         "command_logs": { "offset": 40, "number": 6, "has_bit": 2, "type": 9, "label": 1 },
         "bugbug_no": { "offset": 64, "number": 7, "has_bit": 6, "type": 5, "label": 1 }
+      }
+    },
+    "CMsgAckPetEvent": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "pet_item_id": { "offset": 24, "number": 1, "has_bit": 0, "type": 4, "label": 1 }
       }
     },
     "CPredictionEvent_Teleport": {
@@ -6601,6 +6601,39 @@
       "fields": {
       }
     },
+    "CMsgProtoBufHeader": {
+      "size": 88,
+      "has_bits_offset": 16,
+      "fields": {
+        "client_steam_id": { "offset": 40, "number": 1, "has_bit": 2, "type": 6, "label": 1 },
+        "client_session_id": { "offset": 48, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
+        "source_app_id": { "offset": 52, "number": 3, "has_bit": 4, "type": 13, "label": 1 },
+        "job_id_source": { "offset": 72, "number": 10, "has_bit": 9, "type": 6, "label": 1 },
+        "job_id_target": { "offset": 80, "number": 11, "has_bit": 10, "type": 6, "label": 1 },
+        "target_job_name": { "offset": 24, "number": 12, "has_bit": 0, "type": 9, "label": 1 },
+        "eresult": { "offset": 68, "number": 13, "has_bit": 8, "type": 5, "label": 1 },
+        "error_message": { "offset": 32, "number": 14, "has_bit": 1, "type": 9, "label": 1 },
+        "ip": { "offset": 56, "number": 15, "has_bit": 5, "type": 13, "label": 1 },
+        "gc_msg_src": { "offset": 60, "number": 200, "has_bit": 6, "type": 14, "label": 1 },
+        "gc_dir_index_source": { "offset": 64, "number": 201, "has_bit": 7, "type": 13, "label": 1 }
+      }
+    },
+    "CChinaAgreementSessions_StartAgreementSessionInGame_Request": {
+      "size": 48,
+      "has_bits_offset": 16,
+      "fields": {
+        "appid": { "offset": 40, "number": 1, "has_bit": 2, "type": 13, "label": 1 },
+        "steamid": { "offset": 32, "number": 2, "has_bit": 1, "type": 6, "label": 1 },
+        "client_ipaddress": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
+    "CChinaAgreementSessions_StartAgreementSessionInGame_Response": {
+      "size": 32,
+      "has_bits_offset": 16,
+      "fields": {
+        "agreement_url": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
+      }
+    },
     "CCloud_GetUploadServerInfo_Request": {
       "size": 32,
       "has_bits_offset": 16,
@@ -6673,39 +6706,6 @@
       "size": 24,
       "has_bits_offset": -1,
       "fields": {
-      }
-    },
-    "CMsgProtoBufHeader": {
-      "size": 88,
-      "has_bits_offset": 16,
-      "fields": {
-        "client_steam_id": { "offset": 40, "number": 1, "has_bit": 2, "type": 6, "label": 1 },
-        "client_session_id": { "offset": 48, "number": 2, "has_bit": 3, "type": 5, "label": 1 },
-        "source_app_id": { "offset": 52, "number": 3, "has_bit": 4, "type": 13, "label": 1 },
-        "job_id_source": { "offset": 72, "number": 10, "has_bit": 9, "type": 6, "label": 1 },
-        "job_id_target": { "offset": 80, "number": 11, "has_bit": 10, "type": 6, "label": 1 },
-        "target_job_name": { "offset": 24, "number": 12, "has_bit": 0, "type": 9, "label": 1 },
-        "eresult": { "offset": 68, "number": 13, "has_bit": 8, "type": 5, "label": 1 },
-        "error_message": { "offset": 32, "number": 14, "has_bit": 1, "type": 9, "label": 1 },
-        "ip": { "offset": 56, "number": 15, "has_bit": 5, "type": 13, "label": 1 },
-        "gc_msg_src": { "offset": 60, "number": 200, "has_bit": 6, "type": 14, "label": 1 },
-        "gc_dir_index_source": { "offset": 64, "number": 201, "has_bit": 7, "type": 13, "label": 1 }
-      }
-    },
-    "CChinaAgreementSessions_StartAgreementSessionInGame_Request": {
-      "size": 48,
-      "has_bits_offset": 16,
-      "fields": {
-        "appid": { "offset": 40, "number": 1, "has_bit": 2, "type": 13, "label": 1 },
-        "steamid": { "offset": 32, "number": 2, "has_bit": 1, "type": 6, "label": 1 },
-        "client_ipaddress": { "offset": 24, "number": 3, "has_bit": 0, "type": 9, "label": 1 }
-      }
-    },
-    "CChinaAgreementSessions_StartAgreementSessionInGame_Response": {
-      "size": 32,
-      "has_bits_offset": 16,
-      "fields": {
-        "agreement_url": { "offset": 24, "number": 1, "has_bit": 0, "type": 9, "label": 1 }
       }
     },
     "CPublishedFile_Subscribe_Request": {
@@ -8682,8 +8682,8 @@
       "fields": {
         "path": { "offset": 16, "number": 1, "has_bit": -1, "type": 5, "label": 3 },
         "source_file": { "offset": 0, "number": 2, "has_bit": -1, "type": 9, "label": 1 },
-        "begin": { "offset": 3951852368, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
-        "end": { "offset": 32766, "number": 4, "has_bit": -1, "type": 5, "label": 1 }
+        "begin": { "offset": 1981324720, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "end": { "offset": 32767, "number": 4, "has_bit": -1, "type": 5, "label": 1 }
       }
     }
   },
@@ -8975,7 +8975,7 @@
       "fields": {
         "path": { "offset": 16, "number": 1, "has_bit": -1, "type": 5, "label": 3 },
         "source_file": { "offset": 0, "number": 2, "has_bit": -1, "type": 9, "label": 1 },
-        "begin": { "offset": 463198608, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "begin": { "offset": 3600937216, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
         "end": { "offset": 32767, "number": 4, "has_bit": -1, "type": 5, "label": 1 }
       }
     },
@@ -10934,7 +10934,7 @@
       "fields": {
         "path": { "offset": 16, "number": 1, "has_bit": -1, "type": 5, "label": 3 },
         "source_file": { "offset": 0, "number": 2, "has_bit": -1, "type": 9, "label": 1 },
-        "begin": { "offset": 449198080, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "begin": { "offset": 2837592064, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
         "end": { "offset": 32767, "number": 4, "has_bit": -1, "type": 5, "label": 1 }
       }
     },
@@ -20266,8 +20266,8 @@
       "fields": {
         "path": { "offset": 16, "number": 1, "has_bit": -1, "type": 5, "label": 3 },
         "source_file": { "offset": 0, "number": 2, "has_bit": -1, "type": 9, "label": 1 },
-        "begin": { "offset": 3994343616, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
-        "end": { "offset": 32766, "number": 4, "has_bit": -1, "type": 5, "label": 1 }
+        "begin": { "offset": 2023860736, "number": 3, "has_bit": -1, "type": 5, "label": 1 },
+        "end": { "offset": 32767, "number": 4, "has_bit": -1, "type": 5, "label": 1 }
       }
     }
   }
